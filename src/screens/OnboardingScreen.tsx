@@ -6,12 +6,12 @@ import { Logo } from '~/assets'
 import { LoginWithGoogleButton } from '~/components'
 
 export function OnboardingScreen() {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation()
 
   return (
-    <Center flex={1} paddingX="32px">
+    <Center flex={1} paddingX={8}>
       <Logo />
-      <Text fontSize="xl" fontWeight="600" marginTop="16px" marginBottom="64px">
+      <Text fontSize="xl" fontWeight="600" marginTop={4} marginBottom={16}>
         Bem vindo ao fluentlevel!
       </Text>
       <VStack space={4} width="100%">

@@ -1,2 +1,3 @@
-export * from './SettingsMenuButton'
+export * from './HomeHeaderMenu'
 export * from './LoginWithGoogleButton'
+export * from './Header'

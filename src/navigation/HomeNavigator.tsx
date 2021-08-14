@@ -1,16 +1,12 @@
 import * as React from 'react'
-import styled from 'styled-components/native'
+import { StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Feather from 'react-native-vector-icons/Feather'
 
-import { TasksScreen } from '~/screens/home/Tasks'
-import { ContestsScreen } from '~/screens/home/Contests'
-import { ProfileScreen } from '~/screens/home/Profile'
-import { HorizontalLogo } from '~/assets'
-import { SettingsMenuButton } from '~/components'
-import { StyleSheet } from 'react-native'
-
-export const TabBarIcon = styled(Feather).attrs({ size: 24 })``
+import { TasksScreen } from '~/screens/home/TasksScreen'
+import { ContestsScreen } from '~/screens/home/ContestsScreen'
+import { ProfileScreen } from '~/screens/home/ProfileScreen'
+import { Header, HomeHeaderMenu } from '~/components'
 
 const BottomTab = createBottomTabNavigator()
 
@@ -18,10 +14,6 @@ export function HomeNavigator() {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        headerTransparent: true,
-        headerTitleAlign: 'center',
-        headerTitle: () => <HorizontalLogo />,
-        headerRight: () => <SettingsMenuButton />,
         tabBarLabelStyle: styles.tabBarLabelStyle,
         tabBarIconStyle: styles.tabBarIconStyle,
         tabBarStyle: styles.tabBarStyle,
@@ -31,23 +23,24 @@ export function HomeNavigator() {
         name="Tarefas"
         component={TasksScreen}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="book-open" color={color} />
-          ),
+          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarIcon: ({ color }) => <Feather name="book-open" size={24} color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Competições"
         component={ContestsScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="award" color={color} />,
+          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarIcon: ({ color }) => <Feather name="award" size={24} color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Meu perfil"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="smile" color={color} />,
+          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarIcon: ({ color }) => <Feather name="smile" size={24} color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -56,6 +49,8 @@ export function HomeNavigator() {
 
 const styles = StyleSheet.create({
   tabBarLabelStyle: {
+    fontFamily: 'NunitoBold',
+    fontSize: 12,
     marginBottom: 8,
   },
   tabBarIconStyle: {
@@ -64,13 +59,13 @@ const styles = StyleSheet.create({
   tabBarStyle: {
     height: 64,
     borderTopWidth: 0,
-    elevation: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 2,
     },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 })

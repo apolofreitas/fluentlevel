@@ -1,12 +1,12 @@
 export const fontConfig = {
   Nunito: {
     100: {
-      normal: 'NunitoLight',
-      italic: 'NunitoLightItalic',
-    },
-    200: {
       normal: 'NunitoExtraLight',
       italic: 'NunitoExtraLightItalic',
+    },
+    200: {
+      normal: 'NunitoLight',
+      italic: 'NunitoLightItalic',
     },
     300: {
       normal: 'NunitoLight',

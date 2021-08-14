@@ -20,9 +20,9 @@ export const nativeBaseTheme = extendTheme({
 export const reactNavigationTheme: ReactNavigationTheme = {
   dark: false,
   colors: {
-    text: nativeBaseTheme.colors.gray[400],
-    background: '#f5eff5',
-    card: nativeBaseTheme.colors.white,
+    text: nativeBaseTheme.colors.darkText,
+    background: nativeBaseTheme.colors.background,
+    card: nativeBaseTheme.colors.card,
     border: nativeBaseTheme.colors.gray[200],
     primary: nativeBaseTheme.colors.primary[700],
     notification: nativeBaseTheme.colors.primary[700],

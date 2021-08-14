@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "692321367548",
+    "project_id": "fluentlevel",
+    "storage_bucket": "fluentlevel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692321367548:android:b09830d1ec00af26c8ee79",
+        "android_client_info": {
+          "package_name": "com.fluentlevel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692321367548-i6a1oe07ar6lfh0c6k7ldbali43ecged.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fluentlevel",
+            "certificate_hash": "30e6a0c36a9e4bde53aa0715af6306b9125a581e"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3cXLTCMX0CLA_qRlmz3fuepIrJ4ihiog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
