@@ -26,7 +26,23 @@ export async function signUp({ email, password, nickname, username }: SignUpOpti
 
   await auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(({ user: { uid } }) => users.doc(uid).set({ username, nickname, email, following: [], followers: [] }))
+    .then(({ user: { uid } }) =>
+      users.doc(uid).set({
+        username,
+        nickname,
+        email,
+        following: [],
+        followers: [],
+
+        tasksScore: 0,
+        tasksHistory: [],
+        createdTasks: [],
+
+        contestsScore: 0,
+        contestsHistory: [],
+        createdContests: [],
+      }),
+    )
 }
 
 interface SignInWithEmailAndPasswordOptions {

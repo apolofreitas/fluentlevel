@@ -1,10 +1,6 @@
 import * as React from 'react'
-import { Box, Text } from 'native-base'
+import { Box } from 'native-base'
 
 export function TasksScreen() {
-  return (
-    <Box>
-      <Text>Tarefas</Text>
-    </Box>
-  )
+  return <Box></Box>
 }
