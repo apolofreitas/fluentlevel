@@ -11,10 +11,10 @@ export function SignInScreen() {
   const navigation = useNavigation()
   const toast = useToast()
   const formik = useFormik({
-    initialValues: { email: '', password: '' },
+    initialValues: { usernameOrEmail: '', password: '' },
     onSubmit: async (values) => {
-      if (!values.email) {
-        return showSimpleToast(toast, 'Campo de email vazio.')
+      if (!values.usernameOrEmail) {
+        return showSimpleToast(toast, 'Campo de login vazio.')
       }
       if (!values.password) {
         return showSimpleToast(toast, 'Campo de senha vazio.')
@@ -22,13 +22,13 @@ export function SignInScreen() {
 
       await signIn(values).catch(({ code }: { code: string }) => {
         if (code === 'auth/invalid-email') {
-          showSimpleToast(toast, 'Email inválido.')
+          showSimpleToast(toast, 'Não achamos sua conta.')
         } else if (code === 'auth/user-disabled') {
-          showSimpleToast(toast, 'O usuário correspondente ao email foi desativado.')
+          showSimpleToast(toast, 'O usuário correspondente foi desativado.')
         } else if (code === 'auth/user-not-found') {
           showSimpleToast(toast, 'Desculpe, não conseguimos encontrar sua conta.')
         } else if (code === 'auth/wrong-password') {
-          showSimpleToast(toast, 'Senha não corresponde ao email inserido.')
+          showSimpleToast(toast, 'Os dados preenchidos não correspondem aos nosso registros.')
         } else {
           showSimpleToast(toast, 'Erro inesperado, tente novamente mais tarde.')
         }
@@ -44,19 +44,19 @@ export function SignInScreen() {
           <Text fontWeight="700" fontSize="xl">
             Bem vindo
           </Text>
-          <Text marginBottom={6}>Use seu email e senha para entrar em sua conta.</Text>
+          <Text marginBottom={6}>Use suas informações para entrar em sua conta.</Text>
         </Box>
 
         <VStack space={4} marginBottom={2}>
-          <FormControl isInvalid={!!formik.touched.email && !!formik.errors.email}>
+          <FormControl isInvalid={!!formik.touched.usernameOrEmail && !!formik.errors.usernameOrEmail}>
             <Input
-              onChangeText={formik.handleChange('email')}
-              onBlur={formik.handleBlur('email')}
-              value={formik.values.email}
+              onChangeText={formik.handleChange('usernameOrEmail')}
+              onBlur={formik.handleBlur('usernameOrEmail')}
+              value={formik.values.usernameOrEmail}
               isDisabled={formik.isSubmitting}
-              placeholder="Email"
+              placeholder="Nome de usuário ou email"
             />
-            <FormControl.ErrorMessage>{formik.errors.email}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.usernameOrEmail}</FormControl.ErrorMessage>
           </FormControl>
 
           <Input
@@ -66,7 +66,11 @@ export function SignInScreen() {
             type={isPasswordShowing ? 'text' : 'password'}
             isDisabled={formik.isSubmitting}
             InputRightElement={
-              <Button variant="unstyled" onPress={() => setIsPasswordShowing(!isPasswordShowing)}>
+              <Button
+                variant="unstyled"
+                isDisabled={formik.isSubmitting}
+                onPress={() => setIsPasswordShowing(!isPasswordShowing)}
+              >
                 {isPasswordShowing ? (
                   <Icon as={Feather} name="eye-off" size={4} color="primary.500" />
                 ) : (

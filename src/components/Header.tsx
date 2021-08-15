@@ -25,15 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
   const navigation = useNavigation()
 
   return (
-    <HStack
-      height={16}
-      paddingX={4}
-      space={2}
-      justifyContent="center"
-      alignItems="center"
-      backgroundColor="card"
-      shadow={4}
-    >
+    <HStack height={16} paddingX={4} space={2} justifyContent="center" alignItems="center" backgroundColor="background">
       {canGoBack && (
         <IconButton
           variant="unstyled"

@@ -8,13 +8,15 @@ interface AuthState {
 }
 
 export const useAuth = create<AuthState>((set) => {
-  auth().onAuthStateChanged((user) => {
-    set({ isInitializing: false, isSignedIn: !!user, currentUser: user })
-  })
-
-  return {
+  const initialState = {
     isInitializing: true,
     isSignedIn: false,
     currentUser: null,
   }
+
+  auth().onAuthStateChanged((user) => {
+    set({ isInitializing: false, isSignedIn: !!user, currentUser: user })
+  })
+
+  return initialState
 })

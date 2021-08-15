@@ -3,7 +3,7 @@ import { Button, Center, Text, VStack } from 'native-base'
 
 import { useNavigation } from '@react-navigation/core'
 import { Logo } from '~/assets'
-import { LoginWithGoogleButton } from '~/components'
+// import { LoginWithGoogleButton } from '~/components'
 
 export function OnboardingScreen() {
   const navigation = useNavigation()
@@ -19,7 +19,7 @@ export function OnboardingScreen() {
         <Button variant="outline" onPress={() => navigation.navigate('SignUp')}>
           Criar conta
         </Button>
-        <LoginWithGoogleButton />
+        {/* <LoginWithGoogleButton /> */}
       </VStack>
     </Center>
   )

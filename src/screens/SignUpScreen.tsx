@@ -2,19 +2,7 @@ import * as React from 'react'
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import Feather from 'react-native-vector-icons/Feather'
-import {
-  Box,
-  Button,
-  Center,
-  FormControl,
-  Icon,
-  Input,
-  KeyboardAvoidingView,
-  ScrollView,
-  Text,
-  useToast,
-  VStack,
-} from 'native-base'
+import { Box, Button, FormControl, Icon, Input, ScrollView, Text, useToast, VStack } from 'native-base'
 import * as yup from 'yup'
 
 import { signUp } from '~/api'
@@ -35,12 +23,16 @@ export function SignUpScreen() {
     validationSchema: SignUpSchema,
     onSubmit: async (values) => {
       await signUp(values).catch(({ code }: { code: string }) => {
-        if (code === 'auth/email-already-in-use') {
+        if (code === 'auth/username-already-in-use') {
+          showSimpleToast(toast, 'Nome de usuário já em uso')
+        } else if (code === 'auth/email-already-in-use') {
           showSimpleToast(toast, 'Email já cadastrado')
         } else if (code === 'auth/invalid-email') {
           showSimpleToast(toast, 'Email inválido')
         } else if (code === 'auth/weak-password') {
           showSimpleToast(toast, 'A senha deve ter uma mistura de letras maiúsculas, letras minúsculas e números')
+        } else {
+          showSimpleToast(toast, 'Erro inesperado, tente novamente mais tarde.')
         }
       })
     },
@@ -108,7 +100,11 @@ export function SignUpScreen() {
               value={formik.values.password}
               type={isPasswordShowing ? 'text' : 'password'}
               InputRightElement={
-                <Button variant="unstyled" onPress={() => setIsPasswordShowing(!isPasswordShowing)}>
+                <Button
+                  variant="unstyled"
+                  isDisabled={formik.isSubmitting}
+                  onPress={() => setIsPasswordShowing(!isPasswordShowing)}
+                >
                   {isPasswordShowing ? (
                     <Icon as={Feather} name="eye-off" size={4} color="primary.500" />
                   ) : (
