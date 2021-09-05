@@ -1,13 +1,12 @@
 import * as React from 'react'
 import { Box, Button, Center, FormControl, Input, Text, useToast } from 'native-base'
 import { useFormik } from 'formik'
-import { useNavigation } from '@react-navigation/core'
 
+import { RootScreen } from '~/types/navigation'
 import { showSimpleToast } from '~/utils'
 import { resetPassword } from '~/api'
 
-export function ResetPasswordScreen() {
-  const navigation = useNavigation()
+export const ResetPasswordScreen: RootScreen<'ResetPassword'> = ({ navigation }) => {
   const toast = useToast()
   const formik = useFormik({
     initialValues: { email: '' },

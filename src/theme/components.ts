@@ -22,6 +22,9 @@ export const { components }: Parameters<typeof extendTheme>[0] = {
           borderColor: `${colorScheme}.500`,
           borderWidth: '2px',
         }),
+        unstyled: {
+          padding: 0,
+        },
       },
     },
     Input: {
@@ -31,6 +34,7 @@ export const { components }: Parameters<typeof extendTheme>[0] = {
         height: '48px',
         backgroundColor: 'card',
         borderRadius: '16px',
+        borderColor: 'transparent',
         _focus: {
           borderWidth: 2,
         },
@@ -56,6 +60,13 @@ export const { components }: Parameters<typeof extendTheme>[0] = {
         borderColor: 'gray.100',
         shadow: 'none',
         backgroundColor: 'card',
+      },
+    },
+    FAB: {
+      baseStyle: {
+        rounded: '16px',
+        padding: 3,
+        shadow: 0,
       },
     },
   },

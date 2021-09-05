@@ -2,20 +2,20 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import create from 'zustand'
 
 interface AuthState {
-  isInitializing: boolean
+  isLoading: boolean
   isSignedIn: boolean
   currentUser: FirebaseAuthTypes.User | null
 }
 
 export const useAuth = create<AuthState>((set) => {
   const initialState = {
-    isInitializing: true,
+    isLoading: true,
     isSignedIn: false,
     currentUser: null,
   }
 
   auth().onAuthStateChanged((user) => {
-    set({ isInitializing: false, isSignedIn: !!user, currentUser: user })
+    set({ isLoading: false, isSignedIn: !!user, currentUser: user })
   })
 
   return initialState

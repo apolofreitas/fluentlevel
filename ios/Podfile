@@ -20,6 +20,10 @@ target 'fluentlevel' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-pager-view', :path => '../node_modules/react-native-pager-view'
+
+  pod 'react-native-viewpager', :path => '../node_modules/react-native-pager-view'
+
   target 'fluentlevelTests' do
     inherit! :complete
     # Pods for testing

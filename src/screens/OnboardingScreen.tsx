@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { Button, Center, Text, VStack } from 'native-base'
 
-import { useNavigation } from '@react-navigation/core'
+import { RootScreen } from '~/types/navigation'
 import { Logo } from '~/assets'
 // import { LoginWithGoogleButton } from '~/components'
 
-export function OnboardingScreen() {
-  const navigation = useNavigation()
-
+export const OnboardingScreen: RootScreen<'SaveTask'> = ({ navigation }) => {
   return (
     <Center flex={1} paddingX={8}>
       <Logo />

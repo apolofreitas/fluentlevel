@@ -5,18 +5,19 @@ import Feather from 'react-native-vector-icons/Feather'
 import { Box, Button, FormControl, Icon, Input, ScrollView, Text, useToast, VStack } from 'native-base'
 import * as yup from 'yup'
 
+import { RootScreen } from '~/types/navigation'
 import { signUp } from '~/api'
 import { nicknameSchema, emailSchema, passwordSchema, usernameSchema } from '~/shared/validation'
 import { showSimpleToast } from '~/utils'
 
 const SignUpSchema = yup.object({
-  nickname: nicknameSchema.required('O apelido é um campo obrigatório'),
-  username: usernameSchema.required('O nome de usuário é um campo obrigatório'),
-  email: emailSchema.required('O email é campo obrigatório'),
-  password: passwordSchema.required('A senha é campo obrigatório'),
+  nickname: nicknameSchema.required('O apelido é um campo obrigatório.'),
+  username: usernameSchema.required('O nome de usuário é um campo obrigatório.'),
+  email: emailSchema.required('O email é campo obrigatório.'),
+  password: passwordSchema.required('A senha é campo obrigatório.'),
 })
 
-export function SignUpScreen() {
+export const SignUpScreen: RootScreen<'SignUp'> = () => {
   const toast = useToast()
   const formik = useFormik({
     initialValues: { nickname: '', username: '', email: '', password: '' },
@@ -102,6 +103,7 @@ export function SignUpScreen() {
               InputRightElement={
                 <Button
                   variant="unstyled"
+                  padding={4}
                   isDisabled={formik.isSubmitting}
                   onPress={() => setIsPasswordShowing(!isPasswordShowing)}
                 >

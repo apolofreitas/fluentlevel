@@ -3,12 +3,14 @@ import { StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Feather from 'react-native-vector-icons/Feather'
 
-import { TasksScreen } from '~/screens/home/TasksScreen'
-import { ContestsScreen } from '~/screens/home/ContestsScreen'
-import { ProfileScreen } from '~/screens/home/ProfileScreen'
+import { HomeParamList } from '~/types/navigation'
 import { Header, HomeHeaderMenu } from '~/components'
 
-const BottomTab = createBottomTabNavigator()
+import { TasksScreen } from '~/screens/TasksScreen'
+import { ContestsScreen } from '~/screens/ContestsScreen'
+import { ProfileScreen } from '~/screens/ProfileScreen'
+
+const BottomTab = createBottomTabNavigator<HomeParamList>()
 
 export function HomeNavigator() {
   return (
@@ -20,26 +22,29 @@ export function HomeNavigator() {
       }}
     >
       <BottomTab.Screen
-        name="Tarefas"
+        name="Tasks"
         component={TasksScreen}
         options={{
-          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarLabel: 'Tarefas',
+          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
           tabBarIcon: ({ color }) => <Feather name="book-open" size={24} color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Competições"
+        name="Contests"
         component={ContestsScreen}
         options={{
-          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarLabel: 'Competições',
+          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
           tabBarIcon: ({ color }) => <Feather name="award" size={24} color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Meu perfil"
+        name="Profile"
         component={ProfileScreen}
         options={{
-          header: () => <Header showLogoInTitle rightHeader={() => <HomeHeaderMenu />} />,
+          tabBarLabel: 'Meu perfil',
+          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
           tabBarIcon: ({ color }) => <Feather name="smile" size={24} color={color} />,
         }}
       />

@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
-import { users } from '~/services/db'
-import { getUserDocByUsername, isUsernameAvailable } from './users'
+import { db } from './db'
+import { getUserByUsername, isUsernameAvailable } from './users'
 
 GoogleSignIn.configure({
   webClientId: '692321367548-7c1qlmekmna8i6h4pp45cu5hgr0r0f45.apps.googleusercontent.com',
@@ -27,7 +27,7 @@ export async function signUp({ email, password, nickname, username }: SignUpOpti
   await auth()
     .createUserWithEmailAndPassword(email, password)
     .then(({ user: { uid } }) =>
-      users.doc(uid).set({
+      db.users.doc(uid).set({
         username,
         nickname,
         email,
@@ -55,16 +55,9 @@ export async function signIn({ usernameOrEmail, password }: SignInWithEmailAndPa
     .catch(async (error) => {
       if (error.code !== 'auth/invalid-email') throw error
 
-      const userDoc = await getUserDocByUsername(usernameOrEmail)
+      const { user } = await getUserByUsername(usernameOrEmail)
 
-      if (!userDoc) throw error
-
-      const userSnap = await userDoc.get()
-      const userData = userSnap.data()
-
-      if (!userData) throw error
-
-      await auth().signInWithEmailAndPassword(userData.email, password)
+      await auth().signInWithEmailAndPassword(user.email, password)
     })
 }
 

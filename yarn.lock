@@ -791,10 +791,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@expo/config-plugins@^3.0.2":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-3.0.7.tgz#50870e26d34b11740a5841076c921729381d4319"
-  integrity sha512-7YOoFtxB6XqDil+OlGXi7iredKHxXVFCAOIVfFyEDzO3oo0gBmWGmUnHgrPDvpMj0q+adCCh5BL8OcvGfc9ITQ==
+"@expo/config-plugins@^3.0.7":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-3.0.8.tgz#f8842902aea726c2845e837bb59c07ac497e6a04"
+  integrity sha512-reNYaYklOIq8QUY5ua1ubSRhVgY7hllvjingo22HHSaGhX4UvFFKDGYrjBdjcutHD6jw/eYLa8yJS74o1/rqkg==
   dependencies:
     "@expo/config-types" "^42.0.0"
     "@expo/json-file" "8.2.33"
@@ -1627,28 +1627,25 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz#e42b1bef12d2415411519fd528e64b593b1363dc"
   integrity sha512-W/J0fNYVO01tioHjvYWQ9m6RgndVtbElzYozBq1ZPrHO/iCzlqoySHl4gO/fpCl9QEFjvJfjPgtPMTMlsoq5DQ==
 
-"@react-native-firebase/app@^12.4.0":
-  version "12.4.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.4.0.tgz#879ce26be46a8d3e40fbd371eacdef28c608c59e"
-  integrity sha512-zBA+LSBXOYBpDnO/n0EW2+cZlHyf8aYSHpyTKOIIt5QXj7DNuB46Hk2cRSXFxOZNOU6fiIuf8i9jFsWdYtOlpQ==
+"@react-native-firebase/app@^12.5.0":
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.7.2.tgz#74a12ba21004e2c7a29a9f58e463a8080d4bd99a"
+  integrity sha512-pU9k5yyljpcdUIVk2Gu/YU6gZmif3Dnb/2ZmCdYH9mzXpKM057TDoASgGEpB1mQDsBw5zGZr5Jpw5H55W3XW7g==
   dependencies:
-    "@expo/config-plugins" "^3.0.2"
+    "@expo/config-plugins" "^3.0.7"
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/auth@^12.4.0":
-  version "12.4.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-12.4.0.tgz#40dcbdaf715df445204fa1ffe616d4eb2dfe3e32"
-  integrity sha512-xdCS3sOODHXIIDtGLdewCEJl8NR7UtQ4tHIylrdllUUdpHU7dh+DHvKeTn7oLfDmdmJBCSvDlVf5s6XGHyifZA==
+"@react-native-firebase/auth@^12.5.0":
+  version "12.7.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-12.7.2.tgz#30a988dd3824ca155564b42b2553b73cd1ea19ae"
+  integrity sha512-b47P8j71PtgiI8TlYoC5csECO3lhp2087d2NP2EFT1nyWLPFtqyaJ7cBdw5vJPMnWlr4Wdm4ErxqTVO/iXjgPw==
 
-<<<<<<< HEAD
 "@react-native-firebase/firestore@^12.5.0":
   version "12.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-12.5.0.tgz#e10d140a41e89348f742c6e1034041ac3896b1a0"
   integrity sha512-fW4qUZWO3cCs0wfzkPqfntfWY5X86UKq1Fq0F2Pw1raop6du6NlN0XSCtyO9BCU5xn/H5sDCpn+5lvKqTRlhAg==
 
-=======
->>>>>>> 9269764002bea661cacce869448bd4670889f715
 "@react-native-google-signin/google-signin@^6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-6.0.1.tgz#c953c24c74c42009f59213015d4bdd4e58133c54"
@@ -6951,6 +6948,11 @@ react-native-gesture-handler@^1.10.3:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-pager-view@4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-4.2.4.tgz#84bf9122e086e508904423d90b1cd628e0068ca8"
+  integrity sha512-UuOaaTsokKgutaC0SfE+kCD+vT/5N1JVQsbSRdzMvNq9KKj3Bic/j30R4Kevq6LraCWh/9rCc6EV/M4v/zZoBA==
+
 react-native-safe-area-context@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.3.0.tgz#6e0b45baa031589ec9c54f8359ace166a36aa5e5"
@@ -6980,6 +6982,11 @@ react-native-svg@^12.1.1:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-tab-view@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
+  integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
 react-native-vector-icons@^8.1.0:
   version "8.1.0"

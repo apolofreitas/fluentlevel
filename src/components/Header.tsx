@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import { HStack, Icon, IconButton, Spacer, Text } from 'native-base'
-import { useNavigation } from '@react-navigation/core'
+import { useNavigation, useRoute } from '@react-navigation/core'
 
 import { SmallLogo } from '~/assets'
 
@@ -10,8 +10,20 @@ interface HeaderProps {
   showLogoInTitle?: boolean
   centerTitle?: boolean
   canGoBack?: boolean
-  leftHeader?: React.FC
-  rightHeader?: React.FC
+  headerLeft?:
+    | ((props: {
+        tintColor?: string | undefined
+        pressColor?: string | undefined
+        pressOpacity?: number | undefined
+      }) => React.ReactNode)
+    | undefined
+  headerRight?:
+    | ((props: {
+        tintColor?: string | undefined
+        pressColor?: string | undefined
+        pressOpacity?: number | undefined
+      }) => React.ReactNode)
+    | undefined
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,8 +31,8 @@ export const Header: React.FC<HeaderProps> = ({
   showLogoInTitle = false,
   centerTitle = false,
   canGoBack = false,
-  leftHeader: LeftHeaderComponent = React.Fragment,
-  rightHeader: RightHeaderComponent = React.Fragment,
+  headerLeft,
+  headerRight,
 }) => {
   const navigation = useNavigation()
 
@@ -34,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
         />
       )}
 
-      <LeftHeaderComponent />
+      {!!headerLeft && headerLeft({})}
 
       <HStack paddingX={2} space={2} position={centerTitle ? 'absolute' : undefined}>
         {showLogoInTitle && <SmallLogo />}
@@ -45,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       <Spacer />
 
-      <RightHeaderComponent />
+      {!!headerRight && headerRight({})}
     </HStack>
   )
 }

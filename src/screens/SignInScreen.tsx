@@ -2,13 +2,12 @@ import * as React from 'react'
 import { Box, Button, Center, FormControl, Icon, Input, Text, useToast, VStack } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 import { useFormik } from 'formik'
-import { useNavigation } from '@react-navigation/core'
 
+import { RootScreen } from '~/types/navigation'
 import { signIn } from '~/api'
 import { showSimpleToast } from '~/utils'
 
-export function SignInScreen() {
-  const navigation = useNavigation()
+export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
   const toast = useToast()
   const formik = useFormik({
     initialValues: { usernameOrEmail: '', password: '' },
@@ -68,6 +67,7 @@ export function SignInScreen() {
             InputRightElement={
               <Button
                 variant="unstyled"
+                padding={4}
                 isDisabled={formik.isSubmitting}
                 onPress={() => setIsPasswordShowing(!isPasswordShowing)}
               >
