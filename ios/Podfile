@@ -24,6 +24,10 @@ target 'fluentlevel' do
 
   pod 'react-native-viewpager', :path => '../node_modules/react-native-pager-view'
 
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
+  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
+
   target 'fluentlevelTests' do
     inherit! :complete
     # Pods for testing

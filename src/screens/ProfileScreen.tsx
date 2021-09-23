@@ -15,7 +15,7 @@ export const ProfileScreen: HomeScreen<'Profile'> = () => {
     <ScrollView>
       <Box paddingX={5} paddingY={2}>
         <HStack space={3} alignItems="center" marginX={2} marginBottom={4}>
-          <OctopusIcon backgroundColor="primary.500" height="80px" width="80px" />
+          <OctopusIcon backgroundColor="primary.500" size="80px" maxWidth="80px" maxHeight="80px" />
 
           <Box>
             <Text fontWeight="600" fontSize="xl">
@@ -26,10 +26,10 @@ export const ProfileScreen: HomeScreen<'Profile'> = () => {
             </Text>
 
             <HStack space={2}>
-              <Text fontWeight="600" color="gray.600">
+              <Text fontWeight="600" color="gray.500">
                 {currentUser.followers.length} seguidores
               </Text>
-              <Text fontWeight="600" color="gray.600">
+              <Text fontWeight="600" color="gray.500">
                 {currentUser.following.length} seguindo
               </Text>
             </HStack>

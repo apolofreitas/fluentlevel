@@ -18,6 +18,7 @@ export interface UserModel {
 
 export interface QuestionModel {
   statement: string
+  timeToAnswer: number
   alternatives: string[]
   rightAlternativeIndex: number
 }

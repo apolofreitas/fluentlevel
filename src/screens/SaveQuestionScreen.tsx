@@ -12,6 +12,8 @@ import {
   Button,
   IconButton,
   FormControl,
+  Slider,
+  Select,
 } from 'native-base'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
@@ -21,7 +23,7 @@ import { questionAlternativesSchema, questionStatementSchema } from '~/shared/va
 import { QuestionModel } from '~/api'
 import { OctopusIcon } from '~/components/OctopusIcon'
 import { colors } from '~/theme/colors'
-import { Alert } from 'react-native'
+import { Alert, Pressable } from 'react-native'
 
 const SignUpSchema = yup.object({
   statement: questionStatementSchema.required('O enunciado é um campo obrigatório.'),
@@ -35,6 +37,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
       statement: '',
       alternatives: [],
       rightAlternativeIndex: 0,
+      timeToAnswer: 30,
     },
     validationSchema: SignUpSchema,
     validateOnChange: false,
@@ -128,6 +131,37 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
           </FormControl>
 
           <FormControl
+            isInvalid={!!formik.touched.statement && !!formik.errors.statement}
+            isDisabled={formik.isSubmitting}
+            marginBottom={4}
+          >
+            <HStack space={2}>
+              <FormControl.Label>
+                <Text color="primary.700" fontSize="lg" fontWeight="600">
+                  Tempo: {formik.values.timeToAnswer}s
+                </Text>
+              </FormControl.Label>
+
+              <Slider
+                flexShrink={1}
+                minValue={10}
+                maxValue={60}
+                accessibilityLabel="Time Slider"
+                value={formik.values.timeToAnswer}
+                onChange={(value) => formik.setFieldValue('timeToAnswer', value, false)}
+                isDisabled={formik.isSubmitting}
+              >
+                <Slider.Track>
+                  <Slider.FilledTrack />
+                </Slider.Track>
+                <Slider.Thumb />
+              </Slider>
+            </HStack>
+
+            <FormControl.ErrorMessage>{formik.errors.statement}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl
             isInvalid={!!formik.touched.alternatives && !!formik.errors.alternatives}
             isDisabled={formik.isSubmitting}
           >
@@ -162,15 +196,15 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
                       formik.validateField('alternatives')
                     }}
                     InputLeftElement={
-                      <OctopusIcon
-                        backgroundColor={
-                          index === formik.values.rightAlternativeIndex ? colors.secondary[300] : colors.primary[500]
-                        }
-                        borderLeftRadius={0}
-                        marginRight={3}
-                        isDisabled={formik.isSubmitting}
-                        onPress={() => formik.setFieldValue('rightAlternativeIndex', index, false)}
-                      />
+                      <Pressable onPress={() => formik.setFieldValue('rightAlternativeIndex', index, false)}>
+                        <OctopusIcon
+                          backgroundColor={
+                            index === formik.values.rightAlternativeIndex ? colors.primary[500] : colors.primary[200]
+                          }
+                          borderLeftRadius={0}
+                          marginRight={3}
+                        />
+                      </Pressable>
                     }
                     InputRightElement={
                       <Button

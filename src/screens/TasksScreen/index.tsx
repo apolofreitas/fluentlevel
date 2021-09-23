@@ -9,10 +9,12 @@ import { colors } from '~/theme/colors'
 
 import { HomeScreen } from '~/types/navigation'
 
-const renderScene = SceneMap({ CommunityTasksTab, CreatedTasksTab })
-
-export const TasksScreen: HomeScreen<'Tasks'> = () => {
+export const TasksScreen: HomeScreen<'Tasks'> = (props) => {
   const layout = useWindowDimensions()
+  const renderScene = SceneMap({
+    CommunityTasksTab: () => <CommunityTasksTab {...props} />,
+    CreatedTasksTab: () => <CreatedTasksTab {...props} />,
+  })
 
   const [index, setIndex] = React.useState(0)
   const [routes] = React.useState([

@@ -17,8 +17,8 @@ export const taskTitleSchema = yup.string().max(72, 'O titulo da tarefa deve ter
 export const taskDescriptionSchema = yup.string().max(128, 'A descrição da tarefa deve ter no máximo 72 caracteres.')
 export const taskQuestionsSchema = yup
   .array()
-  .min(2, 'A tarefa deve ter no mínimo duas questões')
-  .max(20, 'A tarefa deve ter no máximo questões')
+  .min(1, 'A tarefa deve ter no mínimo 1 questão')
+  .max(50, 'A tarefa deve ter no máximo 50 questões')
 
 export const questionStatementSchema = yup.string().max(128, 'O enunciado da tarefa deve ter no máximo 72 caracteres.')
 export const questionAlternativesSchema = yup
@@ -29,6 +29,6 @@ export const questionAlternativesSchema = yup
       .required('A alternativa deve ser preenchida.')
       .max(128, 'A alternativa deve ter no máximo 72 caracteres.'),
   )
-  .min(2, 'Deve haver no mínimo 2 alternativas em uma questão.')
-  .max(5, 'Deve haver no máximo 5 alternativas em uma questão.')
+  .min(2, 'A questão deve ter no mínimo 2 alternativas.')
+  .max(5, 'A questão deve ter no máximo 5 alternativas.')
   .required()

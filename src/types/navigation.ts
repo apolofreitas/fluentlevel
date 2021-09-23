@@ -1,3 +1,5 @@
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { Task, TaskModel } from '~/api'
 
@@ -7,7 +9,8 @@ export type RootParamList = {
   SignUp: undefined
   ResetPassword: undefined
 
-  Home: undefined
+  Home?: NavigatorScreenParams<HomeParamList>
+
   SaveTask?: {
     initialValues?: Task
     questionToSave?: {
@@ -19,6 +22,29 @@ export type RootParamList = {
     initialValues?: TaskModel['questions'][number]
     questionIndex?: number
   }
+
+  TaskDetails: {
+    task: Task
+  }
+
+  TaskSolving: {
+    task: Task
+    questionIndex: number
+    results: Array<{
+      isCorrectAnswered: boolean
+      timeSpent: number
+    }>
+  }
+
+  FinishedTask: {
+    task: Task
+    results: {
+      correctAnswers: number
+      totalScore: number
+      totalTimeSpent: number
+      totalTimeToAnswer: number
+    }
+  }
 }
 export type RootScreen<T extends keyof RootParamList> = React.FC<StackScreenProps<RootParamList, T>>
 
@@ -27,4 +53,6 @@ export type HomeParamList = {
   Contests: undefined
   Profile: undefined
 }
-export type HomeScreen<T extends keyof HomeParamList> = React.FC<StackScreenProps<HomeParamList, T>>
+export type HomeScreen<T extends keyof HomeParamList> = React.FC<
+  CompositeScreenProps<BottomTabScreenProps<HomeParamList, T>, StackScreenProps<RootParamList>>
+>
