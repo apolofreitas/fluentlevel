@@ -23,7 +23,7 @@ export async function getTaskData(taskSnap: FirebaseFirestoreTypes.QueryDocument
 }
 
 export async function getCommunityTasks() {
-  const currentUser = await getCurrentUserDoc()
+  const currentUser = getCurrentUserDoc()
 
   if (!currentUser) return []
 
@@ -35,7 +35,7 @@ export async function getCommunityTasks() {
 }
 
 export async function getCreatedTasks() {
-  const currentUser = await getCurrentUserDoc()
+  const currentUser = getCurrentUserDoc()
 
   if (!currentUser) return []
 
@@ -49,7 +49,7 @@ export async function getCreatedTasks() {
 export type CreateTaskOptions = Omit<TaskModel, 'authorId'>
 
 export async function createTask({ title, description, isPublic, questions }: CreateTaskOptions) {
-  const currentUserDoc = await getCurrentUserDoc()
+  const currentUserDoc = getCurrentUserDoc()
 
   if (!currentUserDoc) return null
 

@@ -13,21 +13,23 @@ export const passwordSchema = yup
   .max(128, 'A senha deve ter no máximo 128 caracteres.')
   .matches(/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/, 'A senha deve ter uma mistura de letras e números.')
 
-export const taskTitleSchema = yup.string().max(72, 'O titulo da tarefa deve ter no máximo 72 caracteres.')
-export const taskDescriptionSchema = yup.string().max(128, 'A descrição da tarefa deve ter no máximo 72 caracteres.')
+export const taskTitleSchema = yup.string().max(512, 'O titulo da tarefa deve ter no máximo 512 caracteres.')
+export const taskDescriptionSchema = yup.string().max(1024, 'A descrição da tarefa deve ter no máximo 128 caracteres.')
 export const taskQuestionsSchema = yup
   .array()
   .min(1, 'A tarefa deve ter no mínimo 1 questão')
-  .max(50, 'A tarefa deve ter no máximo 50 questões')
+  .max(100, 'A tarefa deve ter no máximo 100 questões')
 
-export const questionStatementSchema = yup.string().max(128, 'O enunciado da tarefa deve ter no máximo 72 caracteres.')
+export const questionStatementSchema = yup
+  .string()
+  .max(1024, 'O enunciado da tarefa deve ter no máximo 1024 caracteres.')
 export const questionAlternativesSchema = yup
   .array()
   .of(
     yup
       .string()
       .required('A alternativa deve ser preenchida.')
-      .max(128, 'A alternativa deve ter no máximo 72 caracteres.'),
+      .max(1024, 'A alternativa deve ter no máximo 1024 caracteres.'),
   )
   .min(2, 'A questão deve ter no mínimo 2 alternativas.')
   .max(5, 'A questão deve ter no máximo 5 alternativas.')

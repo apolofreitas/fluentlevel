@@ -1,16 +1,17 @@
 import create from 'zustand'
 import auth from '@react-native-firebase/auth'
-import { db, UserModel } from '~/api'
+import { db, getUserData, User } from '~/api'
 
 export interface UsersState {
   isLoading: boolean
-  currentUser: UserModel
+  currentUser: User
 }
 
 export const useCurrentUser = create<UsersState>((set) => {
   const initialState: UsersState = {
     isLoading: true,
     currentUser: {
+      id: '',
       username: '',
       email: '',
       nickname: '',
@@ -37,10 +38,9 @@ export const useCurrentUser = create<UsersState>((set) => {
     if (!currentUser) {
       set({ isLoading: false, currentUser: initialState.currentUser })
     } else {
-      lastUserSubscription.unsubscribe = await db.users.doc(currentUser.uid).onSnapshot((doc) => {
-        const userData = doc.data()
-        if (!userData) return
-        set({ isLoading: false, currentUser: userData })
+      lastUserSubscription.unsubscribe = await db.users.doc(currentUser.uid).onSnapshot(async () => {
+        const { user } = await getUserData(db.users.doc(currentUser.uid))
+        set({ isLoading: false, currentUser: user })
       })
     }
   })

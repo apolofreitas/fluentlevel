@@ -63,14 +63,14 @@ export async function getUserByUsername(username: string) {
 
   return getUserById(userSnap.id)
 }
-export async function isUsernameAvailable(username: string) {
+export async function checkUsernameAvailability(username: string) {
   const userSnaps = await db.users.where('username', '==', username).limit(1).get()
   const userSnap = userSnaps.docs[0]
 
   return !userSnap
 }
 
-export async function getCurrentUserDoc() {
+export function getCurrentUserDoc() {
   const { currentUser } = auth()
 
   if (!currentUser) return null
@@ -78,8 +78,16 @@ export async function getCurrentUserDoc() {
   return db.users.doc(currentUser.uid)
 }
 
+type UpdateCurrentUserOptions = Omit<Partial<UserModel>, 'id' | 'email'>
+
+export async function updateCurrentUser(params: UpdateCurrentUserOptions) {
+  const currentUserDoc = getCurrentUserDoc()
+  if (!currentUserDoc) return
+  currentUserDoc.update(params)
+}
+
 export async function isUserFollowing(id: string) {
-  const currentUserDoc = await getCurrentUserDoc()
+  const currentUserDoc = getCurrentUserDoc()
   const currentUserSnap = await currentUserDoc?.get()
   const currentUserData = currentUserSnap?.data()
 
@@ -91,7 +99,7 @@ export async function isUserFollowing(id: string) {
 }
 
 export async function toggleFollow(id: string) {
-  const currentUserDoc = await getCurrentUserDoc()
+  const currentUserDoc = getCurrentUserDoc()
   const currentUserSnap = await currentUserDoc?.get()
   const currentUser = currentUserSnap?.data()
 

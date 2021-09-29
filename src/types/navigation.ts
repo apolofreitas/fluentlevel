@@ -11,6 +11,11 @@ export type RootParamList = {
 
   Home?: NavigatorScreenParams<HomeParamList>
 
+  EditProfile: undefined
+  MyAccount: undefined
+  ChangeEmail: undefined
+  ChangePassword: undefined
+
   SaveTask?: {
     initialValues?: Task
     questionToSave?: {

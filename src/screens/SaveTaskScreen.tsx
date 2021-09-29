@@ -123,7 +123,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
   return (
     <>
       <ScrollView>
-        <Box paddingX={6} paddingTop={4} paddingBottom={24}>
+        <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
             isInvalid={!!formik.touched.title && !!formik.errors.title}
             isDisabled={formik.isSubmitting}

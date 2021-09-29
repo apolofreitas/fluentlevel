@@ -18,6 +18,10 @@ import { SaveQuestionScreen } from '~/screens/SaveQuestionScreen'
 import { TaskDetailsScreen } from '~/screens/TaskDetailsScreen'
 import { FinishedTaskScreen } from '~/screens/FinishedTaskScreen'
 import { TaskSolvingScreen } from '~/screens/TaskSolvingScreen'
+import { EditProfileScreen } from '~/screens/EditProfileScreen'
+import { MyAccountScreen } from '~/screens/MyAccountScreen'
+import { ChangeEmailScreen } from '~/screens/ChangeEmailScreen'
+import { ChangePasswordScreen } from '~/screens/ChangePasswordScreen'
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -62,6 +66,26 @@ export function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeNavigator} />
+      <Stack.Screen
+        name="EditProfile"
+        options={{ header: () => <Header canGoBack centerTitle title="Editar Perfil" /> }}
+        component={EditProfileScreen}
+      />
+      <Stack.Screen
+        name="MyAccount"
+        options={{ header: () => <Header canGoBack centerTitle title="Minha Conta" /> }}
+        component={MyAccountScreen}
+      />
+      <Stack.Screen
+        name="ChangeEmail"
+        options={{ header: () => <Header canGoBack centerTitle title="Editar Email" /> }}
+        component={ChangeEmailScreen}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        options={{ header: () => <Header canGoBack centerTitle title="Mudar Senha" /> }}
+        component={ChangePasswordScreen}
+      />
       <Stack.Screen
         name="SaveTask"
         component={SaveTaskScreen}

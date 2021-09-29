@@ -109,9 +109,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                       minWidth="60px"
                       marginRight={3}
                       borderLeftRadius={0}
-                      backgroundColor={
-                        selectedAlternativeIndex === alternativeIndex ? colors.primary[500] : colors.primary[200]
-                      }
+                      backgroundColor={selectedAlternativeIndex === alternativeIndex ? 'primary.500' : 'gray.300'}
                     />
                     <Text flexShrink={1}>{alternative}</Text>
                   </HStack>

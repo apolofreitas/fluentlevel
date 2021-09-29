@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth'
 import { GoogleSignin as GoogleSignIn } from '@react-native-google-signin/google-signin'
 import { db } from './db'
-import { getUserByUsername, isUsernameAvailable } from './users'
+import { getUserByUsername, checkUsernameAvailability } from './users'
 
 GoogleSignIn.configure({
   webClientId: '692321367548-7c1qlmekmna8i6h4pp45cu5hgr0r0f45.apps.googleusercontent.com',
@@ -20,7 +20,8 @@ interface SignUpOptions {
   password: string
 }
 export async function signUp({ email, password, nickname, username }: SignUpOptions) {
-  if (!(await isUsernameAvailable(username))) {
+  const isUsernameAvailable = await checkUsernameAvailability(username)
+  if (!isUsernameAvailable) {
     throw { code: 'auth/username-already-in-use' }
   }
 
@@ -65,9 +66,49 @@ export async function signOut() {
   await auth().signOut()
 }
 
-interface ResetPassword {
+interface ResetPasswordOptions {
   email: string
 }
-export async function resetPassword({ email }: ResetPassword) {
+export async function resetPassword({ email }: ResetPasswordOptions) {
   await auth().sendPasswordResetEmail(email)
+}
+
+interface EditEmailOptions {
+  newEmail: string
+  actualPassword: string
+}
+export async function changeEmail({ newEmail, actualPassword }: EditEmailOptions) {
+  try {
+    const { currentUser } = auth()
+
+    if (!currentUser || !currentUser.email) return
+
+    const credential = auth.EmailAuthProvider.credential(currentUser.email, actualPassword)
+
+    await currentUser.reauthenticateWithCredential(credential)
+
+    await currentUser.updateEmail(newEmail)
+  } catch (e) {
+    throw e
+  }
+}
+
+interface EditPasswordOptions {
+  actualPassword: string
+  newPassword: string
+}
+export async function changePassword({ actualPassword, newPassword }: EditPasswordOptions) {
+  try {
+    const { currentUser } = auth()
+
+    if (!currentUser || !currentUser.email) return
+
+    const credential = auth.EmailAuthProvider.credential(currentUser.email, actualPassword)
+
+    await currentUser.reauthenticateWithCredential(credential)
+
+    await currentUser.updatePassword(newPassword)
+  } catch (e) {
+    throw e
+  }
 }

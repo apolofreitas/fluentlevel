@@ -30,8 +30,13 @@ export const TasksScreen: HomeScreen<'Tasks'> = (props) => {
       renderTabBar={(props) => (
         <TabBar
           {...props}
-          indicatorStyle={{ backgroundColor: colors.primary[700] }}
+          indicatorStyle={{ backgroundColor: colors.primary[700], height: 2 }}
           style={{ backgroundColor: colors.background, elevation: 0 }}
+          contentContainerStyle={{
+            height: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
           renderLabel={({ route, focused }) => (
             <Text fontWeight="600" color={focused ? 'primary.700' : 'gray.300'}>
               {route.title}

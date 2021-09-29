@@ -1,20 +1,20 @@
 import * as React from 'react'
-import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
 import { useCurrentUser } from '~/hooks'
 
 import { OctopusIcon } from '~/components'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { HomeScreen } from '~/types/navigation'
 
-export const ProfileScreen: HomeScreen<'Profile'> = () => {
+export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
   const { currentUser, isLoading } = useCurrentUser()
 
   if (isLoading) return <LoadingScreen />
 
   return (
     <ScrollView>
-      <Box paddingX={5} paddingY={2}>
-        <HStack space={3} alignItems="center" marginX={2} marginBottom={4}>
+      <Box paddingX={6} paddingY={2}>
+        <HStack space={3} alignItems="center" marginBottom={4}>
           <OctopusIcon backgroundColor="primary.500" size="80px" maxWidth="80px" maxHeight="80px" />
 
           <Box>
@@ -35,6 +35,10 @@ export const ProfileScreen: HomeScreen<'Profile'> = () => {
             </HStack>
           </Box>
         </HStack>
+
+        <Button padding={2} marginBottom={4} onPress={() => navigation.navigate('EditProfile')}>
+          Editar Perfil
+        </Button>
 
         <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
           <VStack space={2} paddingY={3}>

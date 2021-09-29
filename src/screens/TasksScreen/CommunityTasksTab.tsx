@@ -9,8 +9,8 @@ import { LoadingScreen } from '~/screens/LoadingScreen'
 
 export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
   const [search, setSearch] = React.useState('')
-  const [filteredCommunityTasks, setFilteredCommunityTasks] = React.useState<Task[] | null>(null)
   const { communityTasks, isLoading } = useCommunityTasks()
+  const [filteredCommunityTasks, setFilteredCommunityTasks] = React.useState<Task[]>(communityTasks)
 
   React.useEffect(() => {
     setFilteredCommunityTasks(
@@ -23,7 +23,7 @@ export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
     )
   }, [search, communityTasks])
 
-  if (isLoading || !filteredCommunityTasks) return <LoadingScreen />
+  if (isLoading) return <LoadingScreen />
 
   return (
     <ScrollView>

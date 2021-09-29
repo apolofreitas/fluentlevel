@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Feather from 'react-native-vector-icons/Feather'
 
 import { HomeParamList } from '~/types/navigation'
-import { Header, HomeHeaderMenu } from '~/components'
+import { Header, ProfileHeaderMenu } from '~/components'
 
 import { TasksScreen } from '~/screens/TasksScreen'
 import { ContestsScreen } from '~/screens/ContestsScreen'
@@ -26,7 +26,7 @@ export function HomeNavigator() {
         component={TasksScreen}
         options={{
           tabBarLabel: 'Tarefas',
-          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
+          header: () => <Header showLogoInTitle />,
           tabBarIcon: ({ color }) => <Feather name="book-open" size={24} color={color} />,
         }}
       />
@@ -35,7 +35,7 @@ export function HomeNavigator() {
         component={ContestsScreen}
         options={{
           tabBarLabel: 'Competições',
-          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
+          header: () => <Header showLogoInTitle />,
           tabBarIcon: ({ color }) => <Feather name="award" size={24} color={color} />,
         }}
       />
@@ -44,7 +44,7 @@ export function HomeNavigator() {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Meu perfil',
-          header: () => <Header showLogoInTitle headerRight={() => <HomeHeaderMenu />} />,
+          header: () => <Header showLogoInTitle headerRight={() => <ProfileHeaderMenu />} />,
           tabBarIcon: ({ color }) => <Feather name="smile" size={24} color={color} />,
         }}
       />

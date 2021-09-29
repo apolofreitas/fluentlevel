@@ -2,11 +2,13 @@ import * as React from 'react'
 import { Alert } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather'
 import { Factory, Icon, IconButton, Menu } from 'native-base'
+import { useNavigation } from '@react-navigation/native'
 
 import { signOut } from '~/api'
 
-export const HomeHeaderMenu = Factory(() => {
-  const confirmSignOut = () => {
+export const ProfileHeaderMenu = Factory(() => {
+  const navigation = useNavigation()
+  const showSignOutAlert = () => {
     Alert.alert(
       'Sair',
       'Tem certeza que deseja sair da sua conta?',
@@ -33,7 +35,8 @@ export const HomeHeaderMenu = Factory(() => {
       )}
       placement="top right"
     >
-      <Menu.Item onPress={confirmSignOut}>Sair</Menu.Item>
+      <Menu.Item onPress={() => navigation.navigate('MyAccount')}>Minha conta</Menu.Item>
+      <Menu.Item onPress={showSignOutAlert}>Sair</Menu.Item>
     </Menu>
   )
 })

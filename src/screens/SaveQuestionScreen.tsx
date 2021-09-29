@@ -106,7 +106,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
   return (
     <>
       <ScrollView>
-        <Box paddingX={6} paddingTop={4} paddingBottom={24}>
+        <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
             isInvalid={!!formik.touched.statement && !!formik.errors.statement}
             isDisabled={formik.isSubmitting}
@@ -199,7 +199,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
                       <Pressable onPress={() => formik.setFieldValue('rightAlternativeIndex', index, false)}>
                         <OctopusIcon
                           backgroundColor={
-                            index === formik.values.rightAlternativeIndex ? colors.primary[500] : colors.primary[200]
+                            index === formik.values.rightAlternativeIndex ? colors.primary[500] : colors.gray[300]
                           }
                           borderLeftRadius={0}
                           marginRight={3}
