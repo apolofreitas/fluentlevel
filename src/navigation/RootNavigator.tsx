@@ -2,7 +2,7 @@ import React from 'react'
 import Tts from 'react-native-tts'
 import SplashScreen from 'react-native-splash-screen'
 import { useEffect } from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
 
 import { HomeNavigator } from './HomeNavigator'
 
@@ -23,6 +23,9 @@ import { EditProfileScreen } from '~/screens/EditProfileScreen'
 import { MyAccountScreen } from '~/screens/MyAccountScreen'
 import { ChangeEmailScreen } from '~/screens/ChangeEmailScreen'
 import { ChangePasswordScreen } from '~/screens/ChangePasswordScreen'
+import { FollowingUsersScreen } from '~/screens/FollowingUsersScreen'
+import { FollowersUsersScreen } from '~/screens/FollowersUsersScreen'
+import { UserDetailsScreen } from '~/screens/UserDetailsScreen'
 import { SaveListenQuestionScreen } from '~/screens/SaveListenQuestionScreen'
 import { SaveSpeechQuestionScreen } from '~/screens/SaveSpeechQuestionScreen'
 
@@ -99,6 +102,25 @@ export function RootNavigator() {
         component={ChangePasswordScreen}
       />
       <Stack.Screen
+        name="UserDetails"
+        options={{
+          header: (props: StackHeaderProps) => (
+            <Header canGoBack centerTitle title={`@${(props.route.params as any).initialValues.username}`} />
+          ),
+        }}
+        component={UserDetailsScreen}
+      />
+      <Stack.Screen
+        name="FollowingUsers"
+        options={{ header: () => <Header canGoBack centerTitle title="Seguindo" /> }}
+        component={FollowingUsersScreen}
+      />
+      <Stack.Screen
+        name="FollowersUsers"
+        options={{ header: () => <Header canGoBack centerTitle title="Seguidores" /> }}
+        component={FollowersUsersScreen}
+      />
+      <Stack.Screen
         name="SaveTask"
         component={SaveTaskScreen}
         options={{
@@ -107,9 +129,7 @@ export function RootNavigator() {
               <Header
                 canGoBack
                 centerTitle
-                title={
-                  !Object.keys(props.route.params || {}).includes('initialValues') ? 'Nova Tarefa' : 'Editando Tarefa'
-                }
+                title={!(props.route.params as any)?.initialValues ? 'Nova Tarefa' : 'Editando Tarefa'}
                 headerRight={props.options.headerRight}
               />
             )

@@ -14,6 +14,7 @@ export const useCurrentUser = create<UsersState>((set) => {
       id: '',
       username: '',
       email: '',
+      bio: '',
       nickname: '',
       following: [],
       followers: [],

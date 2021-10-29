@@ -1,7 +1,15 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { AlternativeQuestionModel, ListenQuestionModel, QuestionModel, SpeechQuestionModel, Task } from '~/api'
+import {
+  AlternativeQuestionModel,
+  ListenQuestionModel,
+  QuestionModel,
+  SpeechQuestionModel,
+  Task,
+  User,
+  UserModel,
+} from '~/api'
 
 export type RootParamList = {
   Onboarding: undefined
@@ -15,6 +23,14 @@ export type RootParamList = {
   MyAccount: undefined
   ChangeEmail: undefined
   ChangePassword: undefined
+
+  UserDetails: {
+    initialValues: {
+      username: string
+    }
+  }
+  FollowingUsers: { followingUsers: UserModel[] }
+  FollowersUsers: { followersUsers: UserModel[] }
 
   SaveTask?: {
     initialValues?: Task

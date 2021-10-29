@@ -27,10 +27,18 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
               </Text>
 
               <HStack space={2} marginBottom={1}>
-                <Text fontWeight="600" color="gray.500">
+                <Text
+                  fontWeight="600"
+                  color="gray.500"
+                  onPress={() => navigation.push('FollowersUsers', { followersUsers: currentUser.followers })}
+                >
                   {currentUser.followers.length} seguidores
                 </Text>
-                <Text fontWeight="600" color="gray.500">
+                <Text
+                  fontWeight="600"
+                  color="gray.500"
+                  onPress={() => navigation.push('FollowingUsers', { followingUsers: currentUser.following })}
+                >
                   {currentUser.following.length} seguindo
                 </Text>
               </HStack>

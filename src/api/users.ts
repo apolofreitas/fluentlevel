@@ -4,8 +4,8 @@ import { db, UserModel } from './db'
 
 export interface User extends Omit<UserModel, 'followers' | 'following'> {
   id: string
-  followers: (UserModel | null)[]
-  following: (UserModel | null)[]
+  followers: UserModel[]
+  following: UserModel[]
 }
 
 export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentReference<UserModel>) {
@@ -14,29 +14,33 @@ export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentRefere
 
   if (!userData) throw 'User not found'
 
-  const followers = await Promise.all(
-    userData.followers.map(async (targetId) => {
-      const userDoc = db.users.doc(targetId)
-      const userSnap = await userDoc.get()
-      const user = userSnap.data()
+  const followers = (
+    await Promise.all(
+      userData.followers.map(async (targetId) => {
+        const userDoc = db.users.doc(targetId)
+        const userSnap = await userDoc.get()
+        const user = userSnap.data()
 
-      if (!user) return null
+        if (!user) return null
 
-      return user
-    }),
-  )
+        return user
+      }),
+    )
+  ).filter((user) => user !== null) as UserModel[]
 
-  const following = await Promise.all(
-    userData.following.map(async (targetId) => {
-      const userDoc = db.users.doc(targetId)
-      const userSnap = await userDoc.get()
-      const user = userSnap.data()
+  const following = (
+    await Promise.all(
+      userData.following.map(async (targetId) => {
+        const userDoc = db.users.doc(targetId)
+        const userSnap = await userDoc.get()
+        const user = userSnap.data()
 
-      if (!user) return null
+        if (!user) return null
 
-      return user
-    }),
-  )
+        return user
+      }),
+    )
+  ).filter((user) => user !== null) as UserModel[]
 
   const user: User = {
     ...userData,
@@ -46,7 +50,7 @@ export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentRefere
   }
 
   return {
-    userDoc: userSnap,
+    userDoc,
     userSnap,
     user,
   }
@@ -115,14 +119,14 @@ export async function toggleFollow(id: string) {
       following: firebase.firestore.FieldValue.arrayRemove(id),
     })
     targetUserDoc.update({
-      followers: firebase.firestore.FieldValue.arrayRemove(id),
+      followers: firebase.firestore.FieldValue.arrayRemove(currentUserDoc.id),
     })
   } else {
     currentUserDoc.update({
       following: firebase.firestore.FieldValue.arrayUnion(id),
     })
     targetUserDoc.update({
-      followers: firebase.firestore.FieldValue.arrayUnion(id),
+      followers: firebase.firestore.FieldValue.arrayUnion(currentUserDoc.id),
     })
   }
 }
