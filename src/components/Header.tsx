@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React, { ReactNode } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import { HStack, Icon, IconButton, Spacer, Text } from 'native-base'
-import { useNavigation, useRoute } from '@react-navigation/core'
+import { useNavigation } from '@react-navigation/core'
 
 import { SmallLogo } from '~/assets'
 
@@ -15,14 +15,14 @@ interface HeaderProps {
         tintColor?: string | undefined
         pressColor?: string | undefined
         pressOpacity?: number | undefined
-      }) => React.ReactNode)
+      }) => ReactNode)
     | undefined
   headerRight?:
     | ((props: {
         tintColor?: string | undefined
         pressColor?: string | undefined
         pressOpacity?: number | undefined
-      }) => React.ReactNode)
+      }) => ReactNode)
     | undefined
 }
 

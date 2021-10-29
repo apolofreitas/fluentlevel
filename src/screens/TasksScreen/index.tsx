@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { useWindowDimensions } from 'react-native'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import { Text } from 'native-base'
@@ -16,8 +16,8 @@ export const TasksScreen: HomeScreen<'Tasks'> = (props) => {
     CreatedTasksTab: () => <CreatedTasksTab {...props} />,
   })
 
-  const [index, setIndex] = React.useState(0)
-  const [routes] = React.useState([
+  const [index, setIndex] = useState(0)
+  const [routes] = useState([
     { key: 'CommunityTasksTab', title: 'Comunidade' },
     { key: 'CreatedTasksTab', title: 'Criações' },
   ])

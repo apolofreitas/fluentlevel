@@ -1,5 +1,6 @@
-import * as React from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import {
+  Actionsheet,
   Box,
   Button,
   Checkbox,
@@ -11,6 +12,7 @@ import {
   ScrollView,
   Text,
   TextArea,
+  useDisclose,
   VStack,
 } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
@@ -24,11 +26,12 @@ import { Alert } from 'react-native'
 
 const SaveTaskSchema = yup.object({
   title: taskTitleSchema.required('O título é um cambo obrigatório.'),
-  description: taskDescriptionSchema.required('A descrição é um cambo obrigatório.'),
+  description: taskDescriptionSchema,
   questions: taskQuestionsSchema,
 })
 
 export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) => {
+  const saveQuestionDisclosure = useDisclose()
   const formik = useFormik<CreateTaskOptions & { id?: string }>({
     initialValues: route.params?.initialValues || {
       id: undefined,
@@ -49,7 +52,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
     },
   })
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (formik.values.id === undefined) return
     const taskId = formik.values.id
 
@@ -91,7 +94,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
     })
   }, [navigation, formik.values.id])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!route.params?.questionToSave) return
 
     const { questionToSave } = route.params
@@ -198,13 +201,34 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
               {formik.values.questions.map((question, questionIndex) => (
                 <Button
                   key={questionIndex}
+                  _text={{ fontWeight: '500' }}
                   variant="unstyled"
                   padding={4}
                   justifyContent="flex-start"
                   isDisabled={formik.isSubmitting}
-                  onPress={() => navigation.navigate('SaveQuestion', { initialValues: question, questionIndex })}
+                  onPress={() => {
+                    if (question.type === 'ALTERNATIVE_QUESTION') {
+                      return navigation.navigate('SaveAlternativeQuestion', { initialValues: question, questionIndex })
+                    }
+                    if (question.type === 'LISTEN_QUESTION') {
+                      return navigation.navigate('SaveListenQuestion', { initialValues: question, questionIndex })
+                    }
+                    if (question.type === 'SPEECH_QUESTION') {
+                      return navigation.navigate('SaveSpeechQuestion', { initialValues: question, questionIndex })
+                    }
+                  }}
                 >
-                  {question.statement}
+                  {`Questão ${questionIndex + 1} - ${
+                    question.type === 'ALTERNATIVE_QUESTION'
+                      ? 'Objetiva'
+                      : question.type === 'LISTEN_QUESTION'
+                      ? 'Reconhecimento'
+                      : question.type === 'SPEECH_QUESTION'
+                      ? 'Pronuncia'
+                      : question.type === 'ORGANIZE_QUESTION'
+                      ? 'Organização'
+                      : ''
+                  }`}
                 </Button>
               ))}
 
@@ -214,7 +238,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
                 padding={4}
                 startIcon={<Icon as={Feather} name="plus" size="sm" color="primary.500" />}
                 isDisabled={formik.isSubmitting}
-                onPress={() => navigation.navigate('SaveQuestion')}
+                onPress={saveQuestionDisclosure.onOpen}
               />
             </VStack>
 
@@ -222,6 +246,35 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
           </FormControl>
         </Box>
       </ScrollView>
+
+      <Actionsheet isOpen={saveQuestionDisclosure.isOpen} onClose={saveQuestionDisclosure.onClose}>
+        <Actionsheet.Content>
+          <Actionsheet.Item
+            onPress={() => {
+              navigation.navigate('SaveAlternativeQuestion')
+              saveQuestionDisclosure.onClose()
+            }}
+          >
+            Questão de alternativa
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            onPress={() => {
+              navigation.navigate('SaveListenQuestion')
+              saveQuestionDisclosure.onClose()
+            }}
+          >
+            Questão de reconhecimento
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            onPress={() => {
+              navigation.navigate('SaveSpeechQuestion')
+              saveQuestionDisclosure.onClose()
+            }}
+          >
+            Questão de pronuncia
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
 
       <Button
         position="absolute"

@@ -38,6 +38,26 @@ export const { components }: Parameters<typeof extendTheme>[0] = {
         _focus: {
           borderWidth: 2,
         },
+        _disabled: {
+          bg: 'card',
+        },
+      },
+    },
+    ActionsheetContent: {
+      baseStyle: {
+        alignItems: 'center',
+        gap: 2,
+        padding: 4,
+        roundedTop: 16,
+      },
+    },
+    ActionsheetItem: {
+      baseStyle: {
+        _text: {
+          paddingX: 2,
+          paddingY: 3,
+          fontWeight: 500,
+        },
       },
     },
     Toast: {

@@ -1,7 +1,7 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { Task, TaskModel } from '~/api'
+import { AlternativeQuestionModel, ListenQuestionModel, QuestionModel, SpeechQuestionModel, Task } from '~/api'
 
 export type RootParamList = {
   Onboarding: undefined
@@ -20,11 +20,22 @@ export type RootParamList = {
     initialValues?: Task
     questionToSave?: {
       index?: number
-      data?: TaskModel['questions'][number]
+      data?: QuestionModel
     }
   }
-  SaveQuestion?: {
-    initialValues?: TaskModel['questions'][number]
+
+  SaveAlternativeQuestion?: {
+    initialValues?: AlternativeQuestionModel
+    questionIndex?: number
+  }
+
+  SaveListenQuestion?: {
+    initialValues?: ListenQuestionModel
+    questionIndex?: number
+  }
+
+  SaveSpeechQuestion?: {
+    initialValues?: SpeechQuestionModel
     questionIndex?: number
   }
 
@@ -41,7 +52,7 @@ export type RootParamList = {
     }>
   }
 
-  FinishedTask: {
+  TaskResults: {
     task: Task
     results: {
       correctAnswers: number

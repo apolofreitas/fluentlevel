@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Button, Center, FormControl, Input, Text, useToast } from 'native-base'
 import { useFormik } from 'formik'
 

@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth'
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
+import { firebase, FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
 import { db, UserModel } from './db'
 
 export interface User extends Omit<UserModel, 'followers' | 'following'> {
@@ -112,17 +112,17 @@ export async function toggleFollow(id: string) {
 
   if (await isUserFollowing(id)) {
     currentUserDoc.update({
-      following: currentUser.following.filter((followingId) => followingId !== id),
+      following: firebase.firestore.FieldValue.arrayRemove(id),
     })
     targetUserDoc.update({
-      followers: targetUser.following.filter((followingId) => followingId !== id),
+      followers: firebase.firestore.FieldValue.arrayRemove(id),
     })
   } else {
     currentUserDoc.update({
-      following: [...currentUser.following, id],
+      following: firebase.firestore.FieldValue.arrayUnion(id),
     })
     targetUserDoc.update({
-      followers: [...targetUser.following, id],
+      followers: firebase.firestore.FieldValue.arrayUnion(id),
     })
   }
 }

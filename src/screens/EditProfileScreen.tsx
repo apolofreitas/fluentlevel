@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import * as yup from 'yup'
-import { Button, FormControl, Input, Text, useToast, VStack } from 'native-base'
+import { Button, FormControl, Input, ScrollView, Text, useToast, VStack } from 'native-base'
 import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
@@ -24,9 +24,9 @@ export const EditProfileScreen: RootScreen<'EditProfile'> = ({ navigation }) => 
     },
     validationSchema: EditProfileSchema,
     onSubmit: async (values) => {
+      values.username = values.username.toLowerCase()
       if (values.username !== currentUser.username) {
         const isUsernameAvailable = await checkUsernameAvailability(values.username)
-        console.log('isUsernameAvailable', isUsernameAvailable)
         if (!isUsernameAvailable) return showSimpleToast(toast, 'Nome de usuário indisponível')
       }
       await updateCurrentUser(values)
@@ -37,37 +37,45 @@ export const EditProfileScreen: RootScreen<'EditProfile'> = ({ navigation }) => 
 
   return (
     <>
-      <VStack paddingY={2} paddingX={6} space={2}>
-        <FormControl isInvalid={!!formik.touched.nickname && !!formik.errors.nickname} isDisabled={formik.isSubmitting}>
-          <FormControl.Label>
-            <Text color="primary.700" fontSize="lg" fontWeight="600">
-              Apelido
-            </Text>
-          </FormControl.Label>
-          <Input
-            value={formik.values.nickname}
-            onChangeText={formik.handleChange('nickname')}
-            onBlur={formik.handleBlur('nickname')}
-            placeholder="Apelido"
-          />
-          <FormControl.ErrorMessage>{formik.errors.nickname}</FormControl.ErrorMessage>
-        </FormControl>
+      <ScrollView>
+        <VStack paddingY={2} paddingX={6} paddingBottom={24} space={2}>
+          <FormControl
+            isInvalid={!!formik.touched.nickname && !!formik.errors.nickname}
+            isDisabled={formik.isSubmitting}
+          >
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Apelido
+              </Text>
+            </FormControl.Label>
+            <Input
+              value={formik.values.nickname}
+              onChangeText={formik.handleChange('nickname')}
+              onBlur={formik.handleBlur('nickname')}
+              placeholder="Apelido"
+            />
+            <FormControl.ErrorMessage>{formik.errors.nickname}</FormControl.ErrorMessage>
+          </FormControl>
 
-        <FormControl isInvalid={!!formik.touched.username && !!formik.errors.username} isDisabled={formik.isSubmitting}>
-          <FormControl.Label>
-            <Text color="primary.700" fontSize="lg" fontWeight="600">
-              Nome de usuário
-            </Text>
-          </FormControl.Label>
-          <Input
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            onBlur={formik.handleBlur('username')}
-            placeholder="Nome de usuário"
-          />
-          <FormControl.ErrorMessage>{formik.errors.username}</FormControl.ErrorMessage>
-        </FormControl>
-      </VStack>
+          <FormControl
+            isInvalid={!!formik.touched.username && !!formik.errors.username}
+            isDisabled={formik.isSubmitting}
+          >
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Nome de usuário
+              </Text>
+            </FormControl.Label>
+            <Input
+              value={formik.values.username}
+              onChangeText={formik.handleChange('username')}
+              onBlur={formik.handleBlur('username')}
+              placeholder="Nome de usuário"
+            />
+            <FormControl.ErrorMessage>{formik.errors.username}</FormControl.ErrorMessage>
+          </FormControl>
+        </VStack>
+      </ScrollView>
 
       <Button
         position="absolute"

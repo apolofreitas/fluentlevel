@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import * as yup from 'yup'
-import { Button, FormControl, Icon, Input, Text, useToast, VStack } from 'native-base'
+import { Button, FormControl, Icon, Input, ScrollView, Text, useToast, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'
 import { useFormik } from 'formik'
@@ -17,7 +17,7 @@ const ChangeEmailSchema = yup.object({
 
 export const ChangeEmailScreen: RootScreen<'ChangeEmail'> = ({ navigation }) => {
   const toast = useToast()
-  const [isShowingActualPassword, setIsShowingActualPassword] = React.useState(false)
+  const [isShowingActualPassword, setIsShowingActualPassword] = useState(false)
   const { currentUser } = useCurrentUser()
   const formik = useFormik({
     initialValues: {
@@ -30,7 +30,7 @@ export const ChangeEmailScreen: RootScreen<'ChangeEmail'> = ({ navigation }) => 
         await changeEmail(values)
         navigation.goBack()
         showSimpleToast(toast, 'Email salvo.')
-      } catch (e) {
+      } catch (e: any) {
         if (e.code === 'auth/wrong-password') showSimpleToast(toast, 'A senha não coincide')
         if (e.code === 'auth/invalid-email') showSimpleToast(toast, 'Email inválido')
         if (e.code === 'auth/too-many-requests') showSimpleToast(toast, 'Muitas tentativas, tente novamente mais tarde')
@@ -40,56 +40,61 @@ export const ChangeEmailScreen: RootScreen<'ChangeEmail'> = ({ navigation }) => 
 
   return (
     <>
-      <VStack paddingY={2} paddingX={6} space={2}>
-        <FormControl isInvalid={!!formik.touched.newEmail && !!formik.errors.newEmail} isDisabled={formik.isSubmitting}>
-          <FormControl.Label>
-            <Text color="primary.700" fontSize="lg" fontWeight="600">
-              Email
-            </Text>
-          </FormControl.Label>
-          <Input
-            value={formik.values.newEmail}
-            onChangeText={formik.handleChange('newEmail')}
-            onBlur={formik.handleBlur('newEmail')}
-            placeholder="Email"
-          />
-          <FormControl.ErrorMessage>{formik.errors.newEmail}</FormControl.ErrorMessage>
-        </FormControl>
-
-        <FormControl
-          isInvalid={!!formik.touched.actualPassword && !!formik.errors.actualPassword}
-          isDisabled={formik.isSubmitting}
-        >
-          <FormControl.Label>
-            <Text color="primary.700" fontSize="lg" fontWeight="600">
-              Senha atual
-            </Text>
-          </FormControl.Label>
-          <Input
-            onChangeText={formik.handleChange('actualPassword')}
-            onBlur={formik.handleBlur('actualPassword')}
-            value={formik.values.actualPassword}
+      <ScrollView>
+        <VStack paddingY={2} paddingX={6} paddingBottom={24} space={2}>
+          <FormControl
+            isInvalid={!!formik.touched.newEmail && !!formik.errors.newEmail}
             isDisabled={formik.isSubmitting}
-            type={isShowingActualPassword ? 'text' : 'password'}
-            InputRightElement={
-              <Button
-                variant="unstyled"
-                padding={4}
-                isDisabled={formik.isSubmitting}
-                onPress={() => setIsShowingActualPassword(!isShowingActualPassword)}
-              >
-                {isShowingActualPassword ? (
-                  <Icon as={Feather} name="eye-off" size={4} color="primary.500" />
-                ) : (
-                  <Icon as={Feather} name="eye" size={4} color="primary.500" />
-                )}
-              </Button>
-            }
-            placeholder="Senha atual"
-          />
-          <FormControl.ErrorMessage>{formik.errors.actualPassword}</FormControl.ErrorMessage>
-        </FormControl>
-      </VStack>
+          >
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Email
+              </Text>
+            </FormControl.Label>
+            <Input
+              value={formik.values.newEmail}
+              onChangeText={formik.handleChange('newEmail')}
+              onBlur={formik.handleBlur('newEmail')}
+              placeholder="Email"
+            />
+            <FormControl.ErrorMessage>{formik.errors.newEmail}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isInvalid={!!formik.touched.actualPassword && !!formik.errors.actualPassword}
+            isDisabled={formik.isSubmitting}
+          >
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Senha atual
+              </Text>
+            </FormControl.Label>
+            <Input
+              onChangeText={formik.handleChange('actualPassword')}
+              onBlur={formik.handleBlur('actualPassword')}
+              value={formik.values.actualPassword}
+              isDisabled={formik.isSubmitting}
+              type={isShowingActualPassword ? 'text' : 'password'}
+              InputRightElement={
+                <Button
+                  variant="unstyled"
+                  padding={4}
+                  isDisabled={formik.isSubmitting}
+                  onPress={() => setIsShowingActualPassword(!isShowingActualPassword)}
+                >
+                  {isShowingActualPassword ? (
+                    <Icon as={Feather} name="eye-off" size={4} color="primary.500" />
+                  ) : (
+                    <Icon as={Feather} name="eye" size={4} color="primary.500" />
+                  )}
+                </Button>
+              }
+              placeholder="Senha atual"
+            />
+            <FormControl.ErrorMessage>{formik.errors.actualPassword}</FormControl.ErrorMessage>
+          </FormControl>
+        </VStack>
+      </ScrollView>
 
       <Button
         position="absolute"

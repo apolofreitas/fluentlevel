@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Center, Factory, Spinner } from 'native-base'
 
 export const LoadingScreen = Factory(({ ...rest }) => {

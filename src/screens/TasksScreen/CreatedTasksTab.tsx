@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { useNavigation } from '@react-navigation/core'
 import { Box, Text, Fab, Icon, VStack, ScrollView, HStack, Spacer, Pressable, Center } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
@@ -62,7 +62,7 @@ export const CreatedTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
                     <Text
                       flexShrink={1}
                       isTruncated
-                      numberOfLines={2}
+                      ellipsizeMode="tail"
                       textAlign="justify"
                       fontSize="lg"
                       fontWeight="700"
@@ -70,13 +70,10 @@ export const CreatedTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
                     >
                       {task.title}
                     </Text>
-
-                    <HStack marginBottom={2}>
-                      <Spacer />
-                      <Text color="primary.700">{task.questions.length} questões</Text>
-                    </HStack>
-
-                    <Text>{task.description}</Text>
+                    <Text marginBottom={2} color="primary.700">
+                      {task.questions.length} questões
+                    </Text>
+                    {!!task.description && <Text>{task.description}</Text>}
                   </Box>
                 </Pressable>
               ))

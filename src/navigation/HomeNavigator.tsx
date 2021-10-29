@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Feather from 'react-native-vector-icons/Feather'

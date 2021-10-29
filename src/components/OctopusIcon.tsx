@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Factory, Center, ICenterProps } from 'native-base'
 import { SmallLogo } from '~/assets'
 import { colors } from '~/theme/colors'

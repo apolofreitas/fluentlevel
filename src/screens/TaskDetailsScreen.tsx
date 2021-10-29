@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'
@@ -9,25 +9,25 @@ export const TaskDetailsScreen: RootScreen<'TaskDetails'> = ({ navigation, route
   return (
     <>
       <ScrollView>
-        <Box alignItems="center" padding={8}>
-          <VStack width="100%" marginTop={4} space={6}>
-            <Text fontSize="4xl" fontWeight="700">
-              {task.title}
-            </Text>
+        <Box alignItems="center" padding={8} paddingBottom={24}>
+          <Text fontSize="4xl" fontWeight="700" marginBottom={4}>
+            {task.title}
+          </Text>
 
-            <Text fontSize="lg" color="gray.500">
-              {task.description}
+          <HStack width="100%" justifyContent="space-between" marginBottom={6}>
+            <Text fontSize="lg" fontWeight="600" color="primary.700">
+              @{task.author.username}
             </Text>
+            <Text fontSize="lg" fontWeight="600">
+              {task.questions.length > 1 ? `${task.questions.length} questões` : `${task.questions.length} questão`}
+            </Text>
+          </HStack>
 
-            <HStack width="100%" justifyContent="space-between">
-              <Text fontSize="lg" fontWeight="600">
-                {task.questions.length > 1 ? `${task.questions.length} questões` : `${task.questions.length} questão`}
-              </Text>
-              <Text fontSize="lg" color="primary.700">
-                @{task.author.username}
-              </Text>
-            </HStack>
-          </VStack>
+          {task.description && (
+            <Box width="100%" backgroundColor="card" borderRadius="16px" paddingX={4} paddingY={3}>
+              <Text color="gray.500">{task.description}</Text>
+            </Box>
+          )}
         </Box>
       </ScrollView>
 

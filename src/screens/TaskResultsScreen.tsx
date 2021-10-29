@@ -1,14 +1,14 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import { BackHandler } from 'react-native'
 import { Box, Button, ScrollView, Text, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'
 import { PartyingFace } from '~/assets'
 
-export const FinishedTaskScreen: RootScreen<'FinishedTask'> = ({ navigation, route }) => {
+export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route }) => {
   const { results } = route.params
 
-  React.useEffect(() => {
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       navigation.navigate('Home')
       return true
@@ -20,7 +20,7 @@ export const FinishedTaskScreen: RootScreen<'FinishedTask'> = ({ navigation, rou
   return (
     <>
       <ScrollView>
-        <Box flex={1} alignItems="center" padding={9}>
+        <Box flex={1} alignItems="center" padding={9} paddingBottom={24}>
           <VStack width="100%" space={5}>
             <PartyingFace alignSelf="center" />
 

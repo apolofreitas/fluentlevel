@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Alert } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather'
 import { Factory, Icon, IconButton, Menu } from 'native-base'

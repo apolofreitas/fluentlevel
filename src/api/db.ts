@@ -16,19 +16,47 @@ export interface UserModel {
   contestsHistory: string[]
 }
 
-export interface QuestionModel {
-  statement: string
+export interface AlternativeQuestionModel {
+  type: 'ALTERNATIVE_QUESTION'
+  info: string
   timeToAnswer: number
+
   alternatives: string[]
   rightAlternativeIndex: number
 }
+
+export interface ListenQuestionModel {
+  type: 'LISTEN_QUESTION'
+  info: string
+  timeToAnswer: number
+
+  phraseToRecognize: string
+}
+
+export interface SpeechQuestionModel {
+  type: 'SPEECH_QUESTION'
+  info: string
+  timeToAnswer: number
+
+  phraseToSpeech: string
+}
+
+export interface OrganizeQuestionModel {
+  type: 'ORGANIZE_QUESTION'
+  info: string
+  timeToAnswer: number
+
+  phraseToOrganize: string
+}
+
+export type QuestionModel = ListenQuestionModel | SpeechQuestionModel | OrganizeQuestionModel | AlternativeQuestionModel
 
 export interface TaskModel {
   authorId: string
   isPublic: boolean
 
   title: string
-  description: string
+  description?: string
   questions: Array<QuestionModel>
 }
 
@@ -36,7 +64,7 @@ export interface ContestModel {
   authorId: string
 
   title: string
-  description: string
+  description?: string
   password: string
   startTime: Date
   finishTime: Date

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, Center, FormControl, Icon, Input, Text, useToast, VStack } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 import { useFormik } from 'formik'
@@ -12,6 +12,8 @@ export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
   const formik = useFormik({
     initialValues: { usernameOrEmail: '', password: '' },
     onSubmit: async (values) => {
+      values.usernameOrEmail = values.usernameOrEmail.toLowerCase()
+
       if (!values.usernameOrEmail) {
         return showSimpleToast(toast, 'Campo de login vazio.')
       }
@@ -34,7 +36,7 @@ export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
       })
     },
   })
-  const [isPasswordShowing, setIsPasswordShowing] = React.useState(false)
+  const [isPasswordShowing, setIsPasswordShowing] = useState(false)
 
   return (
     <Center flex={1} paddingX={6}>

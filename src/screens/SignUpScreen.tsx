@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { useFormik } from 'formik'
 import Feather from 'react-native-vector-icons/Feather'
@@ -23,6 +23,7 @@ export const SignUpScreen: RootScreen<'SignUp'> = () => {
     initialValues: { nickname: '', username: '', email: '', password: '' },
     validationSchema: SignUpSchema,
     onSubmit: async (values) => {
+      values.username = values.username.toLowerCase()
       await signUp(values).catch(({ code }: { code: string }) => {
         if (code === 'auth/username-already-in-use') {
           showSimpleToast(toast, 'Nome de usuário já em uso')

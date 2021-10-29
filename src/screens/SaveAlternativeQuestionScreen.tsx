@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import {
   Box,
@@ -13,33 +13,33 @@ import {
   IconButton,
   FormControl,
   Slider,
-  Select,
 } from 'native-base'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-
-import { RootScreen } from '~/types/navigation'
-import { questionAlternativesSchema, questionStatementSchema } from '~/shared/validation'
-import { QuestionModel } from '~/api'
-import { OctopusIcon } from '~/components/OctopusIcon'
-import { colors } from '~/theme/colors'
 import { Alert, Pressable } from 'react-native'
 
-const SignUpSchema = yup.object({
-  statement: questionStatementSchema.required('O enunciado é um campo obrigatório.'),
+import { RootScreen } from '~/types/navigation'
+import { questionAlternativesSchema, questionInfoSchema } from '~/shared/validation'
+import { AlternativeQuestionModel } from '~/api'
+import { colors } from '~/theme/colors'
+import { OctopusIcon } from '~/components'
+
+const SaveAlternativeQuestionSchema = yup.object({
+  info: questionInfoSchema.required('As informações da questão são obrigatórias.'),
   alternatives: questionAlternativesSchema.required('As alternativas são obrigatório.'),
 })
 
-export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, route }) => {
-  const [questionIndex] = React.useState(route.params?.questionIndex)
-  const formik = useFormik<QuestionModel>({
+export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'> = ({ navigation, route }) => {
+  const [questionIndex] = useState(route.params?.questionIndex)
+  const formik = useFormik<AlternativeQuestionModel>({
     initialValues: route.params?.initialValues || {
-      statement: '',
+      type: 'ALTERNATIVE_QUESTION',
+      info: '',
+      timeToAnswer: 30,
       alternatives: [],
       rightAlternativeIndex: 0,
-      timeToAnswer: 30,
     },
-    validationSchema: SignUpSchema,
+    validationSchema: SaveAlternativeQuestionSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
       if (!navigation.isFocused()) return
@@ -52,7 +52,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
     },
   })
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (questionIndex === undefined) return
     navigation.setOptions({
       headerRight: () => (
@@ -95,7 +95,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
     })
   }, [navigation, questionIndex])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const rightAlternativeIndex = Math.max(
       0,
       Math.min(formik.values.rightAlternativeIndex, formik.values.alternatives.length - 1),
@@ -108,30 +108,30 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
       <ScrollView>
         <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
-            isInvalid={!!formik.touched.statement && !!formik.errors.statement}
+            isInvalid={!!formik.touched.info && !!formik.errors.info}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Enunciado
+                Informações
               </Text>
             </FormControl.Label>
             <TextArea
               height="88px"
               numberOfLines={3}
               textAlignVertical="top"
-              placeholder="Digite o enunciado da questão"
-              onChangeText={formik.handleChange('statement')}
-              onBlur={formik.handleBlur('statement')}
-              value={formik.values.statement}
+              placeholder="Digite as informações da questão"
+              onChangeText={formik.handleChange('info')}
+              onBlur={formik.handleBlur('info')}
+              value={formik.values.info}
               isDisabled={formik.isSubmitting}
             />
-            <FormControl.ErrorMessage>{formik.errors.statement}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.info}</FormControl.ErrorMessage>
           </FormControl>
 
           <FormControl
-            isInvalid={!!formik.touched.statement && !!formik.errors.statement}
+            isInvalid={!!formik.touched.info && !!formik.errors.info}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
@@ -158,7 +158,7 @@ export const SaveQuestionScreen: RootScreen<'SaveQuestion'> = ({ navigation, rou
               </Slider>
             </HStack>
 
-            <FormControl.ErrorMessage>{formik.errors.statement}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.timeToAnswer}</FormControl.ErrorMessage>
           </FormControl>
 
           <FormControl

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Button, Center, Text, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'

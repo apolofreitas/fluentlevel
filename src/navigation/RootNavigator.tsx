@@ -1,7 +1,8 @@
-import * as React from 'react'
+import React from 'react'
+import Tts from 'react-native-tts'
+import SplashScreen from 'react-native-splash-screen'
 import { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
-import SplashScreen from 'react-native-splash-screen'
 
 import { HomeNavigator } from './HomeNavigator'
 
@@ -14,14 +15,16 @@ import { SignInScreen } from '~/screens/SignInScreen'
 import { SignUpScreen } from '~/screens/SignUpScreen'
 import { ResetPasswordScreen } from '~/screens/ResetPasswordScreen'
 import { SaveTaskScreen } from '~/screens/SaveTaskScreen'
-import { SaveQuestionScreen } from '~/screens/SaveQuestionScreen'
+import { SaveAlternativeQuestionScreen } from '~/screens/SaveAlternativeQuestionScreen'
 import { TaskDetailsScreen } from '~/screens/TaskDetailsScreen'
-import { FinishedTaskScreen } from '~/screens/FinishedTaskScreen'
+import { TaskResultsScreen } from '~/screens/TaskResultsScreen'
 import { TaskSolvingScreen } from '~/screens/TaskSolvingScreen'
 import { EditProfileScreen } from '~/screens/EditProfileScreen'
 import { MyAccountScreen } from '~/screens/MyAccountScreen'
 import { ChangeEmailScreen } from '~/screens/ChangeEmailScreen'
 import { ChangePasswordScreen } from '~/screens/ChangePasswordScreen'
+import { SaveListenQuestionScreen } from '~/screens/SaveListenQuestionScreen'
+import { SaveSpeechQuestionScreen } from '~/screens/SaveSpeechQuestionScreen'
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -29,7 +32,16 @@ export function RootNavigator() {
   const { isSignedIn, isLoading } = useAuth()
 
   useEffect(() => {
-    if (!isLoading) setTimeout(SplashScreen.hide, 1500)
+    ;(async () => {
+      if (!isLoading) {
+        try {
+          await Tts.getInitStatus()
+          SplashScreen.hide()
+        } catch (error: any) {
+          if (error.code === 'no_engine') Tts.requestInstallData()
+        }
+      }
+    })()
   }, [isLoading])
 
   if (isLoading) return null
@@ -105,8 +117,44 @@ export function RootNavigator() {
         }}
       />
       <Stack.Screen
-        name="SaveQuestion"
-        component={SaveQuestionScreen}
+        name="SaveAlternativeQuestion"
+        component={SaveAlternativeQuestionScreen}
+        options={{
+          header: (props) => {
+            return (
+              <Header
+                canGoBack
+                centerTitle
+                title={
+                  !Object.keys(props.route.params || {}).includes('initialValues') ? 'Nova Questão' : 'Editando Questão'
+                }
+                headerRight={props.options.headerRight}
+              />
+            )
+          },
+        }}
+      />
+      <Stack.Screen
+        name="SaveListenQuestion"
+        component={SaveListenQuestionScreen}
+        options={{
+          header: (props) => {
+            return (
+              <Header
+                canGoBack
+                centerTitle
+                title={
+                  !Object.keys(props.route.params || {}).includes('initialValues') ? 'Nova Questão' : 'Editando Questão'
+                }
+                headerRight={props.options.headerRight}
+              />
+            )
+          },
+        }}
+      />
+      <Stack.Screen
+        name="SaveSpeechQuestion"
+        component={SaveSpeechQuestionScreen}
         options={{
           header: (props) => {
             return (
@@ -130,8 +178,8 @@ export function RootNavigator() {
         }}
       />
       <Stack.Screen
-        name="FinishedTask"
-        component={FinishedTaskScreen}
+        name="TaskResults"
+        component={TaskResultsScreen}
         options={{
           header: () => <Header title="" />,
         }}

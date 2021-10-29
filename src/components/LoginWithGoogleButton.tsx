@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Button, Factory, Spacer } from 'native-base'
 
 import { GoogleLogo } from '~/assets'

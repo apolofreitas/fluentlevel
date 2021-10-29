@@ -20,9 +20,7 @@ export const taskQuestionsSchema = yup
   .min(1, 'A tarefa deve ter no mínimo 1 questão')
   .max(100, 'A tarefa deve ter no máximo 100 questões')
 
-export const questionStatementSchema = yup
-  .string()
-  .max(1024, 'O enunciado da tarefa deve ter no máximo 1024 caracteres.')
+export const questionInfoSchema = yup.string().max(1024, 'As informações da tarefa deve ter no máximo 1024 caracteres.')
 export const questionAlternativesSchema = yup
   .array()
   .of(
@@ -34,3 +32,7 @@ export const questionAlternativesSchema = yup
   .min(2, 'A questão deve ter no mínimo 2 alternativas.')
   .max(5, 'A questão deve ter no máximo 5 alternativas.')
   .required()
+
+export const questionPhraseToSpeechSchema = yup
+  .string()
+  .max(280, 'A frase para ser ditada deve ter no máximo 280 caracteres.')

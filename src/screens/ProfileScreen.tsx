@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
 import { useCurrentUser } from '~/hooks'
 

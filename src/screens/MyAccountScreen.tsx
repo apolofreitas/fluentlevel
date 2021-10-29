@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { HStack, Icon, Pressable, Spacer, Text, VStack } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 
