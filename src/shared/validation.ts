@@ -6,6 +6,7 @@ export const usernameSchema = yup
   .min(4, 'O nome de usuário deve ter pelo menos 4 caracteres.')
   .max(16, 'O nome de usuário deve ter no máximo 16 caracteres.')
   .matches(/^[a-zA-Z0-9_.]+$/, 'Nome de usuário contém caracteres inválidos.')
+export const userBioSchema = yup.string().max(512, 'A biografia deve ter no máximo 512 caracteres.')
 export const emailSchema = yup.string().email('Email inválido.')
 export const passwordSchema = yup
   .string()
@@ -14,7 +15,7 @@ export const passwordSchema = yup
   .matches(/^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/, 'A senha deve ter uma mistura de letras e números.')
 
 export const taskTitleSchema = yup.string().max(512, 'O titulo da tarefa deve ter no máximo 512 caracteres.')
-export const taskDescriptionSchema = yup.string().max(1024, 'A descrição da tarefa deve ter no máximo 128 caracteres.')
+export const taskDescriptionSchema = yup.string().max(1024, 'A descrição da tarefa deve ter no máximo 1024 caracteres.')
 export const taskQuestionsSchema = yup
   .array()
   .min(1, 'A tarefa deve ter no mínimo 1 questão')

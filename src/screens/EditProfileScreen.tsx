@@ -1,10 +1,10 @@
 import React from 'react'
 import * as yup from 'yup'
-import { Button, FormControl, Input, ScrollView, Text, useToast, VStack } from 'native-base'
+import { Button, FormControl, Input, ScrollView, Text, TextArea, useToast, VStack } from 'native-base'
 import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
-import { nicknameSchema, usernameSchema } from '~/shared/validation'
+import { nicknameSchema, userBioSchema, usernameSchema } from '~/shared/validation'
 import { useCurrentUser } from '~/hooks'
 import { checkUsernameAvailability, updateCurrentUser } from '~/api'
 import { showSimpleToast } from '~/utils'
@@ -12,6 +12,7 @@ import { showSimpleToast } from '~/utils'
 const EditProfileSchema = yup.object({
   nickname: nicknameSchema.required('O apelido é um campo obrigatório'),
   username: usernameSchema.required('O nome de usuário é um campo obrigatório'),
+  bio: userBioSchema,
 })
 
 export const EditProfileScreen: RootScreen<'EditProfile'> = ({ navigation }) => {
@@ -21,6 +22,7 @@ export const EditProfileScreen: RootScreen<'EditProfile'> = ({ navigation }) => 
     initialValues: {
       nickname: currentUser.nickname,
       username: currentUser.username,
+      bio: currentUser.bio,
     },
     validationSchema: EditProfileSchema,
     onSubmit: async (values) => {
@@ -73,6 +75,25 @@ export const EditProfileScreen: RootScreen<'EditProfile'> = ({ navigation }) => 
               placeholder="Nome de usuário"
             />
             <FormControl.ErrorMessage>{formik.errors.username}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!formik.touched.bio && !!formik.errors.bio} isDisabled={formik.isSubmitting}>
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Biografia
+              </Text>
+            </FormControl.Label>
+            <TextArea
+              height="88px"
+              numberOfLines={3}
+              textAlignVertical="top"
+              placeholder="Biografia"
+              onChangeText={formik.handleChange('bio')}
+              onBlur={formik.handleBlur('bio')}
+              value={formik.values.bio}
+              isDisabled={formik.isSubmitting}
+            />
+            <FormControl.ErrorMessage>{formik.errors.bio}</FormControl.ErrorMessage>
           </FormControl>
         </VStack>
       </ScrollView>

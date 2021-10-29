@@ -4,6 +4,7 @@ export interface UserModel {
   nickname: string
   username: string
   email: string
+  bio: string
   following: string[]
   followers: string[]
 

@@ -14,27 +14,31 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
   return (
     <ScrollView>
       <Box paddingX={6} paddingY={2}>
-        <HStack space={3} alignItems="center" marginBottom={4}>
-          <OctopusIcon backgroundColor="primary.500" size="80px" maxWidth="80px" maxHeight="80px" />
+        <VStack marginBottom={4}>
+          <HStack space={3}>
+            <OctopusIcon backgroundColor="primary.500" flexGrow={0} flexShrink={0} flexBasis="80px" size="80px" />
 
-          <Box>
-            <Text fontWeight="600" fontSize="xl">
-              {currentUser.nickname}
-            </Text>
-            <Text fontWeight="600" color="primary.500">
-              @{currentUser.username}
-            </Text>
+            <Box flexShrink={1}>
+              <Text fontWeight="600" fontSize="xl">
+                {currentUser.nickname}
+              </Text>
+              <Text fontWeight="600" color="primary.500">
+                @{currentUser.username}
+              </Text>
 
-            <HStack space={2}>
-              <Text fontWeight="600" color="gray.500">
-                {currentUser.followers.length} seguidores
-              </Text>
-              <Text fontWeight="600" color="gray.500">
-                {currentUser.following.length} seguindo
-              </Text>
-            </HStack>
-          </Box>
-        </HStack>
+              <HStack space={2} marginBottom={1}>
+                <Text fontWeight="600" color="gray.500">
+                  {currentUser.followers.length} seguidores
+                </Text>
+                <Text fontWeight="600" color="gray.500">
+                  {currentUser.following.length} seguindo
+                </Text>
+              </HStack>
+
+              {!!currentUser.bio && <Text fontWeight="600">{currentUser.bio}</Text>}
+            </Box>
+          </HStack>
+        </VStack>
 
         <Button padding={2} marginBottom={4} onPress={() => navigation.navigate('EditProfile')}>
           Editar Perfil

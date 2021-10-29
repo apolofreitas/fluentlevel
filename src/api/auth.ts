@@ -32,6 +32,7 @@ export async function signUp({ email, password, nickname, username }: SignUpOpti
         username,
         nickname,
         email,
+        bio: '',
         following: [],
         followers: [],
 
