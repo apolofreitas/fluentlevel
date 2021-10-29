@@ -6,7 +6,7 @@ import { showSimpleToast } from '~/utils'
 
 interface RecognizeAudioButtonProps extends IButtonProps {
   locale: 'pt-BR' | 'en-US'
-  onRecognize?: (value: string) => void
+  onRecognize?: (...values: string[]) => void
 }
 
 export const RecognizeAudioButton: React.FC<RecognizeAudioButtonProps> = ({ locale, onRecognize, ...rest }) => {
@@ -21,22 +21,17 @@ export const RecognizeAudioButton: React.FC<RecognizeAudioButtonProps> = ({ loca
 
       if (!error?.code) return
 
-      if (error.code === '9') {
-        // TODO: ASK FOR PERMISSION?
+      if (error.code === '5') {
+        return showSimpleToast(toast, 'Erro: Comportamento inesperado')
+      } else if (error.code === '7') {
+        return showSimpleToast(toast, 'Não foi possível reconhecer')
       }
 
-      if (error.message) {
-        showSimpleToast(toast, `Error ${error.message}`.split('/').join(': '))
-      } else {
-        showSimpleToast(toast, `Error: Unexpected Behavior`)
-      }
+      return showSimpleToast(toast, `Error ${error.message}`.split('/').join(': '))
     }
     Voice.onSpeechResults = (e) => {
-      if (!onRecognize) return
       if (!e.value) return
-      const [bestMatch] = e.value
-      if (!bestMatch) return
-      onRecognize(bestMatch)
+      onRecognize && onRecognize(...e.value)
     }
 
     return () => {
@@ -48,9 +43,9 @@ export const RecognizeAudioButton: React.FC<RecognizeAudioButtonProps> = ({ loca
   return (
     <Button
       backgroundColor="primary.500"
-      borderWidth={4}
+      borderWidth={6}
       borderStyle="solid"
-      borderColor={!isRecognizing ? 'transparent' : 'primary.300'}
+      borderColor={!isRecognizing ? 'transparent' : 'primary.200'}
       onPress={async () => {
         try {
           if (!isRecognizing) await Voice.start(locale)

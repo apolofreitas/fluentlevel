@@ -153,7 +153,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Descrição
+                Descrição (Opcional)
               </Text>
             </FormControl.Label>
             <TextArea

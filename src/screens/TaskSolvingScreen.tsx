@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, BackHandler } from 'react-native'
-import { Box, Button, HStack, Icon, Input, Pressable, ScrollView, Text, VStack } from 'native-base'
+import { Box, Button, HStack, Icon, Input, Pressable, ScrollView, Text, useToast, VStack } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 
 import { RootScreen } from '~/types/navigation'
@@ -8,9 +8,10 @@ import { OctopusIcon, PlayAudioButton, RecognizeAudioButton } from '~/components
 import { calculateQuestionScore } from '~/utils/calculateQuestionScore'
 import { formatTime } from '~/utils/formatTime'
 import { calculateStringSimilarity } from '~/utils/calculateStringSimilarity'
-import sleep from 'sleep-promise'
+import { showSimpleToast } from '~/utils'
 
 export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route }) => {
+  const toast = useToast()
   const { task, results, questionIndex } = route.params
   const question = task.questions[questionIndex]
   const [score, setScore] = useState<number | null>(null)
@@ -67,15 +68,14 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
     if (score === null) return
 
     setIsShowingResults(true)
-
-    if (question.type !== 'SPEECH_QUESTION') sleep(5000).then(goToNextScreen)
   }, [score, isShowingResults])
 
   useEffect(() => {
     if (question.type !== 'SPEECH_QUESTION') return
     if (speechText === '') return
 
-    if (calculateStringSimilarity(question.phraseToSpeech, speechText) !== 1 && speechAttempts > 0) {
+    if (calculateStringSimilarity(question.phraseToSpeech, speechText) !== 1 && speechAttempts > 1) {
+      showSimpleToast(toast, 'Resposta incorreta')
       return setSpeechAttempts((attempts) => attempts - 1)
     }
 
@@ -203,9 +203,9 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
             Próxima Questão
           </Button>
         ) : (
-          <Box position="absolute" bottom="32px" left="32px" right="32px" alignItems="center">
+          <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
             {selectedAlternativeIndex === question.rightAlternativeIndex ? (
-              <>
+              <Box alignItems="center">
                 <HStack space={3} alignItems="center">
                   <Icon as={Feather} color="green.500" name="check-circle" />
                   <Text color="green.500" fontWeight="700" fontSize="xl">
@@ -216,7 +216,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                 <Text color="green.500" fontWeight="700" fontSize="xl">
                   +{score} pontos
                 </Text>
-              </>
+              </Box>
             ) : (
               <HStack space={3} alignItems="center">
                 <Icon as={Feather} color="red.500" name="x-circle" />
@@ -225,7 +225,10 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                 </Text>
               </HStack>
             )}
-          </Box>
+            <Button width="100%" onPress={goToNextScreen}>
+              Próxima Questão
+            </Button>
+          </VStack>
         )}
       </>
     )
@@ -277,9 +280,9 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
             Próxima Questão
           </Button>
         ) : (
-          <Box position="absolute" bottom="32px" left="32px" right="32px" alignItems="center">
+          <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
             {!!score ? (
-              <>
+              <Box alignItems="center">
                 <HStack space={3} alignItems="center">
                   <Icon as={Feather} color="green.500" name="check-circle" />
                   <Text color="green.500" fontWeight="700" fontSize="xl">
@@ -290,7 +293,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                 <Text color="green.500" fontWeight="700" fontSize="xl">
                   +{score} pontos
                 </Text>
-              </>
+              </Box>
             ) : (
               <HStack space={3} alignItems="center">
                 <Icon as={Feather} color="red.500" name="x-circle" />
@@ -299,7 +302,10 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                 </Text>
               </HStack>
             )}
-          </Box>
+            <Button width="100%" onPress={goToNextScreen}>
+              Próxima Questão
+            </Button>
+          </VStack>
         )}
       </>
     )
@@ -312,7 +318,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
           <VStack space={6} alignItems="center" padding={6} paddingBottom={24}>
             <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center">
               {question.info}
-              Pronuncia corretamente o texto abaixo:
+              Pronuncie corretamente o texto abaixo:
             </Text>
 
             <VStack space={4} alignItems="center" width="100%">
@@ -341,7 +347,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
         ) : (
           <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
             {!!score ? (
-              <Box>
+              <Box alignItems="center">
                 <HStack space={3} alignItems="center">
                   <Icon as={Feather} color="green.500" name="check-circle" />
                   <Text color="green.500" fontWeight="700" fontSize="xl">

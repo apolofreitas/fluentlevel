@@ -48,7 +48,7 @@ export const CreatedTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
                           onPress: () => navigation.navigate('SaveTask', { initialValues: task }),
                         },
                         {
-                          text: 'Abrir',
+                          text: 'Começar',
                           onPress: () => navigation.navigate('TaskDetails', { task }),
                         },
                       ],
