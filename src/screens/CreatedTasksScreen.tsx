@@ -1,14 +1,13 @@
 import React from 'react'
-import { useNavigation } from '@react-navigation/core'
-import { Box, Text, Fab, Icon, VStack, ScrollView, HStack, Spacer, Pressable, Center } from 'native-base'
+import { Box, Text, Fab, Icon, VStack, ScrollView, Pressable } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 
-import { HomeScreen } from '~/types/navigation'
+import { TasksScreen } from '~/types/navigation'
 import { useCreatedTasks } from '~/hooks'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { Alert } from 'react-native'
 
-export const CreatedTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
+export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) => {
   const { createdTasks, isLoading } = useCreatedTasks()
 
   if (isLoading) return <LoadingScreen />

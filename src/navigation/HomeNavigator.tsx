@@ -6,8 +6,8 @@ import Feather from 'react-native-vector-icons/Feather'
 import { HomeParamList } from '~/types/navigation'
 import { Header, ProfileHeaderMenu } from '~/components'
 
-import { TasksScreen } from '~/screens/TasksScreen'
-import { ContestsScreen } from '~/screens/ContestsScreen'
+import { ContestsNavigator } from './ContestsNavigator'
+import { TasksNavigator } from './TasksNavigator'
 import { ProfileScreen } from '~/screens/ProfileScreen'
 
 const BottomTab = createBottomTabNavigator<HomeParamList>()
@@ -23,7 +23,7 @@ export function HomeNavigator() {
     >
       <BottomTab.Screen
         name="Tasks"
-        component={TasksScreen}
+        component={TasksNavigator}
         options={{
           tabBarLabel: 'Tarefas',
           header: () => <Header showLogoInTitle />,
@@ -32,7 +32,7 @@ export function HomeNavigator() {
       />
       <BottomTab.Screen
         name="Contests"
-        component={ContestsScreen}
+        component={ContestsNavigator}
         options={{
           tabBarLabel: 'Competições',
           header: () => <Header showLogoInTitle />,

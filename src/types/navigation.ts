@@ -1,4 +1,5 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs'
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import {
@@ -88,4 +89,26 @@ export type HomeParamList = {
 }
 export type HomeScreen<T extends keyof HomeParamList> = React.FC<
   CompositeScreenProps<BottomTabScreenProps<HomeParamList, T>, StackScreenProps<RootParamList>>
+>
+
+export type TasksParamList = {
+  CommunityTasks: undefined
+  CreatedTasks: undefined
+}
+export type TasksScreen<T extends keyof TasksParamList> = React.FC<
+  CompositeScreenProps<
+    BottomTabScreenProps<HomeParamList, 'Tasks'>,
+    CompositeScreenProps<MaterialTopTabScreenProps<TasksParamList, T>, StackScreenProps<RootParamList>>
+  >
+>
+
+export type ContestsParamList = {
+  CommunityContests: undefined
+  CreatedContests: undefined
+}
+export type ContestsScreen<T extends keyof ContestsParamList> = React.FC<
+  CompositeScreenProps<
+    BottomTabScreenProps<HomeParamList, 'Contests'>,
+    CompositeScreenProps<MaterialTopTabScreenProps<ContestsParamList, T>, StackScreenProps<RootParamList>>
+  >
 >

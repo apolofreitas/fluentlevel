@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Box, VStack, ScrollView, HStack, Text, Spacer, Input, Icon, Pressable } from 'native-base'
 import Feather from 'react-native-vector-icons/Feather'
 
-import { HomeScreen } from '~/types/navigation'
+import { TasksScreen } from '~/types/navigation'
 import { Task } from '~/api'
 import { useCommunityTasks } from '~/hooks'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { calculateStringSimilarity } from '~/utils/calculateStringSimilarity'
 
-export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
+export const CommunityTasksScreen: TasksScreen<'CommunityTasks'> = ({ navigation }) => {
   const [search, setSearch] = useState('')
   const { communityTasks, isLoading } = useCommunityTasks()
   const [filteredCommunityTasks, setFilteredCommunityTasks] = useState<Task[] | null>(

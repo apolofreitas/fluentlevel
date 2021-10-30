@@ -7,7 +7,6 @@ import com.facebook.react.ReactApplication;
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
