@@ -1,10 +1,11 @@
 import React from 'react'
-import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
+import { Box, Button, HStack, Icon, Pressable, ScrollView, Spacer, Text, VStack } from 'native-base'
 import { useCurrentUser } from '~/hooks'
 
 import { OctopusIcon } from '~/components'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { HomeScreen } from '~/types/navigation'
+import Feather from 'react-native-vector-icons/Feather'
 
 export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
   const { currentUser, isLoading } = useCurrentUser()
@@ -52,7 +53,7 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
           Editar Perfil
         </Button>
 
-        <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
+        <Box backgroundColor="card" borderRadius="16px" marginBottom={3} paddingX={4}>
           <VStack space={2} paddingY={3}>
             <HStack alignItems="center" justifyContent="space-between">
               <Text fontSize="xl" fontWeight="700" color="primary.500">
@@ -72,6 +73,23 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
             </HStack>
           </VStack>
         </Box>
+
+        <Pressable onPress={() => navigation.navigate('AddFriend')}>
+          <HStack
+            alignItems="center"
+            backgroundColor="card"
+            borderRadius="16px"
+            paddingX={5}
+            paddingY={3}
+            marginBottom={4}
+          >
+            <Text color="primary.500" fontSize="lg" fontWeight="700">
+              Adicionar amigo
+            </Text>
+            <Spacer />
+            <Icon as={Feather} name="chevron-right" size="sm" color="primary.500" />
+          </HStack>
+        </Pressable>
 
         <Text fontSize="xl" fontWeight="700" color="primary.500" marginLeft={1} marginBottom={2}>
           Histórico

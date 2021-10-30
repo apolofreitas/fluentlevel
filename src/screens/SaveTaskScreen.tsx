@@ -37,7 +37,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
       id: undefined,
       title: '',
       description: '',
-      isPublic: true,
+      isPublic: false,
       questions: [],
     },
     validationSchema: SaveTaskSchema,

@@ -6,6 +6,7 @@ import { HomeScreen } from '~/types/navigation'
 import { Task } from '~/api'
 import { useCommunityTasks } from '~/hooks'
 import { LoadingScreen } from '~/screens/LoadingScreen'
+import { calculateStringSimilarity } from '~/utils/calculateStringSimilarity'
 
 export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
   const [search, setSearch] = useState('')
@@ -16,12 +17,35 @@ export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
 
   useEffect(() => {
     setFilteredCommunityTasks(
-      communityTasks.filter(
-        (communityTask) =>
-          communityTask.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
-          (communityTask.description || '').toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
-          `@${communityTask.author.username.toLocaleLowerCase()}`.match(search.toLocaleLowerCase()),
-      ),
+      communityTasks
+        .filter((communityTask) => {
+          if (!search) return true
+
+          if (search[0] === '@') {
+            return `@${communityTask.author.username.toLocaleLowerCase()}`.includes(search.toLocaleLowerCase())
+          }
+
+          return (
+            communityTask.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
+            (communityTask.description || '').toLocaleLowerCase().includes(search.toLocaleLowerCase())
+          )
+        })
+        .sort((a, b) => {
+          if (!search) return 0
+
+          const similarityA = Math.max(
+            calculateStringSimilarity(a.title, search),
+            calculateStringSimilarity(a.description || '', search),
+            calculateStringSimilarity(`@${a.author.username}`, search),
+          )
+          const similarityB = Math.max(
+            calculateStringSimilarity(b.title, search),
+            calculateStringSimilarity(b.description || '', search),
+            calculateStringSimilarity(`@${b.author.username}`, search),
+          )
+
+          return similarityB - similarityA
+        }),
     )
   }, [search, communityTasks])
 
@@ -30,20 +54,19 @@ export const CommunityTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
   return (
     <ScrollView>
       <Box paddingX={6} paddingY={4}>
-        <HStack space={2} alignItems="center" marginBottom={4}>
-          <Input
-            flex={1}
-            size="sm"
-            height={10}
-            placeholder="Pesquisar"
-            value={search}
-            onChangeText={setSearch}
-            paddingLeft={0}
-            InputLeftElement={<Icon as={Feather} name="search" size="sm" margin={3} />}
-          />
-        </HStack>
+        <Input
+          flex={1}
+          size="sm"
+          height={10}
+          placeholder="Pesquisar"
+          value={search}
+          onChangeText={setSearch}
+          paddingLeft={0}
+          InputLeftElement={<Icon as={Feather} name="search" size="sm" color="primary.500" margin={3} />}
+          marginBottom={4}
+        />
 
-        <VStack space={4}>
+        <VStack space={3}>
           {filteredCommunityTasks.length === 0 ? (
             <Text>Foi mal, não conseguimos encontrar nenhum resultado.</Text>
           ) : (

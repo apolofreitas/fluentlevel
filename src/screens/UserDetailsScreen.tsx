@@ -1,38 +1,34 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
+import React, { useCallback, useState } from 'react'
+import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'
-import { OctopusIcon } from '~/components'
-import { getUserById, getUserByUsername, isUserFollowing, toggleFollow, User } from '~/api'
+import { FollowButton, OctopusIcon } from '~/components'
+import { getUserById, getUserByUsername, User } from '~/api'
 import { LoadingScreen } from './LoadingScreen'
+import { useFocusEffect } from '@react-navigation/core'
 
 export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route }) => {
   const [user, setUser] = useState<User | null>(null)
-  const [isCurrentUserFollowing, setIsCurrentUserFollowing] = useState(false)
 
-  useEffect(() => {
-    let unsubscribe = () => {}
+  useFocusEffect(
+    useCallback(() => {
+      let unsubscribe = () => {}
 
-    getUserByUsername(route.params.initialValues.username).then(({ user, userDoc }) => {
-      setUser(user)
-      isUserFollowing(user.id).then((value) => {
-        if (!value) return
-        setIsCurrentUserFollowing(value)
-      })
+      getUserByUsername(route.params.initialValues.username).then(({ user, userDoc }) => {
+        if (!navigation.isFocused()) return
+        setUser(user)
 
-      unsubscribe = userDoc.onSnapshot((user) => {
-        getUserById(user.id).then(({ user }) => {
-          setUser(user)
-        })
-        isUserFollowing(user.id).then((value) => {
-          if (!value) return
-          setIsCurrentUserFollowing(value)
+        unsubscribe = userDoc.onSnapshot((user) => {
+          getUserById(user.id).then(({ user }) => {
+            if (!navigation.isFocused()) return
+            setUser(user)
+          })
         })
       })
-    })
 
-    return () => unsubscribe()
-  }, [route.params.initialValues.username])
+      return () => unsubscribe()
+    }, [route.params.initialValues.username]),
+  )
 
   if (!user) return <LoadingScreen />
 
@@ -73,16 +69,7 @@ export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route
           </HStack>
         </VStack>
 
-        <Button
-          padding={2}
-          marginBottom={4}
-          onPress={() => {
-            setIsCurrentUserFollowing(!isCurrentUserFollowing)
-            toggleFollow(user.id)
-          }}
-        >
-          {isCurrentUserFollowing ? 'Deixar de seguir' : 'Seguir'}
-        </Button>
+        <FollowButton user={user} padding={2} marginBottom={4} />
 
         <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
           <VStack space={2} paddingY={3}>

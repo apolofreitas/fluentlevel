@@ -200,10 +200,10 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
             isDisabled={selectedAlternativeIndex === null}
             onPress={calculateScore}
           >
-            Próxima Questão
+            Responder
           </Button>
         ) : (
-          <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
+          <VStack space={4} alignItems="center" position="absolute" bottom="24px" left="32px" right="32px">
             {selectedAlternativeIndex === question.rightAlternativeIndex ? (
               <Box alignItems="center">
                 <HStack space={3} alignItems="center">
@@ -277,10 +277,10 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
             isDisabled={!recognizedText}
             onPress={calculateScore}
           >
-            Próxima Questão
+            Responder
           </Button>
         ) : (
-          <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
+          <VStack space={4} alignItems="center" position="absolute" bottom="24px" left="32px" right="32px">
             {!!score ? (
               <Box alignItems="center">
                 <HStack space={3} alignItems="center">
@@ -345,7 +345,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
             <RecognizeAudioButton locale="en-US" onRecognize={setSpeechText} />
           </Box>
         ) : (
-          <VStack space={4} alignItems="center" position="absolute" bottom="32px" left="32px" right="32px">
+          <VStack space={4} alignItems="center" position="absolute" bottom="24px" left="32px" right="32px">
             {!!score ? (
               <Box alignItems="center">
                 <HStack space={3} alignItems="center">

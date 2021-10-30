@@ -25,7 +25,7 @@ export const CreatedTasksTab: HomeScreen<'Tasks'> = ({ navigation }) => {
 
       <ScrollView>
         <Box paddingX={6} paddingY={4}>
-          <VStack space={4}>
+          <VStack space={3}>
             {createdTasks.length === 0 ? (
               <Text textAlign="center" fontWeight="600">
                 Ainda não tem nada por aqui.

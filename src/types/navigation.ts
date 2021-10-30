@@ -31,6 +31,7 @@ export type RootParamList = {
   }
   FollowingUsers: { followingUsers: UserModel[] }
   FollowersUsers: { followersUsers: UserModel[] }
+  AddFriend: undefined
 
   SaveTask?: {
     initialValues?: Task

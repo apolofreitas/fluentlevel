@@ -25,6 +25,7 @@ import { ChangeEmailScreen } from '~/screens/ChangeEmailScreen'
 import { ChangePasswordScreen } from '~/screens/ChangePasswordScreen'
 import { FollowingUsersScreen } from '~/screens/FollowingUsersScreen'
 import { FollowersUsersScreen } from '~/screens/FollowersUsersScreen'
+import { AddFriendScreen } from '~/screens/AddFriendScreen'
 import { UserDetailsScreen } from '~/screens/UserDetailsScreen'
 import { SaveListenQuestionScreen } from '~/screens/SaveListenQuestionScreen'
 import { SaveSpeechQuestionScreen } from '~/screens/SaveSpeechQuestionScreen'
@@ -119,6 +120,11 @@ export function RootNavigator() {
         name="FollowersUsers"
         options={{ header: () => <Header canGoBack centerTitle title="Seguidores" /> }}
         component={FollowersUsersScreen}
+      />
+      <Stack.Screen
+        name="AddFriend"
+        options={{ header: () => <Header canGoBack centerTitle title="Adicionar Amigo" /> }}
+        component={AddFriendScreen}
       />
       <Stack.Screen
         name="SaveTask"

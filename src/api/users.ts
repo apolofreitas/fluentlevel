@@ -56,6 +56,18 @@ export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentRefere
   }
 }
 
+export async function getUsers() {
+  const usersSnap = await db.users.get()
+  const usersDocs = usersSnap.docs
+  const users = await Promise.all(usersDocs.map((doc) => doc.data())).catch()
+
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (currentUserDoc !== null) return users.filter((_, index) => usersDocs[index].id !== currentUserDoc.id)
+
+  return users
+}
+
 export async function getUserById(id: string) {
   const userDoc = db.users.doc(id)
   return await getUserData(userDoc).catch()
@@ -90,7 +102,7 @@ export async function updateCurrentUser(params: UpdateCurrentUserOptions) {
   currentUserDoc.update(params)
 }
 
-export async function isUserFollowing(id: string) {
+export async function isCurrentUserFollowing(id: string) {
   const currentUserDoc = getCurrentUserDoc()
   const currentUserSnap = await currentUserDoc?.get()
   const currentUserData = currentUserSnap?.data()
@@ -114,18 +126,18 @@ export async function toggleFollow(id: string) {
   if (!currentUserDoc || !currentUserSnap || !currentUser) return
   if (!targetUserDoc || !targetUserSnap || !targetUser) return
 
-  if (await isUserFollowing(id)) {
-    currentUserDoc.update({
+  if (await isCurrentUserFollowing(id)) {
+    await currentUserDoc.update({
       following: firebase.firestore.FieldValue.arrayRemove(id),
     })
-    targetUserDoc.update({
+    await targetUserDoc.update({
       followers: firebase.firestore.FieldValue.arrayRemove(currentUserDoc.id),
     })
   } else {
-    currentUserDoc.update({
+    await currentUserDoc.update({
       following: firebase.firestore.FieldValue.arrayUnion(id),
     })
-    targetUserDoc.update({
+    await targetUserDoc.update({
       followers: firebase.firestore.FieldValue.arrayUnion(currentUserDoc.id),
     })
   }

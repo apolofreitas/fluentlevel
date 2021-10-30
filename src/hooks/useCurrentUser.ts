@@ -7,7 +7,7 @@ export interface UsersState {
   currentUser: User
 }
 
-export const useCurrentUser = create<UsersState>((set) => {
+export const useCurrentUser = create<UsersState>((set, get) => {
   const initialState: UsersState = {
     isLoading: true,
     currentUser: {
