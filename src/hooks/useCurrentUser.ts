@@ -2,13 +2,13 @@ import create from 'zustand'
 import auth from '@react-native-firebase/auth'
 import { db, getUserData, User } from '~/api'
 
-export interface UsersState {
+export interface CurrentUserState {
   isLoading: boolean
   currentUser: User
 }
 
-export const useCurrentUser = create<UsersState>((set, get) => {
-  const initialState: UsersState = {
+export const useCurrentUser = create<CurrentUserState>((set, get) => {
+  const initialState: CurrentUserState = {
     isLoading: true,
     currentUser: {
       id: '',

@@ -3,25 +3,17 @@ import { Box, Text, Fab, Icon, VStack, ScrollView, Pressable } from 'native-base
 import Feather from 'react-native-vector-icons/Feather'
 
 import { TasksScreen } from '~/types/navigation'
-import { useCreatedTasks } from '~/hooks'
+import { useTasks } from '~/hooks'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { Alert } from 'react-native'
 
 export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) => {
-  const { createdTasks, isLoading } = useCreatedTasks()
+  const { createdTasks, isLoading } = useTasks()
 
   if (isLoading) return <LoadingScreen />
 
   return (
     <>
-      <Fab
-        renderInPortal={false}
-        right={4}
-        bottom={4}
-        icon={<Icon as={Feather} name="plus" />}
-        onPress={() => navigation.navigate('SaveTask')}
-      />
-
       <ScrollView>
         <Box paddingX={6} paddingY={4}>
           <VStack space={3}>
@@ -61,7 +53,6 @@ export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) 
                     <Text
                       flexShrink={1}
                       isTruncated
-                      ellipsizeMode="tail"
                       textAlign="justify"
                       fontSize="lg"
                       fontWeight="700"
@@ -69,10 +60,8 @@ export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) 
                     >
                       {task.title}
                     </Text>
-                    <Text marginBottom={2} color="primary.700">
-                      {task.questions.length} questões
-                    </Text>
-                    {!!task.description && <Text>{task.description}</Text>}
+                    <Text color="primary.700">{task.questions.length} questões</Text>
+                    {!!task.description && <Text marginTop={1}>{task.description}</Text>}
                   </Box>
                 </Pressable>
               ))
@@ -80,6 +69,14 @@ export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) 
           </VStack>
         </Box>
       </ScrollView>
+
+      <Fab
+        renderInPortal={false}
+        right={4}
+        bottom={4}
+        icon={<Icon as={Feather} name="plus" />}
+        onPress={() => navigation.navigate('SaveTask')}
+      />
     </>
   )
 }

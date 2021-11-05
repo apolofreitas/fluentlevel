@@ -1,4 +1,4 @@
-import firestore from '@react-native-firebase/firestore'
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
 
 export interface UserModel {
   nickname: string
@@ -57,7 +57,7 @@ export interface TaskModel {
   isPublic: boolean
 
   title: string
-  description?: string
+  description: string
   questions: Array<QuestionModel>
 }
 
@@ -65,10 +65,10 @@ export interface ContestModel {
   authorId: string
 
   title: string
-  description?: string
+  description: string
   password: string
-  startTime: Date
-  finishTime: Date
+  startDate: FirebaseFirestoreTypes.Timestamp
+  endDate: FirebaseFirestoreTypes.Timestamp
   taskId: string
 }
 

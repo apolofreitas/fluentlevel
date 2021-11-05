@@ -4,13 +4,13 @@ import Feather from 'react-native-vector-icons/Feather'
 
 import { TasksScreen } from '~/types/navigation'
 import { Task } from '~/api'
-import { useCommunityTasks } from '~/hooks'
+import { useTasks } from '~/hooks'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { calculateStringSimilarity } from '~/utils/calculateStringSimilarity'
 
 export const CommunityTasksScreen: TasksScreen<'CommunityTasks'> = ({ navigation }) => {
   const [search, setSearch] = useState('')
-  const { communityTasks, isLoading } = useCommunityTasks()
+  const { communityTasks, isLoading } = useTasks()
   const [filteredCommunityTasks, setFilteredCommunityTasks] = useState<Task[] | null>(
     communityTasks.length > 0 ? communityTasks : null,
   )
@@ -77,7 +77,6 @@ export const CommunityTasksScreen: TasksScreen<'CommunityTasks'> = ({ navigation
                     <Text
                       flexShrink={1}
                       isTruncated
-                      ellipsizeMode="tail"
                       textAlign="justify"
                       fontSize="lg"
                       fontWeight="700"
@@ -86,14 +85,14 @@ export const CommunityTasksScreen: TasksScreen<'CommunityTasks'> = ({ navigation
                       {task.title}
                     </Text>
 
-                    <HStack marginBottom={1}>
+                    <HStack>
                       <Text color="primary.700">@{task.author.username}</Text>
                       <Spacer />
                       <Text color="primary.700">{task.questions.length} questões</Text>
                     </HStack>
 
                     {!!task.description && (
-                      <Text isTruncated numberOfLines={2} textAlign="justify">
+                      <Text marginTop={1} isTruncated numberOfLines={2} textAlign="justify">
                         {task.description}
                       </Text>
                     )}

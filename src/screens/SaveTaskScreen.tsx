@@ -25,7 +25,7 @@ import { taskDescriptionSchema, taskQuestionsSchema, taskTitleSchema } from '~/s
 import { Alert } from 'react-native'
 
 const SaveTaskSchema = yup.object({
-  title: taskTitleSchema.required('O título é um cambo obrigatório.'),
+  title: taskTitleSchema.required('O título é um campo obrigatório.'),
   description: taskDescriptionSchema,
   questions: taskQuestionsSchema,
 })

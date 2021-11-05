@@ -4,11 +4,11 @@ import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/n
 import { StackScreenProps } from '@react-navigation/stack'
 import {
   AlternativeQuestionModel,
+  Contest,
   ListenQuestionModel,
   QuestionModel,
   SpeechQuestionModel,
   Task,
-  User,
   UserModel,
 } from '~/api'
 
@@ -79,6 +79,13 @@ export type RootParamList = {
       totalTimeToAnswer: number
     }
   }
+
+  SaveContest?: {
+    initialValues?: Contest
+    taskToSelect?: Task | null
+  }
+
+  SelectTask: undefined
 }
 export type RootScreen<T extends keyof RootParamList> = React.FC<StackScreenProps<RootParamList, T>>
 

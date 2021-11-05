@@ -7,41 +7,33 @@ export interface Task extends TaskModel {
   author: User
 }
 
-export async function getTaskData(taskSnap: FirebaseFirestoreTypes.QueryDocumentSnapshot<TaskModel>) {
-  const taskData = taskSnap.data()
+export async function getTaskData(taskDoc: FirebaseFirestoreTypes.DocumentReference<TaskModel>) {
+  const taskSnap = await taskDoc.get()
+  const taskData = await taskSnap.data()
+
+  if (!taskData) throw 'Task not found'
+
   const { user: author } = await getUserById(taskData.authorId)
 
   if (!author) throw 'Task author not found'
 
   const task: Task = {
     ...taskData,
-    id: taskSnap.id,
+    id: taskDoc.id,
     author,
   }
 
   return task
 }
 
-export async function getCommunityTasks() {
+export async function getTasks() {
   const currentUser = getCurrentUserDoc()
 
   if (!currentUser) return []
 
-  const tasksSnap = await db.tasks.where('authorId', '!=', currentUser.id).where('isPublic', '==', true).get()
+  const tasksSnap = await db.tasks.get()
   const tasksDocs = tasksSnap.docs
-  const tasks = await Promise.all(tasksDocs.map(getTaskData)).catch()
-
-  return tasks
-}
-
-export async function getCreatedTasks() {
-  const currentUser = getCurrentUserDoc()
-
-  if (!currentUser) return []
-
-  const tasksSnap = await db.tasks.where('authorId', '==', currentUser.id).get()
-  const tasksDocs = tasksSnap.docs
-  const tasks = await Promise.all(tasksDocs.map(getTaskData)).catch()
+  const tasks = await Promise.all(tasksDocs.map((doc) => getTaskData(db.tasks.doc(doc.id)))).catch()
 
   return tasks
 }
@@ -79,4 +71,9 @@ export async function updateTask(id: string, { title, description, isPublic, que
 
 export async function deleteTask(id: string) {
   await db.tasks.doc(id).delete()
+}
+
+export async function getTaskById(id: string) {
+  const taskDoc = db.tasks.doc(id)
+  return await getTaskData(taskDoc).catch()
 }

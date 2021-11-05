@@ -23,6 +23,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ user, ...rest }) => 
   return (
     <Button
       ref={buttonRef}
+      variant={!isFollowing ? 'solid' : 'outline'}
       borderRadius="12px"
       padding={3}
       isLoading={isPendingFollow}
@@ -40,7 +41,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({ user, ...rest }) => 
       }}
       {...rest}
     >
-      {isFollowing ? 'Deixar de Seguir' : 'Seguir'}
+      {isFollowing ? 'Seguindo' : 'Seguir'}
     </Button>
   )
 }

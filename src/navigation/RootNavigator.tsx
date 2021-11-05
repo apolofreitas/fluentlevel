@@ -29,6 +29,9 @@ import { AddFriendScreen } from '~/screens/AddFriendScreen'
 import { UserDetailsScreen } from '~/screens/UserDetailsScreen'
 import { SaveListenQuestionScreen } from '~/screens/SaveListenQuestionScreen'
 import { SaveSpeechQuestionScreen } from '~/screens/SaveSpeechQuestionScreen'
+import { SaveContestScreen } from '~/screens/SaveContestScreen'
+import { SelectTaskScreen } from '~/screens/SelectTaskScreen'
+import { SelectTaskHeaderMenu } from '~/components/SelectTaskHeaderMenu'
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -106,7 +109,11 @@ export function RootNavigator() {
         name="UserDetails"
         options={{
           header: (props: StackHeaderProps) => (
-            <Header canGoBack centerTitle title={`@${(props.route.params as any).initialValues.username}`} />
+            <Header
+              canGoBack
+              centerTitle
+              title={`@${(props.route.params as RootParamList['UserDetails']).initialValues.username}`}
+            />
           ),
         }}
         component={UserDetailsScreen}
@@ -135,7 +142,9 @@ export function RootNavigator() {
               <Header
                 canGoBack
                 centerTitle
-                title={!(props.route.params as any)?.initialValues ? 'Nova Tarefa' : 'Editando Tarefa'}
+                title={
+                  !(props.route.params as RootParamList['SaveTask'])?.initialValues ? 'Nova Tarefa' : 'Editando Tarefa'
+                }
                 headerRight={props.options.headerRight}
               />
             )
@@ -217,6 +226,35 @@ export function RootNavigator() {
           title: '',
           header: (props) => <Header centerTitle title={props.options.title} />,
         }}
+      />
+      <Stack.Screen
+        name="SaveContest"
+        component={SaveContestScreen}
+        options={{
+          header: (props) => {
+            return (
+              <Header
+                canGoBack
+                centerTitle
+                title={
+                  !(props.route.params as RootParamList['SaveContest'])?.initialValues
+                    ? 'Nova Competição'
+                    : 'Editando Competição'
+                }
+                headerRight={props.options.headerRight}
+              />
+            )
+          },
+        }}
+      />
+      <Stack.Screen
+        name="SelectTask"
+        options={{
+          header: () => (
+            <Header canGoBack centerTitle title="Selecione a tarefa" headerRight={() => <SelectTaskHeaderMenu />} />
+          ),
+        }}
+        component={SelectTaskScreen}
       />
     </Stack.Navigator>
   )

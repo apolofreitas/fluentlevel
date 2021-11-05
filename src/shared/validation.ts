@@ -37,3 +37,9 @@ export const questionAlternativesSchema = yup
 export const questionPhraseToSpeechSchema = yup
   .string()
   .max(280, 'A frase para ser ditada deve ter no máximo 280 caracteres.')
+
+export const contestTitleSchema = yup.string().max(512, 'O titulo da competição deve ter no máximo 512 caracteres.')
+export const contestDescriptionSchema = yup
+  .string()
+  .max(1024, 'A descrição da competição deve ter no máximo 1024 caracteres.')
+export const contestTaskIdSchema = yup.string()

@@ -39,17 +39,19 @@ export const UserList: React.FC<UserListProps> = ({ users }) => {
                 <OctopusIcon backgroundColor="primary.500" flexGrow={0} flexShrink={0} flexBasis="60px" size="60px" />
 
                 <Box flexShrink={1}>
-                  <Text fontWeight="600" fontSize="xl">
+                  <Text fontWeight="600" fontSize="xl" isTruncated>
                     {user.nickname}
                   </Text>
-                  <Text fontWeight="600" color="primary.500">
+                  <Text fontWeight="600" color="primary.500" isTruncated>
                     @{user.username}
                   </Text>
                 </Box>
 
                 <Spacer />
 
-                {user.username !== currentUser.username && <FollowButton user={user} />}
+                {user.username !== currentUser.username && (
+                  <FollowButton flexBasis="120px" flexShrink={0} flexGrow={0} user={user} />
+                )}
               </HStack>
             </Pressable>
           )
