@@ -7,7 +7,7 @@ import { RootScreen } from '~/types/navigation'
 import { passwordSchema } from '~/shared/validation'
 import { useFormik } from 'formik'
 import { changePassword } from '~/api'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 
 const ChangePasswordSchema = yup.object({
   actualPassword: yup.string().required('A senha atual é campo obrigatório.'),

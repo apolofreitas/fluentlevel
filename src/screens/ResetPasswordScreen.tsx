@@ -3,7 +3,7 @@ import { Box, Button, Center, FormControl, Input, Text, useToast } from 'native-
 import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 import { resetPassword } from '~/api'
 
 export const ResetPasswordScreen: RootScreen<'ResetPassword'> = ({ navigation }) => {

@@ -1,30 +1,42 @@
 import React, { useLayoutEffect, useState } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
-import { Box, HStack, Icon, ScrollView, Text, TextArea, Button, IconButton, FormControl, Slider } from 'native-base'
+import {
+  Box,
+  HStack,
+  Icon,
+  ScrollView,
+  Text,
+  TextArea,
+  Button,
+  IconButton,
+  FormControl,
+  Slider,
+  Input,
+} from 'native-base'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { Alert } from 'react-native'
 
 import { RootScreen } from '~/types/navigation'
-import { questionInfoSchema, questionPhraseToSpeechSchema } from '~/shared/validation'
-import { ListenQuestionModel } from '~/api'
+import { phraseToOrganize, questionInfoSchema } from '~/shared/validation'
+import { OrganizeQuestionModel } from '~/api'
 import { RecognizeAudioButton } from '~/components'
 
-const SaveListenQuestionSchema = yup.object({
+const SaveOrganizeQuestionSchema = yup.object({
   info: questionInfoSchema,
-  phraseToRecognize: questionPhraseToSpeechSchema.required('A frase para ser reconhecida é um campo obrigatório.'),
+  phraseToOrganize: phraseToOrganize.required('A frase para ser organizada é um campo obrigatório.'),
 })
 
-export const SaveListenQuestionScreen: RootScreen<'SaveListenQuestion'> = ({ navigation, route }) => {
+export const SaveOrganizeQuestionScreen: RootScreen<'SaveOrganizeQuestion'> = ({ navigation, route }) => {
   const [questionIndex] = useState(route.params?.questionIndex)
-  const formik = useFormik<ListenQuestionModel>({
+  const formik = useFormik<OrganizeQuestionModel>({
     initialValues: route.params?.initialValues || {
-      type: 'LISTEN_QUESTION',
+      type: 'ORGANIZE_QUESTION',
       info: '',
       timeToAnswer: 30,
-      phraseToRecognize: '',
+      phraseToOrganize: '',
     },
-    validationSchema: SaveListenQuestionSchema,
+    validationSchema: SaveOrganizeQuestionSchema,
     validateOnChange: false,
     onSubmit: async (values) => {
       if (!navigation.isFocused()) return
@@ -104,6 +116,9 @@ export const SaveListenQuestionScreen: RootScreen<'SaveListenQuestion'> = ({ nav
               value={formik.values.info}
               isDisabled={formik.isSubmitting}
             />
+
+            <FormControl.HelperText>Frase a ser traduzida</FormControl.HelperText>
+
             <FormControl.ErrorMessage>{formik.errors.info}</FormControl.ErrorMessage>
           </FormControl>
 
@@ -139,31 +154,26 @@ export const SaveListenQuestionScreen: RootScreen<'SaveListenQuestion'> = ({ nav
           </FormControl>
 
           <FormControl
-            isInvalid={!!formik.touched.phraseToRecognize && !!formik.errors.phraseToRecognize}
+            isInvalid={!!formik.touched.phraseToOrganize && !!formik.errors.phraseToOrganize}
             isDisabled={formik.isSubmitting}
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Frase para ser reconhecida
+                Frase para ser organizada
               </Text>
             </FormControl.Label>
 
-            <RecognizeAudioButton
-              locale="en-US"
-              onRecognize={(value) => formik.setFieldValue('phraseToRecognize', value, true)}
+            <Input
+              placeholder="Ex: Hi my name is Paulo."
+              onChangeText={formik.handleChange('phraseToOrganize')}
+              onBlur={formik.handleBlur('phraseToOrganize')}
+              value={formik.values.phraseToOrganize}
+              isDisabled={formik.isSubmitting}
             />
 
-            {!!formik.values.phraseToRecognize && (
-              <FormControl.Label
-                _text={{
-                  textTransform: 'capitalize',
-                }}
-              >
-                {formik.values.phraseToRecognize}
-              </FormControl.Label>
-            )}
+            <FormControl.HelperText>As palavras são identificadas pela separação por espaço.</FormControl.HelperText>
 
-            <FormControl.ErrorMessage>{formik.errors.phraseToRecognize}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.phraseToOrganize}</FormControl.ErrorMessage>
           </FormControl>
         </Box>
       </ScrollView>

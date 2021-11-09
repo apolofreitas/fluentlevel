@@ -216,13 +216,16 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
                     if (question.type === 'SPEECH_QUESTION') {
                       return navigation.navigate('SaveSpeechQuestion', { initialValues: question, questionIndex })
                     }
+                    if (question.type === 'ORGANIZE_QUESTION') {
+                      return navigation.navigate('SaveOrganizeQuestion', { initialValues: question, questionIndex })
+                    }
                   }}
                 >
                   {`Questão ${questionIndex + 1} - ${
                     question.type === 'ALTERNATIVE_QUESTION'
                       ? 'Objetiva'
                       : question.type === 'LISTEN_QUESTION'
-                      ? 'Reconhecimento'
+                      ? 'Reconhecimento de áudio'
                       : question.type === 'SPEECH_QUESTION'
                       ? 'Pronuncia'
                       : question.type === 'ORGANIZE_QUESTION'
@@ -263,7 +266,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
               saveQuestionDisclosure.onClose()
             }}
           >
-            Questão de reconhecimento
+            Questão de reconhecimento de áudio
           </Actionsheet.Item>
           <Actionsheet.Item
             onPress={() => {
@@ -271,7 +274,15 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
               saveQuestionDisclosure.onClose()
             }}
           >
-            Questão de pronuncia
+            Questão prática de pronuncia
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            onPress={() => {
+              navigation.navigate('SaveOrganizeQuestion')
+              saveQuestionDisclosure.onClose()
+            }}
+          >
+            Questão de organizar
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>

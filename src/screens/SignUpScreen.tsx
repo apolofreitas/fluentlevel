@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import { RootScreen } from '~/types/navigation'
 import { signUp } from '~/api'
 import { nicknameSchema, emailSchema, passwordSchema, usernameSchema } from '~/shared/validation'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 
 const SignUpSchema = yup.object({
   nickname: nicknameSchema.required('O apelido é um campo obrigatório.'),

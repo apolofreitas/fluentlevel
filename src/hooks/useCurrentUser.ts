@@ -40,7 +40,7 @@ export const useCurrentUser = create<CurrentUserState>((set, get) => {
       set({ isLoading: false, currentUser: initialState.currentUser })
     } else {
       lastUserSubscription.unsubscribe = await db.users.doc(currentUser.uid).onSnapshot(async () => {
-        const { user } = await getUserData(db.users.doc(currentUser.uid))
+        const { user } = await getUserData(db.users.doc(currentUser.uid)).catch()
         set({ isLoading: false, currentUser: user })
       })
     }

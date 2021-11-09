@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import { useCurrentUser } from '~/hooks'
 import { changeEmail } from '~/api'
 import { emailSchema } from '~/shared/validation'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 import Feather from 'react-native-vector-icons/Feather'
 
 const ChangeEmailSchema = yup.object({

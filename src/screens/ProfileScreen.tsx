@@ -1,11 +1,11 @@
 import React from 'react'
 import { Box, Button, HStack, Icon, Pressable, ScrollView, Spacer, Text, VStack } from 'native-base'
-import { useCurrentUser } from '~/hooks'
+import Feather from 'react-native-vector-icons/Feather'
 
+import { useCurrentUser } from '~/hooks'
 import { OctopusIcon } from '~/components'
 import { LoadingScreen } from '~/screens/LoadingScreen'
 import { HomeScreen } from '~/types/navigation'
-import Feather from 'react-native-vector-icons/Feather'
 
 export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
   const { currentUser, isLoading } = useCurrentUser()

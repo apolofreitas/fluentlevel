@@ -43,3 +43,6 @@ export const contestDescriptionSchema = yup
   .string()
   .max(1024, 'A descrição da competição deve ter no máximo 1024 caracteres.')
 export const contestTaskIdSchema = yup.string()
+
+export const phraseToRecognize = yup.string().max(280, 'A frase para ser ditada deve ter no máximo 280 caracteres.')
+export const phraseToOrganize = yup.string().max(280, 'A frase para ser organizada deve ter no máximo 280 caracteres.')

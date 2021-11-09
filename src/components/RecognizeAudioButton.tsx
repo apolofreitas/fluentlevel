@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import Voice from '@react-native-voice/voice'
 import { Button, IButtonProps, Icon, useToast } from 'native-base'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 
 interface RecognizeAudioButtonProps extends IButtonProps {
   locale: 'pt-BR' | 'en-US'

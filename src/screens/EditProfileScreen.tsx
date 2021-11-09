@@ -7,7 +7,7 @@ import { RootScreen } from '~/types/navigation'
 import { nicknameSchema, userBioSchema, usernameSchema } from '~/shared/validation'
 import { useCurrentUser } from '~/hooks'
 import { checkUsernameAvailability, updateCurrentUser } from '~/api'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 
 const EditProfileSchema = yup.object({
   nickname: nicknameSchema.required('O apelido é um campo obrigatório'),

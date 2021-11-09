@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
 import { signIn } from '~/api'
-import { showSimpleToast } from '~/utils'
+import { showSimpleToast } from '~/utils/showSimpleToast'
 
 export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
   const toast = useToast()
@@ -23,7 +23,7 @@ export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
 
       await signIn(values).catch(({ code }: { code: string }) => {
         if (code === 'auth/invalid-email') {
-          showSimpleToast(toast, 'Não achamos sua conta.')
+          showSimpleToast(toast, 'O email inserido é inválido.')
         } else if (code === 'auth/user-disabled') {
           showSimpleToast(toast, 'O usuário correspondente foi desativado.')
         } else if (code === 'auth/user-not-found') {

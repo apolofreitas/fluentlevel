@@ -32,6 +32,7 @@ import { SaveSpeechQuestionScreen } from '~/screens/SaveSpeechQuestionScreen'
 import { SaveContestScreen } from '~/screens/SaveContestScreen'
 import { SelectTaskScreen } from '~/screens/SelectTaskScreen'
 import { SelectTaskHeaderMenu } from '~/components/SelectTaskHeaderMenu'
+import { SaveOrganizeQuestionScreen } from '~/screens/SaveOrganizeQuestionScreen'
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -39,14 +40,13 @@ export function RootNavigator() {
   const { isSignedIn, isLoading } = useAuth()
 
   useEffect(() => {
+    if (!isLoading) return
     ;(async () => {
-      if (!isLoading) {
-        try {
-          await Tts.getInitStatus()
-          SplashScreen.hide()
-        } catch (error: any) {
-          if (error.code === 'no_engine') Tts.requestInstallData()
-        }
+      try {
+        await Tts.getInitStatus()
+        SplashScreen.hide()
+      } catch (error: any) {
+        if (error.code === 'no_engine') Tts.requestInstallData()
       }
     })()
   }, [isLoading])
@@ -190,6 +190,24 @@ export function RootNavigator() {
       <Stack.Screen
         name="SaveSpeechQuestion"
         component={SaveSpeechQuestionScreen}
+        options={{
+          header: (props) => {
+            return (
+              <Header
+                canGoBack
+                centerTitle
+                title={
+                  !Object.keys(props.route.params || {}).includes('initialValues') ? 'Nova Questão' : 'Editando Questão'
+                }
+                headerRight={props.options.headerRight}
+              />
+            )
+          },
+        }}
+      />
+      <Stack.Screen
+        name="SaveOrganizeQuestion"
+        component={SaveOrganizeQuestionScreen}
         options={{
           header: (props) => {
             return (

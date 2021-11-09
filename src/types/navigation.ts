@@ -6,6 +6,7 @@ import {
   AlternativeQuestionModel,
   Contest,
   ListenQuestionModel,
+  OrganizeQuestionModel,
   QuestionModel,
   SpeechQuestionModel,
   Task,
@@ -54,6 +55,11 @@ export type RootParamList = {
 
   SaveSpeechQuestion?: {
     initialValues?: SpeechQuestionModel
+    questionIndex?: number
+  }
+
+  SaveOrganizeQuestion?: {
+    initialValues?: OrganizeQuestionModel
     questionIndex?: number
   }
 
