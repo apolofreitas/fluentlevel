@@ -40,15 +40,15 @@ export function RootNavigator() {
   const { isSignedIn, isLoading } = useAuth()
 
   useEffect(() => {
-    if (!isLoading) return
-    ;(async () => {
-      try {
-        await Tts.getInitStatus()
-        SplashScreen.hide()
-      } catch (error: any) {
+    if (isLoading) return
+
+    Tts.getInitStatus()
+      .catch((error) => {
         if (error.code === 'no_engine') Tts.requestInstallData()
-      }
-    })()
+      })
+      .finally(() => {
+        SplashScreen.hide()
+      })
   }, [isLoading])
 
   if (isLoading) return null
