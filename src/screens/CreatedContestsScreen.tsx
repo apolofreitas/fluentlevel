@@ -61,13 +61,13 @@ export const CreatedContestsScreen: ContestsScreen<'CreatedContests'> = ({ navig
                     >
                       {contest.title}
                     </Text>
-                    <Text color="primary.700">
+                    <Text color="gray.500" fontSize="sm">
                       {`Duração: ${dateFormat(contest.startDate.toDate(), 'dd/mm/yy HH:MM')} - ${dateFormat(
                         contest.endDate.toDate(),
                         'dd/mm/yy HH:MM',
                       )}`}
                     </Text>
-                    {!!contest.description && <Text marginTop={1}>{contest.description}</Text>}
+                    {!!contest.description && <Text>{contest.description}</Text>}
                   </Box>
                 </Pressable>
               ))

@@ -11,9 +11,9 @@ import { calculateQuestionScore } from '~/utils/calculateQuestionScore'
 import { formatTime } from '~/utils/formatTime'
 import { calculateStringSimilarity } from '~/utils/calculateStringSimilarity'
 import { showSimpleToast } from '~/utils/showSimpleToast'
-import { Lines } from '~/components/OrganizeQuestionComponents/Lines'
-import { OrganizeQuestionSortableWordWrapper } from '~/components/OrganizeQuestionComponents/OrganizeQuestionSortableWordWrapper'
-import { OrganizeQuestionWord } from '~/components/OrganizeQuestionComponents/OrganizeQuestionWord'
+import { OrganizeQuestionLines } from '~/components/OrganizeQuestionLines'
+import { OrganizeQuestionSortableWordWrapper } from '~/components/OrganizeQuestionSortableWordWrapper'
+import { OrganizeQuestionWord } from '~/components/OrganizeQuestionWord'
 import { MARGIN_LEFT, getFilteredOffsets } from '~/utils/questionLayout'
 
 const containerWidth = Dimensions.get('window').width - MARGIN_LEFT * 2
@@ -471,7 +471,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
                   marginBottom: 320,
                 }}
               >
-                <Lines />
+                <OrganizeQuestionLines />
                 {words.map((child, index) => (
                   <OrganizeQuestionSortableWordWrapper
                     key={index}

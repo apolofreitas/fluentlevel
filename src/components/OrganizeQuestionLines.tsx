@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 
 import { WORD_HEIGHT, NUMBER_OF_LINES } from '~/utils/questionLayout'
 
-export const Lines = () => {
+export const OrganizeQuestionLines = () => {
   return (
     <View style={StyleSheet.absoluteFill}>
       {new Array(NUMBER_OF_LINES).fill(0).map((_, index) => (

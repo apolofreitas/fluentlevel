@@ -2,11 +2,11 @@ import React from 'react'
 import { View } from 'react-native'
 import { MARGIN_LEFT, MARGIN_TOP, Offset, WORD_HEIGHT } from '~/utils/questionLayout'
 
-interface PlaceholderProps {
+interface OrganizeQuestionPlaceholderProps {
   offset: Offset
 }
 
-export const Placeholder = ({ offset }: PlaceholderProps) => {
+export const OrganizeQuestionPlaceholder = ({ offset }: OrganizeQuestionPlaceholderProps) => {
   return (
     <View
       style={{

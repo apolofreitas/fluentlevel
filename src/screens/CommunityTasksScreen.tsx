@@ -92,7 +92,7 @@ export const CommunityTasksScreen: TasksScreen<'CommunityTasks'> = ({ navigation
                     </HStack>
 
                     {!!task.description && (
-                      <Text marginTop={1} isTruncated numberOfLines={2} textAlign="justify">
+                      <Text isTruncated numberOfLines={2} textAlign="justify">
                         {task.description}
                       </Text>
                     )}
