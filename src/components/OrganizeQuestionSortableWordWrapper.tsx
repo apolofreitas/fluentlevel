@@ -21,7 +21,7 @@ import {
   MARGIN_LEFT,
   MARGIN_TOP,
 } from '~/utils/questionLayout'
-import { Placeholder } from './Placeholder'
+import { OrganizeQuestionPlaceholder } from './OrganizeQuestionPlaceholder'
 
 interface OrganizeQuestionSortableWordWrapperProps {
   offsets: Offset[]
@@ -114,7 +114,7 @@ export const OrganizeQuestionSortableWordWrapper = ({
 
   return (
     <>
-      <Placeholder offset={offset} />
+      <OrganizeQuestionPlaceholder offset={offset} />
       <Animated.View style={style}>
         <PanGestureHandler onGestureEvent={onGestureEvent}>
           <Animated.View style={StyleSheet.absoluteFill}>{children}</Animated.View>

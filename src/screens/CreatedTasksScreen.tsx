@@ -60,8 +60,14 @@ export const CreatedTasksScreen: TasksScreen<'CreatedTasks'> = ({ navigation }) 
                     >
                       {task.title}
                     </Text>
+
                     <Text color="primary.700">{task.questions.length} questões</Text>
-                    {!!task.description && <Text marginTop={1}>{task.description}</Text>}
+
+                    {!!task.description && (
+                      <Text isTruncated numberOfLines={2} textAlign="justify">
+                        {task.description}
+                      </Text>
+                    )}
                   </Box>
                 </Pressable>
               ))
