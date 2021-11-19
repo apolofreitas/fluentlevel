@@ -1,14 +1,68 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Dimensions } from 'react-native'
 import { Box, HStack, ScrollView, Text, VStack } from 'native-base'
+import { useFocusEffect } from '@react-navigation/core'
+import { LineChart } from 'react-native-chart-kit'
+import dateFormat from 'dateformat'
 
 import { RootScreen } from '~/types/navigation'
 import { FollowButton, OctopusIcon } from '~/components'
 import { getUserById, getUserByUsername, User } from '~/api'
 import { LoadingScreen } from './LoadingScreen'
-import { useFocusEffect } from '@react-navigation/core'
+import { colors } from '~/theme/colors'
+import { useCurrentUser } from '~/hooks'
 
 export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route }) => {
+  const { currentUser } = useCurrentUser()
   const [user, setUser] = useState<User | null>(null)
+
+  const labels = useMemo(() => {
+    const month = new Date().getMonth()
+    const getMonth = (month: number) => dateFormat(new Date(0, month), 'mmm')
+    return Array.from([month - 5, month - 4, month - 3, month - 2, month - 1, month]).map(getMonth)
+  }, [])
+
+  const currentUserChartData = useMemo(getChartDataFrom(currentUser), [])
+  const userChartData = useMemo(() => {
+    if (!user) return []
+    return getChartDataFrom(user)()
+  }, [user])
+
+  function getChartDataFrom(user: User) {
+    return () => {
+      const month = new Date().getMonth()
+      const getMonthDate = (month: number) => {
+        const now = new Date()
+        return new Date(now.getFullYear(), month)
+      }
+      return Array.from([month - 5, month - 4, month - 3, month - 2, month - 1, month])
+        .map(getMonthDate)
+        .map((date) => {
+          return (
+            user.contestsHistory.reduce((acc, history) => {
+              const submittedAtDate = history.submittedAt.toDate()
+              if (
+                submittedAtDate.getFullYear() === date.getFullYear() &&
+                submittedAtDate.getMonth() === date.getMonth()
+              ) {
+                return acc + history.totalScore
+              }
+              return acc
+            }, 0) +
+            user.tasksHistory.reduce((acc, history) => {
+              const submittedAtDate = history.submittedAt.toDate()
+              if (
+                submittedAtDate.getFullYear() === date.getFullYear() &&
+                submittedAtDate.getMonth() === date.getMonth()
+              ) {
+                return acc + history.totalScore
+              }
+              return acc
+            }, 0)
+          )
+        })
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -34,8 +88,8 @@ export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route
 
   return (
     <ScrollView>
-      <Box paddingX={6} paddingY={2}>
-        <VStack marginBottom={4}>
+      <VStack space={4} paddingX={6} paddingY={2}>
+        <VStack>
           <HStack space={3}>
             <OctopusIcon backgroundColor="primary.500" flexGrow={0} flexShrink={0} flexBasis="80px" size="80px" />
 
@@ -69,9 +123,9 @@ export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route
           </HStack>
         </VStack>
 
-        <FollowButton user={user} padding={2} marginBottom={4} />
+        <FollowButton user={user} padding={2} />
 
-        <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
+        <Box backgroundColor="card" borderRadius="16px" paddingX={4}>
           <VStack space={2} paddingY={3}>
             <HStack alignItems="center" justifyContent="space-between">
               <Text fontSize="xl" fontWeight="700" color="primary.500">
@@ -91,7 +145,54 @@ export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route
             </HStack>
           </VStack>
         </Box>
-      </Box>
+
+        <Text fontSize="xl" fontWeight="700" color="primary.500">
+          Eu vs. Você
+        </Text>
+
+        <Box backgroundColor="card" borderRadius="16px" paddingTop={4}>
+          <LineChart
+            width={Dimensions.get('window').width - 60}
+            height={220}
+            data={{
+              labels,
+              datasets: [
+                {
+                  data: userChartData,
+                  color: (opacity = 1) => colors['primary']['200'],
+                  strokeDashArray: [4],
+                },
+                {
+                  data: currentUserChartData,
+                  color: (opacity = 1) => colors['primary']['500'],
+                },
+              ],
+              legend: [`@${user.username}`, `@${currentUser.username}`],
+            }}
+            yAxisLabel=""
+            yAxisSuffix=""
+            withInnerLines={false}
+            withShadow={false}
+            fromZero
+            chartConfig={{
+              decimalPlaces: 0,
+
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientToOpacity: 0,
+
+              paddingRight: 16,
+              paddingTop: 16,
+
+              color: (opacity = 1) => colors['primary']['500'],
+              labelColor: (opacity = 1) => colors['darkText'],
+              propsForLabels: {
+                fontFamily: 'NunitoSemiBold',
+                fontSize: 14,
+              },
+            }}
+          />
+        </Box>
+      </VStack>
     </ScrollView>
   )
 }
