@@ -33,6 +33,9 @@ import { SaveContestScreen } from '~/screens/SaveContestScreen'
 import { SelectTaskScreen } from '~/screens/SelectTaskScreen'
 import { SelectTaskHeaderMenu } from '~/components/SelectTaskHeaderMenu'
 import { SaveOrganizeQuestionScreen } from '~/screens/SaveOrganizeQuestionScreen'
+import { ContestDetailsScreen } from '~/screens/ContestDetailsScreen'
+import { ContestPasswordScreen } from '~/screens/ContestPasswordScreen'
+import { ParticipatingContestDetailsScreen } from '~/screens/ParticipatingContestDetails'
 
 const Stack = createStackNavigator<RootParamList>()
 
@@ -273,6 +276,29 @@ export function RootNavigator() {
           ),
         }}
         component={SelectTaskScreen}
+      />
+      <Stack.Screen
+        name="ContestDetails"
+        component={ContestDetailsScreen}
+        options={{
+          header: () => <Header canGoBack title="" />,
+        }}
+      />
+      <Stack.Screen
+        name="ContestPassword"
+        component={ContestPasswordScreen}
+        options={{
+          header: () => <Header canGoBack centerTitle title="Competição" />,
+        }}
+      />
+      <Stack.Screen
+        name="ParticipatingContestDetails"
+        component={ParticipatingContestDetailsScreen}
+        options={{
+          header: (props) => {
+            return <Header canGoBack title="" headerRight={props.options.headerRight} />
+          },
+        }}
       />
     </Stack.Navigator>
   )

@@ -24,6 +24,8 @@ export const useTasks = create<TasksState>((set) => {
   auth().onAuthStateChanged(async (currentUser) => {
     lastTasksSubscription.unsubscribe()
 
+    set({ isLoading: false })
+
     if (!currentUser) {
       set({ isLoading: false, tasks: initialState.tasks })
     } else {

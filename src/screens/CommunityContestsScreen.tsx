@@ -73,7 +73,7 @@ export const CommunityContestsScreen: ContestsScreen<'CommunityContests'> = ({ n
           ) : (
             filteredCommunityContests.map((contest) => {
               return (
-                <Pressable key={contest.id} onPress={() => null}>
+                <Pressable key={contest.id} onPress={() => navigation.navigate('ContestDetails', { contest })}>
                   <Box backgroundColor="card" borderRadius="16px" paddingX={4} paddingY={3}>
                     <Text
                       flexShrink={1}

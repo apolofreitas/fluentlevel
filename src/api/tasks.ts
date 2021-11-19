@@ -1,4 +1,4 @@
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
+import { firebase, FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
 import { db, TaskModel } from './db'
 import { getCurrentUserDoc, getUserById, User } from './users'
 
@@ -31,14 +31,14 @@ export async function getTasks() {
 
   if (!currentUser) return []
 
-  const tasksSnap = await db.tasks.get()
+  const tasksSnap = await db.tasks.where('isDeleted', '!=', true).get()
   const tasksDocs = tasksSnap.docs
   const tasks = await Promise.all(tasksDocs.map((doc) => getTaskData(db.tasks.doc(doc.id)))).catch()
 
   return tasks
 }
 
-export type CreateTaskOptions = Omit<TaskModel, 'authorId'>
+export type CreateTaskOptions = Omit<TaskModel, 'authorId' | 'isDeleted'>
 
 export async function createTask({ title, description, isPublic, questions }: CreateTaskOptions) {
   const currentUserDoc = getCurrentUserDoc()
@@ -48,29 +48,40 @@ export async function createTask({ title, description, isPublic, questions }: Cr
   const createdTask = await db.tasks.add({
     title,
     authorId: currentUserDoc.id,
+    isDeleted: false,
     description,
     isPublic,
     questions,
+  })
+  currentUserDoc.update({
+    createdTasks: firebase.firestore.FieldValue.arrayUnion(createdTask.id),
   })
 
   return createdTask
 }
 
-export type UpdateTaskOptions = Omit<TaskModel, 'authorId'>
+export type UpdateTaskOptions = Partial<Omit<TaskModel, 'authorId' | 'isDeleted'>>
 
 export async function updateTask(id: string, { title, description, isPublic, questions }: UpdateTaskOptions) {
-  const updatedTask = await db.tasks.doc(id).update({
+  await db.tasks.doc(id).update({
     title,
     description,
     isPublic,
     questions,
   })
-
-  return updatedTask
 }
 
 export async function deleteTask(id: string) {
-  await db.tasks.doc(id).delete()
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return null
+
+  await db.tasks.doc(id).update({
+    isDeleted: true,
+  })
+  currentUserDoc.update({
+    createdTasks: firebase.firestore.FieldValue.arrayRemove(id),
+  })
 }
 
 export async function getTaskById(id: string) {

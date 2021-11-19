@@ -9,8 +9,8 @@ export const TaskDetailsScreen: RootScreen<'TaskDetails'> = ({ navigation, route
   return (
     <>
       <ScrollView>
-        <Box alignItems="center" padding={8} paddingBottom={24}>
-          <Text fontSize="4xl" fontWeight="700" marginBottom={4}>
+        <Box paddingX={8} paddingY={2} paddingBottom={24}>
+          <Text color="primary.500" fontSize="4xl" fontWeight="700" marginBottom={2}>
             {task.title}
           </Text>
 

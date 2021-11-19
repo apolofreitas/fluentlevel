@@ -10,11 +10,13 @@ export interface UserModel {
 
   tasksScore: number
   createdTasks: string[]
-  tasksHistory: string[]
+  tasksHistory: TaskResults[]
 
   contestsScore: number
   createdContests: string[]
-  contestsHistory: string[]
+  contestsHistory: ContestResults[]
+
+  participatingContests: string[]
 }
 
 export interface AlternativeQuestionModel {
@@ -55,14 +57,24 @@ export type QuestionModel = ListenQuestionModel | SpeechQuestionModel | Organize
 export interface TaskModel {
   authorId: string
   isPublic: boolean
+  isDeleted: boolean
 
   title: string
   description: string
   questions: Array<QuestionModel>
 }
 
+export interface TaskResults {
+  taskId: string
+  totalScore: number
+  correctQuestionsAmount: number
+  questionsAmount: number
+  timeSpent: number
+  totalTime: number
+}
 export interface ContestModel {
   authorId: string
+  isDeleted: boolean
 
   title: string
   description: string
@@ -70,6 +82,11 @@ export interface ContestModel {
   startDate: FirebaseFirestoreTypes.Timestamp
   endDate: FirebaseFirestoreTypes.Timestamp
   taskId: string
+  participatingUsers: string[]
+}
+
+export interface ContestResults extends TaskResults {
+  contestId: string
 }
 
 const users = firestore().collection<UserModel>('users')

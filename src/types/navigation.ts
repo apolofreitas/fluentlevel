@@ -10,6 +10,7 @@ import {
   QuestionModel,
   SpeechQuestionModel,
   Task,
+  TaskResults,
   UserModel,
 } from '~/api'
 
@@ -68,6 +69,7 @@ export type RootParamList = {
   }
 
   TaskSolving: {
+    contestId?: string
     task: Task
     questionIndex: number
     results: Array<{
@@ -77,13 +79,8 @@ export type RootParamList = {
   }
 
   TaskResults: {
-    task: Task
-    results: {
-      correctAnswers: number
-      totalScore: number
-      totalTimeSpent: number
-      totalTimeToAnswer: number
-    }
+    contestId?: string
+    results: TaskResults
   }
 
   SaveContest?: {
@@ -92,12 +89,24 @@ export type RootParamList = {
   }
 
   SelectTask: undefined
+
+  ContestDetails: {
+    contest: Contest
+  }
+
+  ContestPassword: {
+    contest: Contest
+  }
+
+  ParticipatingContestDetails: {
+    contest: Contest
+  }
 }
 export type RootScreen<T extends keyof RootParamList> = React.FC<StackScreenProps<RootParamList, T>>
 
 export type HomeParamList = {
-  Tasks: undefined
-  Contests: undefined
+  Tasks: NavigatorScreenParams<TasksParamList>
+  Contests: NavigatorScreenParams<ContestsParamList>
   Profile: undefined
 }
 export type HomeScreen<T extends keyof HomeParamList> = React.FC<
@@ -118,6 +127,7 @@ export type TasksScreen<T extends keyof TasksParamList> = React.FC<
 export type ContestsParamList = {
   CommunityContests: undefined
   CreatedContests: undefined
+  ParticipatingContests: undefined
 }
 export type ContestsScreen<T extends keyof ContestsParamList> = React.FC<
   CompositeScreenProps<

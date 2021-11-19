@@ -29,7 +29,7 @@ export const SignInScreen: RootScreen<'SignIn'> = ({ navigation }) => {
         } else if (code === 'auth/user-not-found') {
           showSimpleToast(toast, 'Desculpe, não conseguimos encontrar sua conta.')
         } else if (code === 'auth/wrong-password') {
-          showSimpleToast(toast, 'Os dados preenchidos não correspondem aos nosso registros.')
+          showSimpleToast(toast, 'Os dados preenchidos não correspondem aos nossos registros.')
         } else {
           showSimpleToast(toast, 'Erro inesperado, tente novamente mais tarde.')
         }

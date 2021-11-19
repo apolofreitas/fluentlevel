@@ -25,6 +25,7 @@ export const useCurrentUser = create<CurrentUserState>((set, get) => {
 
       contestsScore: 0,
       createdContests: [],
+      participatingContests: [],
       contestsHistory: [],
     },
   }

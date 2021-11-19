@@ -20,7 +20,7 @@ const containerWidth = Dimensions.get('window').width - MARGIN_LEFT * 2
 
 export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route }) => {
   const toast = useToast()
-  const { task, results, questionIndex } = route.params
+  const { contestId, task, results, questionIndex } = route.params
   const question = task.questions[questionIndex]
   const [score, setScore] = useState<number | null>(null)
   const [isShowingResults, setIsShowingResults] = useState(false)
@@ -70,7 +70,7 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
   }, [isShowingResults])
 
   useEffect(() => {
-    navigation.setOptions({ title: `Tempo: ${formatTime(question.timeToAnswer - timeSpent)}` })
+    navigation.setOptions({ title: `Tempo: ${formatTime((question.timeToAnswer - timeSpent) * 1000)}` })
     if (timeSpent === question.timeToAnswer) calculateScore()
   }, [timeSpent])
 
@@ -141,19 +141,27 @@ export const TaskSolvingScreen: RootScreen<'TaskSolving'> = ({ navigation, route
 
     if (questionIndex < task.questions.length - 1) {
       navigation.replace('TaskSolving', {
+        contestId,
         task,
         questionIndex: questionIndex + 1,
         results: updatedResults,
       })
     } else {
-      const correctAnswers = updatedResults.reduce((acc, result) => acc + (result.isCorrectAnswered ? 1 : 0), 0)
-      const totalTimeSpent = updatedResults.reduce((acc, result) => acc + result.timeSpent, 0)
+      const correctQuestionsAmount = updatedResults.reduce((acc, result) => acc + (result.isCorrectAnswered ? 1 : 0), 0)
+      const timeSpent = updatedResults.reduce((acc, result) => acc + result.timeSpent, 0)
       const totalScore = updatedResults.reduce((acc, result) => acc + (result.isCorrectAnswered ? score || 0 : 0), 0)
-      const totalTimeToAnswer = task.questions.reduce((acc, question) => acc + question.timeToAnswer, 0)
+      const totalTime = task.questions.reduce((acc, question) => acc + question.timeToAnswer, 0)
 
       navigation.replace('TaskResults', {
-        task,
-        results: { correctAnswers, totalScore, totalTimeSpent, totalTimeToAnswer },
+        contestId,
+        results: {
+          taskId: task.id,
+          totalScore,
+          timeSpent,
+          totalTime,
+          correctQuestionsAmount,
+          questionsAmount: task.questions.length,
+        },
       })
     }
   }

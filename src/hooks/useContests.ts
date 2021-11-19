@@ -1,19 +1,22 @@
 import create from 'zustand'
 import auth from '@react-native-firebase/auth'
-import { db, getContests, Contest } from '~/api'
+import { db, getContests, Contest, getCurrentUserDoc } from '~/api'
+import { useCurrentUser } from './useCurrentUser'
 
 export interface ContestsState {
   isLoading: boolean
   contests: Contest[]
   createdContests: Contest[]
   communityContests: Contest[]
+  participatingContests: Contest[]
 }
 
-export const useContests = create<ContestsState>((set) => {
+export const useContests = create<ContestsState>((set, get) => {
   const initialState: ContestsState = {
     contests: [],
     createdContests: [],
     communityContests: [],
+    participatingContests: [],
     isLoading: true,
   }
 
@@ -22,22 +25,25 @@ export const useContests = create<ContestsState>((set) => {
   }
 
   auth().onAuthStateChanged(async (currentUser) => {
+    if (!currentUser) return
+
     lastContestsSubscription.unsubscribe()
 
-    if (!currentUser) {
-      set({ isLoading: false, createdContests: initialState.createdContests })
-    } else {
-      lastContestsSubscription.unsubscribe = db.contests.onSnapshot(async () => {
-        const contests = await getContests()
+    lastContestsSubscription.unsubscribe = db.contests.onSnapshot(async () => {
+      set({ isLoading: true })
 
-        set({
-          isLoading: false,
-          contests,
-          createdContests: contests.filter((contest) => contest.authorId === currentUser.uid),
-          communityContests: contests.filter((contest) => contest.authorId !== currentUser.uid),
-        })
+      const contests = await getContests()
+
+      set({
+        isLoading: false,
+        contests,
+        createdContests: contests.filter((contest) => contest.authorId === currentUser.uid),
+        communityContests: contests.filter((contest) => contest.authorId !== currentUser.uid),
+        participatingContests: contests.filter((contest) =>
+          contest.participatingUsers.some(({ id }) => id === currentUser.uid),
+        ),
       })
-    }
+    })
   })
 
   return initialState

@@ -40,8 +40,8 @@ export const CreatedContestsScreen: ContestsScreen<'CreatedContests'> = ({ navig
                           onPress: () => navigation.navigate('SaveContest', { initialValues: contest }),
                         },
                         {
-                          text: 'Começar',
-                          onPress: () => undefined,
+                          text: 'Participar',
+                          onPress: () => navigation.navigate('ContestDetails', { contest }),
                         },
                       ],
                       {

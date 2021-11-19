@@ -101,6 +101,8 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
               <Text fontWeight="700" color="primary.500">
                 {currentUser.tasksHistory.length === 0 ? (
                   <>Nenhuma tarefa concluída</>
+                ) : currentUser.tasksHistory.length === 1 ? (
+                  <>{currentUser.tasksHistory.length} tarefa concluída</>
                 ) : (
                   <>{currentUser.tasksHistory.length} tarefas concluídas</>
                 )}
@@ -126,6 +128,8 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
               <Text fontWeight="700" color="primary.500">
                 {currentUser.contestsHistory.length === 0 ? (
                   <>Nenhuma competição concluída</>
+                ) : currentUser.contestsHistory.length === 1 ? (
+                  <>{currentUser.contestsHistory.length} competição concluída</>
                 ) : (
                   <>{currentUser.contestsHistory.length} competições concluídas</>
                 )}

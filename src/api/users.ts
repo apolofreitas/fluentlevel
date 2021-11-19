@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth'
 import { firebase, FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
-import { db, UserModel } from './db'
+import { db, UserModel, TaskResults } from './db'
 
 export interface User extends Omit<UserModel, 'followers' | 'following'> {
   id: string
@@ -139,6 +139,66 @@ export async function toggleFollow(id: string) {
     })
     await targetUserDoc.update({
       followers: firebase.firestore.FieldValue.arrayUnion(currentUserDoc.id),
+    })
+  }
+}
+
+export async function participateInContest(contestId: string) {
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return
+
+  const { user } = await getUserById(currentUserDoc.id)
+
+  if (user.participatingContests.includes(contestId)) return
+
+  await db.contests.doc(contestId).update({
+    participatingUsers: firebase.firestore.FieldValue.arrayUnion(user.id),
+  })
+  await currentUserDoc.update({
+    participatingContests: firebase.firestore.FieldValue.arrayUnion(contestId),
+  })
+}
+
+export async function removeParticipationInContest(contestId: string) {
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return
+
+  const { user } = await getUserById(currentUserDoc.id)
+
+  if (!user.participatingContests.includes(contestId)) return
+
+  await db.contests.doc(contestId).update({
+    participatingUsers: firebase.firestore.FieldValue.arrayRemove(user.id),
+  })
+  await currentUserDoc.update({
+    participatingContests: firebase.firestore.FieldValue.arrayRemove(contestId),
+  })
+}
+
+export interface SubmitScoreOptions {
+  contestId?: string
+  results: TaskResults
+}
+
+export async function submitScore({ contestId, results }: SubmitScoreOptions) {
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return
+
+  const { user } = await getUserById(currentUserDoc.id)
+
+  if (!user.tasksHistory.find((history) => history.taskId === results.taskId)) {
+    await db.users.doc(currentUserDoc.id).update({
+      tasksScore: firebase.firestore.FieldValue.increment(results.totalScore),
+      tasksHistory: firebase.firestore.FieldValue.arrayUnion(results),
+    })
+  }
+  if (!!contestId && !user.contestsHistory.find((history) => history.contestId === contestId)) {
+    await db.users.doc(currentUserDoc.id).update({
+      contestsScore: firebase.firestore.FieldValue.increment(results.totalScore),
+      contestsHistory: firebase.firestore.FieldValue.arrayUnion({ ...results, contestId }),
     })
   }
 }

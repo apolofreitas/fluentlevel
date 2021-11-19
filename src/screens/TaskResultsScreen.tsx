@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { Box, Button, ScrollView, Text, VStack } from 'native-base'
 
 import { RootScreen } from '~/types/navigation'
 import { PartyingFace } from '~/assets'
+import { submitScore } from '~/api'
 
 export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route }) => {
-  const { results } = route.params
+  const { contestId, results } = route.params
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -30,10 +32,10 @@ export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route
 
             <VStack space={1}>
               <Text fontSize="lg" fontWeight="600">
-                Tempo gasto: {results.totalTimeSpent} segundos
+                Tempo gasto: {results.timeSpent} segundos
               </Text>
               <Text fontSize="lg" fontWeight="600">
-                Questões corretas: {results.correctAnswers}
+                Questões corretas: {results.correctQuestionsAmount}
               </Text>
               <Text fontSize="lg" fontWeight="600">
                 Pontuação total: {results.totalScore}
@@ -43,7 +45,18 @@ export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route
         </Box>
       </ScrollView>
 
-      <Button position="absolute" bottom="24px" left="32px" right="32px" onPress={() => navigation.navigate('Home')}>
+      <Button
+        position="absolute"
+        bottom="24px"
+        left="32px"
+        right="32px"
+        isLoading={isLoading}
+        onPress={async () => {
+          setIsLoading(true)
+          await submitScore({ results, contestId })
+          navigation.navigate('Home')
+        }}
+      >
         Finalizar
       </Button>
     </>

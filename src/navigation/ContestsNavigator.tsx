@@ -7,6 +7,7 @@ import { ContestsParamList } from '~/types/navigation'
 
 import { CommunityContestsScreen } from '~/screens/CommunityContestsScreen'
 import { CreatedContestsScreen } from '~/screens/CreatedContestsScreen'
+import { ParticipatingContestsScreen } from '~/screens/ParticipatingContests'
 
 const Tab = createMaterialTopTabNavigator<ContestsParamList>()
 
@@ -23,6 +24,13 @@ export function ContestsNavigator() {
         component={CommunityContestsScreen}
         options={{
           tabBarLabel: 'Comunidade',
+        }}
+      />
+      <Tab.Screen
+        name="ParticipatingContests"
+        component={ParticipatingContestsScreen}
+        options={{
+          tabBarLabel: 'Participando',
         }}
       />
       <Tab.Screen
