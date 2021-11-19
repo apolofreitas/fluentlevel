@@ -20,40 +20,41 @@ export const ParticipatingContestDetailsScreen: RootScreen<'ParticipatingContest
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <IconButton
-          variant="unstyled"
-          icon={
-            <Icon
-              as={Feather}
-              name="trash"
-              size="sm"
-              onPress={async () => {
-                Alert.alert(
-                  'Remover competição',
-                  'Tem certeza que deseja remover a competição de "Participando"?',
-                  [
-                    {
-                      text: 'Cancelar',
-                      style: 'cancel',
-                    },
-                    {
-                      text: 'Remover',
-                      onPress: async () => {
-                        removeParticipationInContest(contest.id)
-                        navigation.goBack()
+      headerRight: () =>
+        !!currentUser.participatingContests.find((contestId) => contestId === contest.id) && (
+          <IconButton
+            variant="unstyled"
+            icon={
+              <Icon
+                as={Feather}
+                name="trash"
+                size="sm"
+                onPress={async () => {
+                  Alert.alert(
+                    'Remover competição',
+                    'Tem certeza que deseja remover a competição de "Participando"?',
+                    [
+                      {
+                        text: 'Cancelar',
+                        style: 'cancel',
                       },
+                      {
+                        text: 'Remover',
+                        onPress: async () => {
+                          removeParticipationInContest(contest.id)
+                          navigation.goBack()
+                        },
+                      },
+                    ],
+                    {
+                      cancelable: true,
                     },
-                  ],
-                  {
-                    cancelable: true,
-                  },
-                )
-              }}
-            />
-          }
-        />
-      ),
+                  )
+                }}
+              />
+            }
+          />
+        ),
     })
   }, [navigation])
 
@@ -95,7 +96,7 @@ export const ParticipatingContestDetailsScreen: RootScreen<'ParticipatingContest
   }
 
   function calculateRanking() {
-    return contest.participatingUsers
+    return contest.ranking
       .map((user) => ({
         user,
         score: user.contestsHistory.find(({ contestId }) => contestId === contest.id)?.totalScore || 0,

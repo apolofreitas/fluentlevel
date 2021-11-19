@@ -95,59 +95,63 @@ export const ProfileScreen: HomeScreen<'Profile'> = ({ navigation }) => {
           Histórico
         </Text>
 
-        <Box backgroundColor="card" borderRadius="16px" marginBottom={2} paddingX={4}>
-          <VStack space={2} paddingY={3}>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="700" color="primary.500">
-                {currentUser.tasksHistory.length === 0 ? (
-                  <>Nenhuma tarefa concluída</>
-                ) : currentUser.tasksHistory.length === 1 ? (
-                  <>{currentUser.tasksHistory.length} tarefa concluída</>
-                ) : (
-                  <>{currentUser.tasksHistory.length} tarefas concluídas</>
-                )}
+        <Pressable onPress={() => navigation.navigate('TasksHistory')}>
+          <Box backgroundColor="card" borderRadius="16px" marginBottom={2} paddingX={4}>
+            <VStack space={2} paddingY={3}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontWeight="700" color="primary.500">
+                  {currentUser.tasksHistory.length === 0 ? (
+                    <>Nenhuma tarefa concluída</>
+                  ) : currentUser.tasksHistory.length === 1 ? (
+                    <>{currentUser.tasksHistory.length} tarefa concluída</>
+                  ) : (
+                    <>{currentUser.tasksHistory.length} tarefas concluídas</>
+                  )}
+                </Text>
+                <Text fontSize="sm" fontWeight="600" color="gray.500">
+                  {currentUser.tasksScore} pontos
+                </Text>
+              </HStack>
+
+              <Text fontWeight="400" color="gray.500">
+                Aqui você poderá ver todas as tarefas já feitas por você.
               </Text>
-              <Text fontSize="sm" fontWeight="600" color="gray.500">
-                {currentUser.tasksScore} pontos
+
+              <Text alignSelf="flex-end" fontSize="sm" fontWeight="400" color="primary.500">
+                Exibir mais
               </Text>
-            </HStack>
+            </VStack>
+          </Box>
+        </Pressable>
 
-            <Text fontWeight="400" color="gray.500">
-              Aqui você poderá ver todas as tarefas já feitas por você.
-            </Text>
+        <Pressable onPress={() => navigation.navigate('ContestsHistory')}>
+          <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
+            <VStack space={2} paddingY={3}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontWeight="700" color="primary.500">
+                  {currentUser.contestsHistory.length === 0 ? (
+                    <>Nenhuma competição concluída</>
+                  ) : currentUser.contestsHistory.length === 1 ? (
+                    <>{currentUser.contestsHistory.length} competição concluída</>
+                  ) : (
+                    <>{currentUser.contestsHistory.length} competições concluídas</>
+                  )}
+                </Text>
+                <Text fontSize="sm" fontWeight="600" color="gray.500">
+                  {currentUser.contestsScore} pontos
+                </Text>
+              </HStack>
 
-            <Text alignSelf="flex-end" fontSize="sm" fontWeight="400" color="primary.500">
-              Exibir mais
-            </Text>
-          </VStack>
-        </Box>
-
-        <Box backgroundColor="card" borderRadius="16px" marginBottom={4} paddingX={4}>
-          <VStack space={2} paddingY={3}>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text fontWeight="700" color="primary.500">
-                {currentUser.contestsHistory.length === 0 ? (
-                  <>Nenhuma competição concluída</>
-                ) : currentUser.contestsHistory.length === 1 ? (
-                  <>{currentUser.contestsHistory.length} competição concluída</>
-                ) : (
-                  <>{currentUser.contestsHistory.length} competições concluídas</>
-                )}
+              <Text fontWeight="400" color="gray.500">
+                Aqui você poderá ver todas as competições que você já participou.
               </Text>
-              <Text fontSize="sm" fontWeight="600" color="gray.500">
-                {currentUser.contestsScore} pontos
+
+              <Text alignSelf="flex-end" fontSize="sm" fontWeight="400" color="primary.500">
+                Exibir mais
               </Text>
-            </HStack>
-
-            <Text fontWeight="400" color="gray.500">
-              Aqui você poderá ver todas as competições que você já participou.
-            </Text>
-
-            <Text alignSelf="flex-end" fontSize="sm" fontWeight="400" color="primary.500">
-              Exibir mais
-            </Text>
-          </VStack>
-        </Box>
+            </VStack>
+          </Box>
+        </Pressable>
       </Box>
     </ScrollView>
   )

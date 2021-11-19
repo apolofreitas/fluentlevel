@@ -1,11 +1,22 @@
 import auth from '@react-native-firebase/auth'
 import { firebase, FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
-import { db, UserModel, TaskResults } from './db'
+import { db, UserModel, TaskModel, TaskResults, ContestModel, ContestResults } from './db'
 
-export interface User extends Omit<UserModel, 'followers' | 'following'> {
+export interface User extends Omit<UserModel, 'followers' | 'following' | 'tasksHistory' | 'contestsHistory'> {
   id: string
   followers: UserModel[]
   following: UserModel[]
+  tasksHistory: Array<
+    TaskResults & {
+      task: TaskModel
+    }
+  >
+  contestsHistory: Array<
+    ContestResults & {
+      task: TaskModel
+      contest: ContestModel
+    }
+  >
 }
 
 export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentReference<UserModel>) {
@@ -14,39 +25,77 @@ export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentRefere
 
   if (!userData) throw 'User not found'
 
-  const followers = (
-    await Promise.all(
-      userData.followers.map(async (targetId) => {
-        const userDoc = db.users.doc(targetId)
-        const userSnap = await userDoc.get()
-        const user = userSnap.data()
+  const followers = await Promise.all(
+    userData.followers.map(async (userId) => {
+      const userDoc = db.users.doc(userId)
+      const userSnap = await userDoc.get()
+      const user = userSnap.data()
 
-        if (!user) return null
+      if (!user) throw 'User not found'
 
-        return user
-      }),
-    )
-  ).filter((user) => user !== null) as UserModel[]
+      return user
+    }),
+  ).catch(() => [])
 
-  const following = (
-    await Promise.all(
-      userData.following.map(async (targetId) => {
-        const userDoc = db.users.doc(targetId)
-        const userSnap = await userDoc.get()
-        const user = userSnap.data()
+  const following = await Promise.all(
+    userData.following.map(async (userId) => {
+      const userDoc = db.users.doc(userId)
+      const userSnap = await userDoc.get()
+      const user = userSnap.data()
 
-        if (!user) return null
+      if (!user) throw 'User not found'
 
-        return user
-      }),
-    )
-  ).filter((user) => user !== null) as UserModel[]
+      return user
+    }),
+  ).catch(() => [])
+
+  const tasksHistory = await Promise.all(
+    userData.tasksHistory.map(async ({ taskId, ...rest }) => {
+      const taskDoc = db.tasks.doc(taskId)
+      const taskSnap = await taskDoc.get()
+      const task = taskSnap.data()
+
+      if (!task) throw 'Task not found'
+
+      return {
+        ...rest,
+        taskId,
+        task,
+      }
+    }),
+  ).catch(() => [])
+
+  const contestsHistory = await Promise.all(
+    userData.contestsHistory.map(async ({ contestId, taskId, ...rest }) => {
+      const contestDoc = db.contests.doc(contestId)
+      const contestSnap = await contestDoc.get()
+      const contest = contestSnap.data()
+
+      if (!contest) throw 'Contest not found'
+
+      const taskDoc = db.tasks.doc(taskId)
+      const taskSnap = await taskDoc.get()
+      const task = taskSnap.data()
+
+      if (!task) throw 'Task not found'
+
+      return {
+        ...rest,
+        contestId,
+        contest,
+        taskId,
+        task,
+      }
+    }),
+  ).catch(() => [])
 
   const user: User = {
     ...userData,
     id: userSnap.id,
     followers,
     following,
+    tasksHistory,
+    contestsHistory,
   }
 
   return {
@@ -179,7 +228,7 @@ export async function removeParticipationInContest(contestId: string) {
 
 export interface SubmitScoreOptions {
   contestId?: string
-  results: TaskResults
+  results: Omit<TaskResults, 'submittedAt'>
 }
 
 export async function submitScore({ contestId, results }: SubmitScoreOptions) {
@@ -192,13 +241,23 @@ export async function submitScore({ contestId, results }: SubmitScoreOptions) {
   if (!user.tasksHistory.find((history) => history.taskId === results.taskId)) {
     await db.users.doc(currentUserDoc.id).update({
       tasksScore: firebase.firestore.FieldValue.increment(results.totalScore),
-      tasksHistory: firebase.firestore.FieldValue.arrayUnion(results),
+      tasksHistory: firebase.firestore.FieldValue.arrayUnion({
+        submittedAt: firebase.firestore.Timestamp.now(),
+        ...results,
+      }),
     })
   }
   if (!!contestId && !user.contestsHistory.find((history) => history.contestId === contestId)) {
     await db.users.doc(currentUserDoc.id).update({
       contestsScore: firebase.firestore.FieldValue.increment(results.totalScore),
-      contestsHistory: firebase.firestore.FieldValue.arrayUnion({ ...results, contestId }),
+      contestsHistory: firebase.firestore.FieldValue.arrayUnion({
+        submittedAt: firebase.firestore.Timestamp.now(),
+        contestId,
+        ...results,
+      }),
+    })
+    await db.contests.doc(contestId).update({
+      ranking: firebase.firestore.FieldValue.arrayUnion(user.id),
     })
   }
 }

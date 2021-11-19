@@ -3,11 +3,12 @@ import { db, ContestModel } from './db'
 import { getCurrentUserDoc, getUserById, User } from './users'
 import { getTaskById, Task } from './tasks'
 
-export interface Contest extends Omit<ContestModel, 'participatingUsers'> {
+export interface Contest extends Omit<ContestModel, 'participatingUsers' | 'ranking'> {
   id: string
   author: User
   task: Task
   participatingUsers: User[]
+  ranking: User[]
 }
 
 export async function getContestData(contestDoc: FirebaseFirestoreTypes.DocumentReference<ContestModel>) {
@@ -16,10 +17,11 @@ export async function getContestData(contestDoc: FirebaseFirestoreTypes.Document
 
   if (!contestData) throw 'Contest not found'
 
-  const [{ user: author }, task, participatingUsers] = await Promise.all([
+  const [{ user: author }, task, participatingUsers, ranking] = await Promise.all([
     getUserById(contestData.authorId),
     getTaskById(contestData.taskId),
     await Promise.all(contestData.participatingUsers.map(async (id) => (await getUserById(id)).user)),
+    await Promise.all(contestData.ranking.map(async (id) => (await getUserById(id)).user)),
   ])
 
   if (!author) throw 'Contest author not found'
@@ -30,6 +32,7 @@ export async function getContestData(contestDoc: FirebaseFirestoreTypes.Document
     author,
     task,
     participatingUsers,
+    ranking,
   }
 
   return contest
@@ -71,6 +74,7 @@ export async function createContest({
     endDate,
     taskId,
     participatingUsers: [],
+    ranking: [],
   })
   currentUserDoc.update({
     createdContests: firebase.firestore.FieldValue.arrayUnion(createdContest.id),
@@ -89,6 +93,8 @@ export async function updateContest(id: string, options: UpdateContestOptions) {
     startDate: options.startDate,
     endDate: options.endDate,
     taskId: options.taskId,
+    participatingUsers: options.participatingUsers,
+    ranking: options.ranking,
   })
 }
 

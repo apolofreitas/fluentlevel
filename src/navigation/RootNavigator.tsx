@@ -14,6 +14,8 @@ import { OnboardingScreen } from '~/screens/OnboardingScreen'
 import { SignInScreen } from '~/screens/SignInScreen'
 import { SignUpScreen } from '~/screens/SignUpScreen'
 import { ResetPasswordScreen } from '~/screens/ResetPasswordScreen'
+import { TasksHistoryScreen } from '~/screens/TasksHistoryScreen'
+import { ContestsHistoryScreen } from '~/screens/ContestsHistoryScreen'
 import { SaveTaskScreen } from '~/screens/SaveTaskScreen'
 import { SaveAlternativeQuestionScreen } from '~/screens/SaveAlternativeQuestionScreen'
 import { TaskDetailsScreen } from '~/screens/TaskDetailsScreen'
@@ -135,6 +137,16 @@ export function RootNavigator() {
         name="AddFriend"
         options={{ header: () => <Header canGoBack centerTitle title="Adicionar Amigo" /> }}
         component={AddFriendScreen}
+      />
+      <Stack.Screen
+        name="TasksHistory"
+        options={{ header: () => <Header canGoBack centerTitle title="Tarefas Resolvidas" /> }}
+        component={TasksHistoryScreen}
+      />
+      <Stack.Screen
+        name="ContestsHistory"
+        options={{ header: () => <Header canGoBack centerTitle title="Competições Resolvidas" /> }}
+        component={ContestsHistoryScreen}
       />
       <Stack.Screen
         name="SaveTask"

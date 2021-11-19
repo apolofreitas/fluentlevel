@@ -1,16 +1,29 @@
-import React, { useState } from 'react'
-import { Box, Button, HStack, ScrollView, Text, VStack } from 'native-base'
+import React, { useEffect, useState } from 'react'
+import { Box, Button, ScrollView, Text, VStack } from 'native-base'
 import dateFormat from 'dateformat'
 
 import { RootScreen } from '~/types/navigation'
 import { participateInContest } from '~/api'
 import { useCurrentUser } from '~/hooks'
+import { firebase } from '@react-native-firebase/firestore'
 
 export const ContestDetailsScreen: RootScreen<'ContestDetails'> = ({ navigation, route }) => {
   const { contest } = route.params
   const { currentUser } = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(calculateIsDisabled)
 
+  function calculateIsDisabled() {
+    return (
+      contest.participatingUsers.some(({ id }) => id === currentUser.id) ||
+      currentUser.contestsHistory.some(({ contestId }) => contestId === contest.id) ||
+      contest.endDate.toMillis() < firebase.firestore.Timestamp.now().toMillis()
+    )
+  }
+
+  useEffect(() => {
+    setIsDisabled(calculateIsDisabled)
+  }, [contest])
   return (
     <>
       <ScrollView>
@@ -52,7 +65,7 @@ export const ContestDetailsScreen: RootScreen<'ContestDetails'> = ({ navigation,
         bottom="24px"
         left="32px"
         right="32px"
-        isDisabled={contest.participatingUsers.some(({ id }) => id === currentUser.id)}
+        isDisabled={isDisabled}
         isLoading={isLoading}
         onPress={async () => {
           if (!!contest.password && contest.authorId !== currentUser.id) {

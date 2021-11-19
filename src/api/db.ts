@@ -66,6 +66,7 @@ export interface TaskModel {
 
 export interface TaskResults {
   taskId: string
+  submittedAt: FirebaseFirestoreTypes.Timestamp
   totalScore: number
   correctQuestionsAmount: number
   questionsAmount: number
@@ -83,6 +84,7 @@ export interface ContestModel {
   endDate: FirebaseFirestoreTypes.Timestamp
   taskId: string
   participatingUsers: string[]
+  ranking: string[]
 }
 
 export interface ContestResults extends TaskResults {

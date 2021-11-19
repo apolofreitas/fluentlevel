@@ -35,6 +35,8 @@ export type RootParamList = {
   FollowingUsers: { followingUsers: UserModel[] }
   FollowersUsers: { followersUsers: UserModel[] }
   AddFriend: undefined
+  TasksHistory: undefined
+  ContestsHistory: undefined
 
   SaveTask?: {
     initialValues?: Task
@@ -80,7 +82,7 @@ export type RootParamList = {
 
   TaskResults: {
     contestId?: string
-    results: TaskResults
+    results: Omit<TaskResults, 'submittedAt'>
   }
 
   SaveContest?: {
