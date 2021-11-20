@@ -88,7 +88,7 @@ export const UserDetailsScreen: RootScreen<'UserDetails'> = ({ navigation, route
 
   return (
     <ScrollView>
-      <VStack space={4} paddingX={6} paddingY={2}>
+      <VStack space={4} paddingX={6} paddingTop={2} paddingBottom={4}>
         <VStack>
           <HStack space={3}>
             <OctopusIcon backgroundColor="primary.500" flexGrow={0} flexShrink={0} flexBasis="80px" size="80px" />

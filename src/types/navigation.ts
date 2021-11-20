@@ -5,6 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 import {
   AlternativeQuestionModel,
   Contest,
+  CreateContestOptions,
+  CreateTaskOptions,
   ListenQuestionModel,
   OrganizeQuestionModel,
   QuestionModel,
@@ -39,7 +41,7 @@ export type RootParamList = {
   ContestsHistory: undefined
 
   SaveTask?: {
-    initialValues?: Task
+    initialValues?: CreateTaskOptions & { id?: string }
     questionToSave?: {
       index?: number
       data?: QuestionModel
@@ -49,6 +51,11 @@ export type RootParamList = {
   SaveAlternativeQuestion?: {
     initialValues?: AlternativeQuestionModel
     questionIndex?: number
+    imageUriToSave?: string
+  }
+
+  SelectImage: {
+    screenToNavigateOnSave: keyof RootParamList
   }
 
   SaveListenQuestion?: {
@@ -86,7 +93,7 @@ export type RootParamList = {
   }
 
   SaveContest?: {
-    initialValues?: Contest
+    initialValues?: CreateContestOptions & { id?: string }
     taskToSelect?: Task | null
   }
 

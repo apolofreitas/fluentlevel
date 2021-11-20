@@ -20,7 +20,7 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
-import { createTask, CreateTaskOptions, deleteTask, updateTask } from '~/api'
+import { createTask, deleteTask, updateTask } from '~/api'
 import { taskDescriptionSchema, taskQuestionsSchema, taskTitleSchema } from '~/shared/validation'
 import { Alert } from 'react-native'
 
@@ -32,7 +32,7 @@ const SaveTaskSchema = yup.object({
 
 export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) => {
   const saveQuestionDisclosure = useDisclose()
-  const formik = useFormik<CreateTaskOptions & { id?: string }>({
+  const formik = useFormik({
     initialValues: route.params?.initialValues || {
       id: undefined,
       title: '',
@@ -274,7 +274,7 @@ export const SaveTaskScreen: RootScreen<'SaveTask'> = ({ navigation, route }) =>
               saveQuestionDisclosure.onClose()
             }}
           >
-            Questão prática de pronuncia
+            Questão de pronuncia
           </Actionsheet.Item>
           <Actionsheet.Item
             onPress={() => {

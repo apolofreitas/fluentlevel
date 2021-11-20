@@ -23,7 +23,7 @@ import fromEntries from 'fromentries'
 import { useFormik } from 'formik'
 
 import { RootScreen } from '~/types/navigation'
-import { createContest, CreateContestOptions, deleteContest, getTaskById, Task, updateContest } from '~/api'
+import { createContest, deleteContest, getTaskById, Task, updateContest } from '~/api'
 import { contestDescriptionSchema, contestTaskIdSchema, contestTitleSchema } from '~/shared/validation'
 import { DatePickerButton } from '~/components/DatePickerButton'
 
@@ -34,7 +34,7 @@ const SaveContestSchema = yup.object({
 })
 
 export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route }) => {
-  const formik = useFormik<CreateContestOptions & { id?: string }>({
+  const formik = useFormik({
     initialValues: route.params?.initialValues || {
       id: undefined,
       title: '',
@@ -43,6 +43,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
       taskId: '',
       startDate: firestore.Timestamp.fromMillis(new Date().setSeconds(0, 0)),
       endDate: firestore.Timestamp.fromMillis(new Date().setSeconds(0, 0)),
+      ranking: [],
     },
     validationSchema: SaveContestSchema,
     validateOnChange: false,
@@ -64,7 +65,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
     },
     onSubmit: async (values) => {
       if (!!values.id) {
-        await updateContest(values.id, values)
+        await updateContest(values.id, { ...values, ranking: [] })
       } else {
         await createContest(values)
       }

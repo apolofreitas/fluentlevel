@@ -24,6 +24,7 @@ export interface AlternativeQuestionModel {
   info: string
   timeToAnswer: number
 
+  imageUri?: string
   alternatives: string[]
   rightAlternativeIndex: number
 }

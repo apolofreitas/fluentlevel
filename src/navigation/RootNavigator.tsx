@@ -18,6 +18,7 @@ import { TasksHistoryScreen } from '~/screens/TasksHistoryScreen'
 import { ContestsHistoryScreen } from '~/screens/ContestsHistoryScreen'
 import { SaveTaskScreen } from '~/screens/SaveTaskScreen'
 import { SaveAlternativeQuestionScreen } from '~/screens/SaveAlternativeQuestionScreen'
+import { SelectImageScreen } from '~/screens/SelectImageScreen'
 import { TaskDetailsScreen } from '~/screens/TaskDetailsScreen'
 import { TaskResultsScreen } from '~/screens/TaskResultsScreen'
 import { TaskSolvingScreen } from '~/screens/TaskSolvingScreen'
@@ -181,6 +182,15 @@ export function RootNavigator() {
                 headerRight={props.options.headerRight}
               />
             )
+          },
+        }}
+      />
+      <Stack.Screen
+        name="SelectImage"
+        component={SelectImageScreen}
+        options={{
+          header: (props) => {
+            return <Header canGoBack centerTitle title="Imagens" headerRight={props.options.headerRight} />
           },
         }}
       />

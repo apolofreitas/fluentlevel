@@ -101,7 +101,7 @@ export const ParticipatingContestDetailsScreen: RootScreen<'ParticipatingContest
         user,
         score: user.contestsHistory.find(({ contestId }) => contestId === contest.id)?.totalScore || 0,
       }))
-      .sort((a, b) => a.score - b.score)
+      .sort((a, b) => b.score - a.score)
   }
 
   return (

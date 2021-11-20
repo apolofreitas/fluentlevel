@@ -13,6 +13,7 @@ import {
   IconButton,
   FormControl,
   Slider,
+  Image,
 } from 'native-base'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
@@ -31,6 +32,7 @@ const SaveAlternativeQuestionSchema = yup.object({
 
 export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'> = ({ navigation, route }) => {
   const [questionIndex] = useState(route.params?.questionIndex)
+
   const formik = useFormik<AlternativeQuestionModel>({
     initialValues: route.params?.initialValues || {
       type: 'ALTERNATIVE_QUESTION',
@@ -103,10 +105,16 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
     formik.setFieldValue('rightAlternativeIndex', rightAlternativeIndex, false)
   }, [formik.values.alternatives])
 
+  useEffect(() => {
+    if (!route.params?.imageUriToSave) return
+
+    formik.setFieldValue('imageUri', route.params?.imageUriToSave, false)
+  }, [route.params?.imageUriToSave])
+
   return (
     <>
       <ScrollView>
-        <Box paddingX={6} paddingTop={2} paddingBottom={24}>
+        <Box paddingX={6} paddingTop={2} paddingBottom={28}>
           <FormControl
             isInvalid={!!formik.touched.info && !!formik.errors.info}
             isDisabled={formik.isSubmitting}
@@ -252,6 +260,23 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
                 formik.errors.alternatives}
             </FormControl.ErrorMessage>
           </FormControl>
+
+          <Button
+            margin={2}
+            startIcon={<Icon as={Feather} name="search" />}
+            onPress={() => navigation.navigate('SelectImage', { screenToNavigateOnSave: 'SaveAlternativeQuestion' })}
+          >
+            Search image in WEB
+          </Button>
+
+          {!!formik.values.imageUri && (
+            <Image
+              boxSize="120px"
+              borderRadius="16px"
+              source={{ uri: formik.values.imageUri }}
+              alt="Imagem da internet"
+            />
+          )}
         </Box>
       </ScrollView>
 

@@ -238,15 +238,14 @@ export async function submitScore({ contestId, results }: SubmitScoreOptions) {
 
   const { user } = await getUserById(currentUserDoc.id)
 
-  if (!user.tasksHistory.find((history) => history.taskId === results.taskId)) {
-    await db.users.doc(currentUserDoc.id).update({
-      tasksScore: firebase.firestore.FieldValue.increment(results.totalScore),
-      tasksHistory: firebase.firestore.FieldValue.arrayUnion({
-        submittedAt: firebase.firestore.Timestamp.now(),
-        ...results,
-      }),
-    })
-  }
+  await db.users.doc(currentUserDoc.id).update({
+    tasksScore: firebase.firestore.FieldValue.increment(results.totalScore),
+    tasksHistory: firebase.firestore.FieldValue.arrayUnion({
+      submittedAt: firebase.firestore.Timestamp.now(),
+      ...results,
+    }),
+  })
+
   if (!!contestId && !user.contestsHistory.find((history) => history.contestId === contestId)) {
     await db.users.doc(currentUserDoc.id).update({
       contestsScore: firebase.firestore.FieldValue.increment(results.totalScore),
