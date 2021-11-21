@@ -21,9 +21,9 @@ export interface UserModel {
 
 export interface AlternativeQuestionModel {
   type: 'ALTERNATIVE_QUESTION'
-  info: string
   timeToAnswer: number
 
+  statement: string
   imageUri?: string
   alternatives: string[]
   rightAlternativeIndex: number
@@ -31,7 +31,6 @@ export interface AlternativeQuestionModel {
 
 export interface ListenQuestionModel {
   type: 'LISTEN_QUESTION'
-  info: string
   timeToAnswer: number
 
   phraseToRecognize: string
@@ -39,7 +38,6 @@ export interface ListenQuestionModel {
 
 export interface SpeechQuestionModel {
   type: 'SPEECH_QUESTION'
-  info: string
   timeToAnswer: number
 
   phraseToSpeech: string
@@ -47,9 +45,9 @@ export interface SpeechQuestionModel {
 
 export interface OrganizeQuestionModel {
   type: 'ORGANIZE_QUESTION'
-  info: string
   timeToAnswer: number
 
+  translatedPhraseToOrganize: string
   phraseToOrganize: string
 }
 

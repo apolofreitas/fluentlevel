@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import { StyleSheet } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -6,8 +6,13 @@ import Animated, {
   withSpring,
   useSharedValue,
   useDerivedValue,
+  runOnUI,
 } from 'react-native-reanimated'
-import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler'
+import {
+  PanGestureHandler,
+  PanGestureHandlerEventPayload,
+  PanGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler'
 import { between, useVector } from 'react-native-redash'
 
 import { calculateLayout, lastOrder, Offset, remove, reorder, LayoutValues } from '~/utils/questionLayout'
@@ -30,6 +35,23 @@ export const OrganizeQuestionSortableWordWrapper: React.FC<OrganizeQuestionSorta
   const translation = useVector()
   const isInBank = useDerivedValue(() => offset.order.value === -1)
 
+  const onPress = ({}: PanGestureHandlerEventPayload) => {
+    'worklet'
+
+    if (isInBank.value) {
+      offset.order.value = lastOrder(offsets)
+    } else {
+      offset.order.value = -1
+      remove(offsets, index)
+    }
+
+    calculateLayout(offsets, layoutValues)
+
+    isAnimating.value = true
+    translation.x.value = withSpring(offset.x.value, {}, () => (isAnimating.value = false))
+    translation.y.value = withSpring(offset.y.value, {})
+  }
+
   const onGestureEvent = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, { x: number; y: number }>({
     onStart: (_, ctx) => {
       if (isInBank.value) {
@@ -41,9 +63,9 @@ export const OrganizeQuestionSortableWordWrapper: React.FC<OrganizeQuestionSorta
       }
       ctx.x = translation.x.value
       ctx.y = translation.y.value
-      isGestureActive.value = true
     },
     onActive: ({ translationX, translationY }, ctx) => {
+      isGestureActive.value = true
       translation.x.value = ctx.x + translationX
       translation.y.value = ctx.y + translationY
       if (isInBank.value && translation.y.value < layoutValues.sentenceHeight) {
@@ -76,18 +98,21 @@ export const OrganizeQuestionSortableWordWrapper: React.FC<OrganizeQuestionSorta
       isGestureActive.value = false
     },
   })
+
   const translateX = useDerivedValue(() => {
     if (isGestureActive.value) {
       return translation.x.value
     }
     return withSpring(isInBank.value ? offset.originalX.value - layoutValues.marginX : offset.x.value)
   })
+
   const translateY = useDerivedValue(() => {
     if (isGestureActive.value) {
       return translation.y.value
     }
     return withSpring(isInBank.value ? offset.originalY.value + layoutValues.sentenceHeight : offset.y.value)
   })
+
   const style = useAnimatedStyle(() => {
     return {
       position: 'absolute',
@@ -102,7 +127,13 @@ export const OrganizeQuestionSortableWordWrapper: React.FC<OrganizeQuestionSorta
 
   return (
     <Animated.View style={style}>
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <PanGestureHandler
+        minDist={1}
+        onGestureEvent={onGestureEvent}
+        onHandlerStateChange={({ nativeEvent }) => {
+          if (nativeEvent.oldState !== 4 && nativeEvent.state === 5) runOnUI(onPress)(nativeEvent)
+        }}
+      >
         <Animated.View style={StyleSheet.absoluteFill}>{children}</Animated.View>
       </PanGestureHandler>
     </Animated.View>

@@ -190,7 +190,7 @@ export function RootNavigator() {
         component={SelectImageScreen}
         options={{
           header: (props) => {
-            return <Header canGoBack centerTitle title="Imagens" headerRight={props.options.headerRight} />
+            return <Header canGoBack centerTitle title="Selecionar Imagem" headerRight={props.options.headerRight} />
           },
         }}
       />

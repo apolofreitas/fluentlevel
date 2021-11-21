@@ -57,8 +57,7 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
       <ScrollView>
         <VStack space={6} alignItems="center" padding={6} paddingBottom={24}>
           <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center">
-            {question.info}
-            Pronuncie corretamente o texto abaixo:
+            Pronuncie o texto abaixo:
           </Text>
 
           <VStack space={4} alignItems="center" width="100%">
@@ -97,6 +96,13 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
                 +{score} pontos
               </Text>
             </Box>
+          ) : timeSpent >= question.timeToAnswer && speechText === '' ? (
+            <HStack space={3} alignItems="center">
+              <Icon as={Feather} color="primary.500" name="clock" />
+              <Text color="primary.500" fontWeight="700" fontSize="xl">
+                Tempo esgotado
+              </Text>
+            </HStack>
           ) : (
             <HStack space={3} alignItems="center">
               <Icon as={Feather} color="red.500" name="x-circle" />

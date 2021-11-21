@@ -49,45 +49,49 @@ export async function getUserData(userDoc: FirebaseFirestoreTypes.DocumentRefere
     }),
   ).catch(() => [])
 
-  const tasksHistory = await Promise.all(
-    userData.tasksHistory.map(async ({ taskId, ...rest }) => {
-      const taskDoc = db.tasks.doc(taskId)
-      const taskSnap = await taskDoc.get()
-      const task = taskSnap.data()
+  const tasksHistory = (
+    await Promise.all(
+      userData.tasksHistory.map(async ({ taskId, ...rest }) => {
+        const taskDoc = db.tasks.doc(taskId)
+        const taskSnap = await taskDoc.get()
+        const task = taskSnap.data()
 
-      if (!task) throw 'Task not found'
+        if (!task) throw 'Task not found'
 
-      return {
-        ...rest,
-        taskId,
-        task,
-      }
-    }),
-  ).catch(() => [])
+        return {
+          ...rest,
+          taskId,
+          task,
+        }
+      }),
+    ).catch(() => [])
+  ).sort((a, b) => b.submittedAt.toMillis() - a.submittedAt.toMillis())
 
-  const contestsHistory = await Promise.all(
-    userData.contestsHistory.map(async ({ contestId, taskId, ...rest }) => {
-      const contestDoc = db.contests.doc(contestId)
-      const contestSnap = await contestDoc.get()
-      const contest = contestSnap.data()
+  const contestsHistory = (
+    await Promise.all(
+      userData.contestsHistory.map(async ({ contestId, taskId, ...rest }) => {
+        const contestDoc = db.contests.doc(contestId)
+        const contestSnap = await contestDoc.get()
+        const contest = contestSnap.data()
 
-      if (!contest) throw 'Contest not found'
+        if (!contest) throw 'Contest not found'
 
-      const taskDoc = db.tasks.doc(taskId)
-      const taskSnap = await taskDoc.get()
-      const task = taskSnap.data()
+        const taskDoc = db.tasks.doc(taskId)
+        const taskSnap = await taskDoc.get()
+        const task = taskSnap.data()
 
-      if (!task) throw 'Task not found'
+        if (!task) throw 'Task not found'
 
-      return {
-        ...rest,
-        contestId,
-        contest,
-        taskId,
-        task,
-      }
-    }),
-  ).catch(() => [])
+        return {
+          ...rest,
+          contestId,
+          contest,
+          taskId,
+          task,
+        }
+      }),
+    ).catch(() => [])
+  ).sort((a, b) => b.submittedAt.toMillis() - a.submittedAt.toMillis())
 
   const user: User = {
     ...userData,

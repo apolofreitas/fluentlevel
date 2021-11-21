@@ -6,12 +6,11 @@ import { useFormik } from 'formik'
 import { Alert } from 'react-native'
 
 import { RootScreen } from '~/types/navigation'
-import { questionPhraseToSpeechSchema, questionInfoSchema } from '~/shared/validation'
+import { questionPhraseToSpeechSchema } from '~/shared/validation'
 import { SpeechQuestionModel } from '~/api'
 import { RecognizeAudioButton } from '~/components'
 
 const SaveSpeechQuestionSchema = yup.object({
-  info: questionInfoSchema,
   phraseToSpeech: questionPhraseToSpeechSchema.required('A frase para ser ditada é um campo obrigatório.'),
 })
 
@@ -20,7 +19,6 @@ export const SaveSpeechQuestionScreen: RootScreen<'SaveSpeechQuestion'> = ({ nav
   const formik = useFormik<SpeechQuestionModel>({
     initialValues: route.params?.initialValues || {
       type: 'SPEECH_QUESTION',
-      info: '',
       timeToAnswer: 30,
       phraseToSpeech: '',
     },
@@ -85,62 +83,9 @@ export const SaveSpeechQuestionScreen: RootScreen<'SaveSpeechQuestion'> = ({ nav
       <ScrollView>
         <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
-            isDisabled={formik.isSubmitting}
-            marginBottom={4}
-          >
-            <FormControl.Label>
-              <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Informações (Opcional)
-              </Text>
-            </FormControl.Label>
-            <TextArea
-              height="88px"
-              numberOfLines={3}
-              textAlignVertical="top"
-              placeholder="Digite as informações da questão"
-              onChangeText={formik.handleChange('info')}
-              onBlur={formik.handleBlur('info')}
-              value={formik.values.info}
-              isDisabled={formik.isSubmitting}
-            />
-            <FormControl.ErrorMessage>{formik.errors.info}</FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
-            isDisabled={formik.isSubmitting}
-            marginBottom={4}
-          >
-            <HStack space={2}>
-              <FormControl.Label>
-                <Text color="primary.700" fontSize="lg" fontWeight="600">
-                  Tempo: {formik.values.timeToAnswer}s
-                </Text>
-              </FormControl.Label>
-
-              <Slider
-                flexShrink={1}
-                minValue={10}
-                maxValue={60}
-                accessibilityLabel="Time Slider"
-                value={formik.values.timeToAnswer}
-                onChange={(value) => formik.setFieldValue('timeToAnswer', value, false)}
-                isDisabled={formik.isSubmitting}
-              >
-                <Slider.Track>
-                  <Slider.FilledTrack />
-                </Slider.Track>
-                <Slider.Thumb />
-              </Slider>
-            </HStack>
-
-            <FormControl.ErrorMessage>{formik.errors.timeToAnswer}</FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl
             isInvalid={!!formik.touched.phraseToSpeech && !!formik.errors.phraseToSpeech}
             isDisabled={formik.isSubmitting}
+            marginBottom={4}
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
@@ -164,6 +109,36 @@ export const SaveSpeechQuestionScreen: RootScreen<'SaveSpeechQuestion'> = ({ nav
             )}
 
             <FormControl.ErrorMessage>{formik.errors.phraseToSpeech}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isInvalid={!!formik.touched.timeToAnswer && !!formik.errors.timeToAnswer}
+            isDisabled={formik.isSubmitting}
+          >
+            <HStack space={2} paddingRight={2}>
+              <FormControl.Label>
+                <Text color="primary.700" fontSize="lg" fontWeight="600">
+                  Tempo: {formik.values.timeToAnswer}s
+                </Text>
+              </FormControl.Label>
+
+              <Slider
+                flexShrink={1}
+                minValue={10}
+                maxValue={60}
+                accessibilityLabel="Time Slider"
+                value={formik.values.timeToAnswer}
+                onChange={(value) => formik.setFieldValue('timeToAnswer', value, false)}
+                isDisabled={formik.isSubmitting}
+              >
+                <Slider.Track>
+                  <Slider.FilledTrack />
+                </Slider.Track>
+                <Slider.Thumb />
+              </Slider>
+            </HStack>
+
+            <FormControl.ErrorMessage>{formik.errors.timeToAnswer}</FormControl.ErrorMessage>
           </FormControl>
         </Box>
       </ScrollView>

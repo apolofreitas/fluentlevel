@@ -20,14 +20,14 @@ import { useFormik } from 'formik'
 import { Alert, Pressable } from 'react-native'
 
 import { RootScreen } from '~/types/navigation'
-import { questionAlternativesSchema, questionInfoSchema } from '~/shared/validation'
+import { questionAlternativesSchema, questionStatementSchema } from '~/shared/validation'
 import { AlternativeQuestionModel } from '~/api'
 import { colors } from '~/theme/colors'
 import { OctopusIcon } from '~/components'
 
 const SaveAlternativeQuestionSchema = yup.object({
-  info: questionInfoSchema.required('As informações da questão são obrigatórias.'),
-  alternatives: questionAlternativesSchema.required('As alternativas são obrigatório.'),
+  statement: questionStatementSchema.required('O enunciado da questão é obrigatório.'),
+  alternatives: questionAlternativesSchema.required('As alternativas são obrigatórias.'),
 })
 
 export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'> = ({ navigation, route }) => {
@@ -36,10 +36,11 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
   const formik = useFormik<AlternativeQuestionModel>({
     initialValues: route.params?.initialValues || {
       type: 'ALTERNATIVE_QUESTION',
-      info: '',
+      statement: '',
       timeToAnswer: 30,
       alternatives: [],
       rightAlternativeIndex: 0,
+      imageUri: undefined,
     },
     validationSchema: SaveAlternativeQuestionSchema,
     validateOnChange: false,
@@ -76,7 +77,7 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
                     },
                     {
                       text: 'Sair',
-                      onPress: async () => {
+                      onPress: () => {
                         navigation.navigate('SaveTask', {
                           questionToSave: {
                             index: questionIndex,
@@ -114,36 +115,36 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
   return (
     <>
       <ScrollView>
-        <Box paddingX={6} paddingTop={2} paddingBottom={28}>
+        <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
+            isInvalid={!!formik.touched.statement && !!formik.errors.statement}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Informações
+                Enunciado
               </Text>
             </FormControl.Label>
             <TextArea
               height="88px"
               numberOfLines={3}
               textAlignVertical="top"
-              placeholder="Digite as informações da questão"
-              onChangeText={formik.handleChange('info')}
-              onBlur={formik.handleBlur('info')}
-              value={formik.values.info}
+              placeholder="Digite o enunciado da questão"
+              onChangeText={formik.handleChange('statement')}
+              onBlur={formik.handleBlur('statement')}
+              value={formik.values.statement}
               isDisabled={formik.isSubmitting}
             />
-            <FormControl.ErrorMessage>{formik.errors.info}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.statement}</FormControl.ErrorMessage>
           </FormControl>
 
           <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
+            isInvalid={!!formik.touched.timeToAnswer && !!formik.errors.timeToAnswer}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
-            <HStack space={2}>
+            <HStack space={2} paddingRight={2}>
               <FormControl.Label>
                 <Text color="primary.700" fontSize="lg" fontWeight="600">
                   Tempo: {formik.values.timeToAnswer}s
@@ -167,6 +168,81 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
             </HStack>
 
             <FormControl.ErrorMessage>{formik.errors.timeToAnswer}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl marginBottom={4}>
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Imagem (Opcional):
+              </Text>
+            </FormControl.Label>
+
+            <Pressable
+              onPress={() => {
+                if (!formik.values.imageUri) {
+                  return navigation.navigate('SelectImage', { screenToNavigateOnSave: 'SaveAlternativeQuestion' })
+                }
+
+                Alert.alert(
+                  'Imagem',
+                  'O que deseja fazer com a imagem?',
+                  [
+                    {
+                      text: 'Cancelar',
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Remover',
+                      onPress: () => {
+                        formik.setFieldValue('imageUri', undefined, false)
+                      },
+                    },
+                    {
+                      text: 'Trocar',
+                      onPress: () => {
+                        navigation.navigate('SelectImage', { screenToNavigateOnSave: 'SaveAlternativeQuestion' })
+                      },
+                    },
+                  ],
+                  {
+                    cancelable: true,
+                  },
+                )
+              }}
+            >
+              <Box
+                height={24}
+                width={32}
+                backgroundColor="card"
+                borderRadius="16px"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {!!formik.values.imageUri && (
+                  <Image
+                    height="100%"
+                    width="100%"
+                    borderRadius="16px"
+                    source={{ uri: formik.values.imageUri }}
+                    alt="Imagem da internet"
+                  />
+                )}
+
+                <Box
+                  position="absolute"
+                  top={0}
+                  bottom={0}
+                  left={0}
+                  right={0}
+                  backgroundColor="card"
+                  opacity={0.25}
+                  alignItems="center"
+                  justifyContent="center"
+                />
+
+                <Icon position="absolute" as={Feather} name="image" />
+              </Box>
+            </Pressable>
           </FormControl>
 
           <FormControl
@@ -240,7 +316,7 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
                 </Box>
               ))}
 
-              {formik.values.alternatives.length < 5 && (
+              {formik.values.alternatives.length < 4 && (
                 <Button
                   variant="ghost"
                   backgroundColor="white"
@@ -260,23 +336,6 @@ export const SaveAlternativeQuestionScreen: RootScreen<'SaveAlternativeQuestion'
                 formik.errors.alternatives}
             </FormControl.ErrorMessage>
           </FormControl>
-
-          <Button
-            margin={2}
-            startIcon={<Icon as={Feather} name="search" />}
-            onPress={() => navigation.navigate('SelectImage', { screenToNavigateOnSave: 'SaveAlternativeQuestion' })}
-          >
-            Search image in WEB
-          </Button>
-
-          {!!formik.values.imageUri && (
-            <Image
-              boxSize="120px"
-              borderRadius="16px"
-              source={{ uri: formik.values.imageUri }}
-              alt="Imagem da internet"
-            />
-          )}
         </Box>
       </ScrollView>
 

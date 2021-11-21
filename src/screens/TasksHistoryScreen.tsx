@@ -14,7 +14,7 @@ export const TasksHistoryScreen: RootScreen<'TasksHistory'> = ({ navigation }) =
       <VStack paddingX={5} paddingY={3} space={2}>
         {currentUser.tasksHistory.map(({ taskId, task, totalScore, submittedAt }) => (
           <Pressable
-            key={taskId}
+            key={`${taskId}-${submittedAt.toMillis()}`}
             onPress={async () => {
               const task = tasks.find(({ id }) => id === taskId)
               if (!task) return

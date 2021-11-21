@@ -13,8 +13,8 @@ export const PlayAudioButton: React.FC<PlayAudioButtonProps> = ({ locale, textTo
 
   useEffect(() => {
     Tts.setDefaultLanguage(locale)
-    Tts.setDefaultRate(0.5)
-    // Tts.setDefaultPitch(1.25)
+    Tts.setDefaultRate(0.25)
+    Tts.setDefaultPitch(1)
     Tts.setDucking(true)
 
     const onTtsFinish = () => setIsPlaying(false)

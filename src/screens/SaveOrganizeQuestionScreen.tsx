@@ -18,12 +18,11 @@ import { useFormik } from 'formik'
 import { Alert } from 'react-native'
 
 import { RootScreen } from '~/types/navigation'
-import { phraseToOrganize, questionInfoSchema } from '~/shared/validation'
+import { phraseToOrganize } from '~/shared/validation'
 import { OrganizeQuestionModel } from '~/api'
-import { RecognizeAudioButton } from '~/components'
 
 const SaveOrganizeQuestionSchema = yup.object({
-  info: questionInfoSchema,
+  translatedPhraseToOrganize: phraseToOrganize.required('A frase a ser traduzida um campo obrigatório.'),
   phraseToOrganize: phraseToOrganize.required('A frase para ser organizada é um campo obrigatório.'),
 })
 
@@ -32,8 +31,8 @@ export const SaveOrganizeQuestionScreen: RootScreen<'SaveOrganizeQuestion'> = ({
   const formik = useFormik<OrganizeQuestionModel>({
     initialValues: route.params?.initialValues || {
       type: 'ORGANIZE_QUESTION',
-      info: '',
       timeToAnswer: 30,
+      translatedPhraseToOrganize: '',
       phraseToOrganize: '',
     },
     validationSchema: SaveOrganizeQuestionSchema,
@@ -97,37 +96,62 @@ export const SaveOrganizeQuestionScreen: RootScreen<'SaveOrganizeQuestion'> = ({
       <ScrollView>
         <Box paddingX={6} paddingTop={2} paddingBottom={24}>
           <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
+            isInvalid={!!formik.touched.translatedPhraseToOrganize && !!formik.errors.translatedPhraseToOrganize}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
             <FormControl.Label>
               <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Informações (Opcional)
+                Frase a ser traduzida
               </Text>
             </FormControl.Label>
+
             <TextArea
               height="88px"
               numberOfLines={3}
               textAlignVertical="top"
-              placeholder="Digite as informações da questão"
-              onChangeText={formik.handleChange('info')}
-              onBlur={formik.handleBlur('info')}
-              value={formik.values.info}
+              placeholder="Ex: Olá meu nome é Paulo."
+              onChangeText={formik.handleChange('translatedPhraseToOrganize')}
+              onBlur={formik.handleBlur('translatedPhraseToOrganize')}
+              value={formik.values.translatedPhraseToOrganize}
               isDisabled={formik.isSubmitting}
             />
 
-            <FormControl.HelperText>Frase a ser traduzida</FormControl.HelperText>
-
-            <FormControl.ErrorMessage>{formik.errors.info}</FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>{formik.errors.translatedPhraseToOrganize}</FormControl.ErrorMessage>
           </FormControl>
 
           <FormControl
-            isInvalid={!!formik.touched.info && !!formik.errors.info}
+            isInvalid={!!formik.touched.phraseToOrganize && !!formik.errors.phraseToOrganize}
             isDisabled={formik.isSubmitting}
             marginBottom={4}
           >
-            <HStack space={2}>
+            <FormControl.Label>
+              <Text color="primary.700" fontSize="lg" fontWeight="600">
+                Frase para ser organizada
+              </Text>
+            </FormControl.Label>
+
+            <TextArea
+              height="88px"
+              numberOfLines={3}
+              textAlignVertical="top"
+              placeholder="Ex: Hi my name is Paulo."
+              onChangeText={formik.handleChange('phraseToOrganize')}
+              onBlur={formik.handleBlur('phraseToOrganize')}
+              value={formik.values.phraseToOrganize}
+              isDisabled={formik.isSubmitting}
+            />
+
+            <FormControl.HelperText>As palavras são identificadas pela separação por espaço.</FormControl.HelperText>
+
+            <FormControl.ErrorMessage>{formik.errors.phraseToOrganize}</FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl
+            isInvalid={!!formik.touched.timeToAnswer && !!formik.errors.timeToAnswer}
+            isDisabled={formik.isSubmitting}
+          >
+            <HStack space={2} paddingRight={2}>
               <FormControl.Label>
                 <Text color="primary.700" fontSize="lg" fontWeight="600">
                   Tempo: {formik.values.timeToAnswer}s
@@ -151,29 +175,6 @@ export const SaveOrganizeQuestionScreen: RootScreen<'SaveOrganizeQuestion'> = ({
             </HStack>
 
             <FormControl.ErrorMessage>{formik.errors.timeToAnswer}</FormControl.ErrorMessage>
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!formik.touched.phraseToOrganize && !!formik.errors.phraseToOrganize}
-            isDisabled={formik.isSubmitting}
-          >
-            <FormControl.Label>
-              <Text color="primary.700" fontSize="lg" fontWeight="600">
-                Frase para ser organizada
-              </Text>
-            </FormControl.Label>
-
-            <Input
-              placeholder="Ex: Hi my name is Paulo."
-              onChangeText={formik.handleChange('phraseToOrganize')}
-              onBlur={formik.handleBlur('phraseToOrganize')}
-              value={formik.values.phraseToOrganize}
-              isDisabled={formik.isSubmitting}
-            />
-
-            <FormControl.HelperText>As palavras são identificadas pela separação por espaço.</FormControl.HelperText>
-
-            <FormControl.ErrorMessage>{formik.errors.phraseToOrganize}</FormControl.ErrorMessage>
           </FormControl>
         </Box>
       </ScrollView>

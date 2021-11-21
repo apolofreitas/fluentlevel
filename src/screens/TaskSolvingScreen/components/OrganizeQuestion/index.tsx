@@ -89,62 +89,86 @@ export const OrganizeQuestion: React.FC<OrganizeQuestionProps> = ({
     <>
       <ScrollView>
         <Box paddingBottom={24}>
-          <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center" marginX={6} marginBottom={6}>
-            {question.info}
-          </Text>
+          <VStack space={2} paddingX={6} marginBottom={6}>
+            <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center">
+              Traduza a frase abaixo:
+            </Text>
+            <Text fontWeight="600" fontSize="xl" textAlign="center">
+              {question.translatedPhraseToOrganize}
+            </Text>
+            {!!isShowingResults && (
+              <Text
+                color={
+                  organizedPhrase === question.phraseToOrganize
+                    ? 'green.500'
+                    : timeSpent >= question.timeToAnswer
+                    ? 'primary.500'
+                    : 'red.500'
+                }
+                fontWeight="600"
+                fontSize="xl"
+                textAlign="center"
+                marginX={6}
+                marginBottom={6}
+              >
+                {question.phraseToOrganize}
+              </Text>
+            )}
+          </VStack>
 
-          {!layoutValues ? (
-            <HStack
-              justifyContent="center"
-              flexWrap="wrap"
-              opacity="0"
-              paddingX={`${layoutConstants.marginX}px`}
-              paddingTop={`${layoutConstants.separatorHeight}px`}
-            >
-              {words.map((word, index) => {
-                const offset = offsets[index]!
-                const isLastOffset = index === offsets.length - 1
+          {!isShowingResults &&
+            (!layoutValues ? (
+              <HStack
+                justifyContent="center"
+                flexWrap="wrap"
+                opacity="0"
+                paddingX={`${layoutConstants.marginX}px`}
+                paddingTop={`${layoutConstants.separatorHeight}px`}
+              >
+                {words.map((word, index) => {
+                  const offset = offsets[index]!
+                  const isLastOffset = index === offsets.length - 1
 
-                return (
-                  <View
-                    key={index}
-                    onLayout={({
-                      nativeEvent: {
-                        layout: { x, y, width, height },
-                      },
-                    }) => {
-                      offset.wordId.value = index
-                      offset.order.value = -1
-                      offset.width.value = width
-                      offset.height.value = height
-                      offset.originalX.value = x
-                      offset.originalY.value = y
+                  return (
+                    <View
+                      key={index}
+                      onLayout={({
+                        nativeEvent: {
+                          layout: { x, y, width, height },
+                        },
+                      }) => {
+                        offset.wordId.value = index
+                        offset.order.value = -1
+                        offset.width.value = width
+                        offset.height.value = height
+                        offset.originalX.value = x
+                        offset.originalY.value = y
 
-                      runOnUI(() => {
-                        'worklet'
+                        runOnUI(() => {
+                          'worklet'
 
-                        if (isLastOffset) {
-                          runOnJS(setLayoutValues)(calculateLayoutValues)
-                        }
-                      })()
-                    }}
-                  >
-                    <OrganizeQuestionWord key={word.id} id={word.id} word={word.text} />
-                  </View>
-                )
-              })}
-            </HStack>
-          ) : (
-            <Box
-              height={layoutValues.containerHeight}
-              width={layoutValues.containerWidth}
-              marginX={`${layoutValues.marginX}px`}
-            >
-              <OrganizeQuestionLines layoutValues={layoutValues} />
-              <OrganizeQuestionPlaceholders layoutValues={layoutValues} offsets={offsets} />
-              <OrganizeQuestionSortableWords layoutValues={layoutValues} offsets={offsets} words={words} />
-            </Box>
-          )}
+                          if (isLastOffset) {
+                            runOnJS(setLayoutValues)(calculateLayoutValues)
+                          }
+                        })()
+                      }}
+                    >
+                      <OrganizeQuestionWord key={word.id} id={word.id} word={word.text} />
+                    </View>
+                  )
+                })}
+              </HStack>
+            ) : (
+              <Box
+                height={layoutValues.containerHeight}
+                width={layoutValues.containerWidth}
+                marginX={`${layoutValues.marginX}px`}
+              >
+                <OrganizeQuestionLines layoutValues={layoutValues} />
+                <OrganizeQuestionPlaceholders layoutValues={layoutValues} offsets={offsets} />
+                <OrganizeQuestionSortableWords layoutValues={layoutValues} offsets={offsets} words={words} />
+              </Box>
+            ))}
         </Box>
       </ScrollView>
 
@@ -160,7 +184,7 @@ export const OrganizeQuestion: React.FC<OrganizeQuestionProps> = ({
             width="100%"
             onPress={verifyOrganizedPhrase}
           >
-            Verificar
+            Responder
           </Button>
         </Box>
       ) : (
@@ -178,6 +202,13 @@ export const OrganizeQuestion: React.FC<OrganizeQuestionProps> = ({
                 +{score} pontos
               </Text>
             </Box>
+          ) : timeSpent >= question.timeToAnswer ? (
+            <HStack space={3} alignItems="center">
+              <Icon as={Feather} color="primary.500" name="clock" />
+              <Text color="primary.500" fontWeight="700" fontSize="xl">
+                Tempo esgotado
+              </Text>
+            </HStack>
           ) : (
             <HStack space={3} alignItems="center">
               <Icon as={Feather} color="red.500" name="x-circle" />

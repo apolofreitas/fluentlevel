@@ -43,6 +43,7 @@ export async function signUp({ email, password, nickname, username }: SignUpOpti
         contestsScore: 0,
         contestsHistory: [],
         createdContests: [],
+        participatingContests: [],
       }),
     )
 }

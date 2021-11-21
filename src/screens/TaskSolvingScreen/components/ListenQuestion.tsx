@@ -42,8 +42,7 @@ export const ListenQuestion: React.FC<ListenQuestionProps> = ({
       <ScrollView>
         <VStack space={6} alignItems="center" padding={6} paddingBottom={24}>
           <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center">
-            {question.info}
-            Digite corretamente o que reconhecer no áudio
+            Escreva o que você ouviu
           </Text>
 
           <PlayAudioButton width="100%" locale="en-US" textToSpeech={question.phraseToRecognize} />
@@ -56,8 +55,24 @@ export const ListenQuestion: React.FC<ListenQuestionProps> = ({
               onChangeText={setRecognizedText}
               isDisabled={isShowingResults}
               borderWidth={2}
-              borderColor={isShowingResults ? (!!score ? 'green.500' : 'red.500') : 'transparent'}
-              color={isShowingResults ? (!!score ? 'green.600' : 'red.600') : undefined}
+              borderColor={
+                isShowingResults
+                  ? !!score
+                    ? 'green.500'
+                    : timeSpent >= question.timeToAnswer && recognizedText === ''
+                    ? 'primary.500'
+                    : 'red.500'
+                  : 'transparent'
+              }
+              color={
+                isShowingResults
+                  ? !!score
+                    ? 'green.600'
+                    : timeSpent >= question.timeToAnswer && recognizedText === ''
+                    ? 'primary.600'
+                    : 'red.600'
+                  : undefined
+              }
               textAlign={isShowingResults ? 'center' : undefined}
               fontWeight={isShowingResults ? '600' : undefined}
             />
@@ -96,6 +111,13 @@ export const ListenQuestion: React.FC<ListenQuestionProps> = ({
                 +{score} pontos
               </Text>
             </Box>
+          ) : timeSpent >= question.timeToAnswer && recognizedText === '' ? (
+            <HStack space={3} alignItems="center">
+              <Icon as={Feather} color="primary.500" name="clock" />
+              <Text color="primary.500" fontWeight="700" fontSize="xl">
+                Tempo esgotado
+              </Text>
+            </HStack>
           ) : (
             <HStack space={3} alignItems="center">
               <Icon as={Feather} color="red.500" name="x-circle" />

@@ -24,13 +24,16 @@ export const useTasks = create<TasksState>((set) => {
   auth().onAuthStateChanged(async (currentUser) => {
     lastTasksSubscription.unsubscribe()
 
-    set({ isLoading: false })
+    set({ isLoading: true })
 
     if (!currentUser) {
       set({ isLoading: false, tasks: initialState.tasks })
     } else {
       lastTasksSubscription.unsubscribe = db.tasks.onSnapshot(async () => {
+        set({ isLoading: true })
+
         const tasks = await getTasks()
+
         set({
           isLoading: false,
           tasks,

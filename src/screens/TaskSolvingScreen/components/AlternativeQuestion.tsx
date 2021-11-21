@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, Pressable, ScrollView, Text, VStack } from 'native-base'
+import { Box, Button, HStack, Icon, Image, Pressable, ScrollView, Text, VStack } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import { AlternativeQuestionModel } from '~/api'
@@ -40,13 +40,22 @@ export const AlternativeQuestion: React.FC<AlternativeQuestionProps> = ({
     <>
       <ScrollView>
         <Box alignItems="center" padding={6} paddingBottom={24}>
-          {!!question.info && (
-            <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center">
-              {question.info}
-            </Text>
+          <Text color="primary.700" fontWeight="600" fontSize="xl" textAlign="center" marginBottom={6}>
+            {question.statement}
+          </Text>
+
+          {!!question.imageUri && (
+            <Image
+              height="120px"
+              width="160px"
+              borderRadius="16px"
+              source={{ uri: question.imageUri }}
+              alt="Imagem da internet"
+              marginBottom={6}
+            />
           )}
 
-          <VStack width="100%" marginTop={6} space={3}>
+          <VStack width="100%" space={3}>
             {question.alternatives.map((alternative, alternativeIndex) =>
               !isShowingResults ? (
                 <Pressable
@@ -81,7 +90,9 @@ export const AlternativeQuestion: React.FC<AlternativeQuestionProps> = ({
                     borderLeftRadius={0}
                     backgroundColor={
                       alternativeIndex === question.rightAlternativeIndex
-                        ? 'green.400'
+                        ? timeSpent >= question.timeToAnswer && selectedAlternativeIndex === null
+                          ? 'primary.500'
+                          : 'green.400'
                         : alternativeIndex === selectedAlternativeIndex
                         ? 'red.400'
                         : 'gray.300'
@@ -121,6 +132,13 @@ export const AlternativeQuestion: React.FC<AlternativeQuestionProps> = ({
                 +{score} pontos
               </Text>
             </Box>
+          ) : timeSpent >= question.timeToAnswer && selectedAlternativeIndex === null ? (
+            <HStack space={3} alignItems="center">
+              <Icon as={Feather} color="primary.500" name="clock" />
+              <Text color="primary.500" fontWeight="700" fontSize="xl">
+                Tempo esgotado
+              </Text>
+            </HStack>
           ) : (
             <HStack space={3} alignItems="center">
               <Icon as={Feather} color="red.500" name="x-circle" />
