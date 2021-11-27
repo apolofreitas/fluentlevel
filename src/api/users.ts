@@ -123,7 +123,7 @@ export async function getUsers() {
 
 export async function getUserById(id: string) {
   const userDoc = db.users.doc(id)
-  return await getUserData(userDoc).catch()
+  return await getUserData(userDoc)
 }
 
 export async function getUserByUsername(username: string) {

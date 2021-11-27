@@ -110,3 +110,16 @@ export async function deleteContest(id: string) {
     createdContests: firebase.firestore.FieldValue.arrayRemove(id),
   })
 }
+
+export async function reportContest(contestId: string, reason: string) {
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return
+
+  db.contestReports.add({
+    contestId,
+    reason,
+    reportingUserId: currentUserDoc.id,
+    submittedAt: firebase.firestore.Timestamp.now(),
+  })
+}

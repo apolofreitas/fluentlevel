@@ -3,6 +3,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   HStack,
   Icon,
@@ -42,7 +43,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
       password: '',
       taskId: '',
       startDate: firestore.Timestamp.fromMillis(new Date().setSeconds(0, 0)),
-      endDate: firestore.Timestamp.fromMillis(new Date().setSeconds(0, 0)),
+      endDate: firestore.Timestamp.fromMillis(new Date().setSeconds(0, 0) + 86400000),
       ranking: [],
     },
     validationSchema: SaveContestSchema,
@@ -51,7 +52,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
       const now = firestore.Timestamp.now()
       const errors = new Map<string, string>()
 
-      if (values.startDate.toMillis() < now.toMillis()) {
+      if (!formik.values.id && !isImmediateStart && values.startDate.toMillis() < now.toMillis()) {
         errors.set('startDate', 'A data inicial está no passado.')
       }
 
@@ -65,7 +66,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
     },
     onSubmit: async (values) => {
       if (!!values.id) {
-        await updateContest(values.id, { ...values, ranking: [] })
+        await updateContest(values.id, values)
       } else {
         await createContest(values)
       }
@@ -74,6 +75,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
   })
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [isPasswordShowing, setIsPasswordShowing] = useState(false)
+  const [isImmediateStart, setIsImmediateStart] = useState(!formik.values.id)
 
   useLayoutEffect(() => {
     if (formik.values.id === undefined) return
@@ -163,6 +165,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
               onChangeText={formik.handleChange('title')}
               onBlur={formik.handleBlur('title')}
               value={formik.values.title}
+              isDisabled={formik.isSubmitting}
             />
 
             <FormControl.ErrorMessage>{formik.errors.title}</FormControl.ErrorMessage>
@@ -284,7 +287,21 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
               </Text>
             </FormControl.Label>
 
+            {!formik.values.id && (
+              <Checkbox
+                alignSelf="flex-start"
+                marginBottom="1"
+                value="isImmediateStart"
+                defaultIsChecked={isImmediateStart}
+                onChange={setIsImmediateStart}
+                accessibilityLabel="Começar imediatamente?"
+              >
+                Começar imediatamente?
+              </Checkbox>
+            )}
+
             <DatePickerButton
+              isDisabled={isImmediateStart || formik.isSubmitting}
               defaultValue={formik.values.startDate.toDate()}
               onPickDate={(date) => {
                 formik.setFieldValue('startDate', firestore.Timestamp.fromDate(date), true)
@@ -308,6 +325,7 @@ export const SaveContestScreen: RootScreen<'SaveContest'> = ({ navigation, route
             </FormControl.Label>
 
             <DatePickerButton
+              isDisabled={formik.isSubmitting}
               defaultValue={formik.values.endDate.toDate()}
               onPickDate={(date) => {
                 formik.setFieldValue('endDate', firestore.Timestamp.fromDate(date), true)

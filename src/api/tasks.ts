@@ -88,3 +88,16 @@ export async function getTaskById(id: string) {
   const taskDoc = db.tasks.doc(id)
   return await getTaskData(taskDoc).catch()
 }
+
+export async function reportTask(taskId: string, reason: string) {
+  const currentUserDoc = getCurrentUserDoc()
+
+  if (!currentUserDoc) return
+
+  db.taskReports.add({
+    taskId,
+    reason,
+    reportingUserId: currentUserDoc.id,
+    submittedAt: firebase.firestore.Timestamp.now(),
+  })
+}

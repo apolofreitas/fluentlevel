@@ -90,8 +90,24 @@ export interface ContestResults extends TaskResults {
   contestId: string
 }
 
+export interface TaskReportModel {
+  submittedAt: FirebaseFirestoreTypes.Timestamp
+  reportingUserId: string
+  taskId: string
+  reason: string
+}
+
+export interface ContestReportModel {
+  submittedAt: FirebaseFirestoreTypes.Timestamp
+  reportingUserId: string
+  contestId: string
+  reason: string
+}
+
 const users = firestore().collection<UserModel>('users')
 const tasks = firestore().collection<TaskModel>('tasks')
 const contests = firestore().collection<ContestModel>('contests')
+const taskReports = firestore().collection<TaskReportModel>('task-reports')
+const contestReports = firestore().collection<ContestReportModel>('contest-reports')
 
-export const db = { users, tasks, contests }
+export const db = { users, tasks, contests, taskReports, contestReports }

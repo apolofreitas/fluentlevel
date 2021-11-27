@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { BackHandler } from 'react-native'
 import { Box, Button, ScrollView, Text, VStack } from 'native-base'
 
@@ -8,6 +8,7 @@ import { submitScore } from '~/api'
 
 export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route }) => {
   const { contestId, results } = route.params
+  const submitting = useMemo(() => submitScore({ results, contestId }), [contestId, results])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route
         isLoading={isLoading}
         onPress={async () => {
           setIsLoading(true)
-          await submitScore({ results, contestId })
+          await submitting
           navigation.navigate('Home')
         }}
       >

@@ -195,9 +195,9 @@ export const ParticipatingContestDetailsScreen: RootScreen<'ParticipatingContest
                     <Text color="primary.500" fontWeight="700">
                       {index + 1}º
                     </Text>
-                    <Text fontWeight="600">{user.username}</Text>
+                    <Text fontWeight="600">{user.nickname}</Text>
                     <Text color="primary.700" fontWeight="600">
-                      @{user.nickname}
+                      @{user.username}
                     </Text>
                     <Text fontWeight="600">{score} pontos</Text>
                   </HStack>

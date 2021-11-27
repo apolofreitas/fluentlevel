@@ -16,8 +16,6 @@ export const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   const [mode, setMode] = useState<'none' | 'date' | 'time'>('none')
   const [date, setDate] = useState(defaultDate)
 
-  useEffect(() => {})
-
   return (
     <>
       <Button
