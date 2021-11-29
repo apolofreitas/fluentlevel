@@ -1,4 +1,4 @@
-import arrayShuffle from 'array-shuffle'
+import shuffle from 'shuffle-array'
 import { Box, Button, HStack, Icon, ScrollView, Text, useToast, View, VStack } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import { runOnJS, runOnUI, useSharedValue } from 'react-native-reanimated'
@@ -35,10 +35,11 @@ export const OrganizeQuestion: React.FC<OrganizeQuestionProps> = ({
   const [organizedPhrase, setOrganizedPhrase] = useState('')
 
   const [words] = useState(
-    arrayShuffle(
+    shuffle(
       (question.type === 'ORGANIZE_QUESTION' ? question.phraseToOrganize : '')
         .split(' ')
         .map((text, index) => ({ text, id: index })),
+      { copy: true },
     ),
   )
   const [layoutValues, setLayoutValues] = useState<LayoutValues | null>(null)
