@@ -26,21 +26,18 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
 }) => {
   const toast = useToast()
   const [speechAttempts, setSpeechAttempts] = useState(3)
-  const [speechTexts, setSpeechTexts] = useState<string[]>([])
+  const [speechText, setSpeechText] = useState('')
 
   useEffect(() => {
-    if (speechTexts.length === 0) return
+    if (speechText === '') return
 
-    if (
-      !speechTexts.some((speechText) => calculateStringSimilarity(question.phraseToSpeech, speechText) === 1) &&
-      speechAttempts > 1
-    ) {
+    if (calculateStringSimilarity(question.phraseToSpeech, speechText) !== 1 && speechAttempts > 1) {
       showSimpleToast(toast, 'Resposta incorreta')
       return setSpeechAttempts((attempts) => attempts - 1)
     }
 
     handleCalculateScore()
-  }, [speechTexts])
+  }, [speechText])
 
   useEffect(() => {
     if (timeSpent < question.timeToAnswer) return
@@ -50,9 +47,7 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
   const handleCalculateScore = () => {
     if (timeSpent >= question.timeToAnswer) onCalculateScore(0)
 
-    if (!speechTexts.some((speechText) => calculateStringSimilarity(question.phraseToSpeech, speechText) === 1)) {
-      return onCalculateScore(0)
-    }
+    if (calculateStringSimilarity(question.phraseToSpeech, speechText) !== 1) return onCalculateScore(0)
 
     onCalculateScore(calculateQuestionScore(question.timeToAnswer, timeSpent))
   }
@@ -84,7 +79,7 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
               Não posso falar
             </Text>
           </HStack>
-          <RecognizeAudioButton locale="en-US" onRecognize={(...texts) => setSpeechTexts(texts)} />
+          <RecognizeAudioButton locale="en-US" onRecognize={setSpeechText} />
         </Box>
       ) : (
         <VStack space={4} alignItems="center" position="absolute" bottom="24px" left="32px" right="32px">
@@ -101,7 +96,7 @@ export const SpeechQuestion: React.FC<SpeechQuestionProps> = ({
                 +{score} pontos
               </Text>
             </Box>
-          ) : timeSpent >= question.timeToAnswer && speechTexts.length === 0 ? (
+          ) : timeSpent >= question.timeToAnswer && speechText === '' ? (
             <HStack space={3} alignItems="center">
               <Icon as={Feather} color="primary.500" name="clock" />
               <Text color="primary.500" fontWeight="700" fontSize="xl">

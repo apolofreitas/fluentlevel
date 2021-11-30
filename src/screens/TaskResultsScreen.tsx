@@ -54,9 +54,7 @@ export const TaskResultsScreen: RootScreen<'TaskResults'> = ({ navigation, route
         isLoading={isLoading}
         onPress={async () => {
           setIsLoading(true)
-
           await submitting
-
           navigation.navigate('Home')
         }}
       >
