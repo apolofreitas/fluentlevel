@@ -16,6 +16,16 @@
 
 An app that provides the experience of learning English in the community and by yourself!
 
+## 🛠️ Functionalities
+
+- User authentication
+- Resolution, creation and sharing of tasks
+- Resolution, creation and sharing of contests
+- History of solved tasks and contests
+- User followers
+- Score system
+- Graphical comparison of progress between users
+
 ## 🚀 Technologies
 
 - [React Native](https://reactnative.dev/)
@@ -27,6 +37,13 @@ An app that provides the experience of learning English in the community and by 
 The Layout can be access it on [Figma](https://www.figma.com/). 📱
 
 - [Layout Mobile](https://www.figma.com/file/JVewnYIOWywmNmUOhO6v1l/fluentlevel)
+
+## 🤔 Getting started
+
+1. Clone this repository.
+2. Run `cd fluentlevel`.
+3. Run `yarn` to install dependencies.
+4. Run `yarn android` to start android development.
 
 ## 🤝 Contributing
 
